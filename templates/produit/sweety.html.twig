@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choux Sucrés{% endblock %}
+
+{% block body %}
+<h1>Les Choux Sucrés</h1>
+<ul>
+    {% for produit in produits %}
+        <li>
+            <h2>{{ produit.nomProduit }}</h2>
+            <p>{{ produit.description }}</p>
+            <p>{{ produit.getTTC }}€</p>
+            <p>{{ produit.allergene }}</p>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

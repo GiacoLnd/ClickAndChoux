@@ -5,13 +5,47 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         {% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
     </head>
-    <body>
+    <body style="background-color: #FFFFFF">
+        <div id="wrapper">
+            <nav>
+                <div id="container">
+
+                    <div class="navbar-logo">
+                        <a href="{{ path('app_home') }}">
+                            <img src="{{ asset('img/logo.png') }}" alt="ClickAndChoux" class="logo">
+                        </a>
+                        <a href="{{ path('app_home') }}" class="navbar-title">Click&Choux</a>
+                    </div>
+            
+                    
+                    <div class="burger-user">
+                        <a href="/"><i class="fa-solid fa-cart-shopping"></i></a>
+                        <a href="/"><i class="fa-solid fa-user"></i></a>
+                        <button class="burger" id="burger-button" aria-label="Menu">
+                            <i class="fa-solid fa-bars" id="burger-icon"></i>
+                        </button>
+                    </div>
+
+                    <ul class="navbar-list" id="navbar-list">
+                        <li><a href="{{ path('salty_produit') }}" class="menu-item">Les Salés</a></li>
+                        <li><a href="{{ path('sweety_produit') }}" class="menu-item">Les Sucrés</a></li>
+                        <li><a href="/" class="menu-item">Contactez-nous</a></li>
+                        <li><a href="/" class="menu-item">F.A.Q</a></li>
+                    </ul>
+                </div>
+            </nav>
         {% block body %}{% endblock %}
+        </div>
+    {% block javascripts %}
+        <script type="module" src="{{ asset('js/script.js') }}"></script>
+    {% endblock %}
     </body>
 </html>

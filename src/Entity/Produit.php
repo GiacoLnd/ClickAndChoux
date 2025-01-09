@@ -40,6 +40,9 @@ class Produit
     #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'Produits')]
     private Collection $paniers;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
 
     public function __construct()
     {
@@ -119,10 +122,21 @@ class Produit
     public function setCategorie(?Categorie $categorie): static
     {
         $this->categorie = $categorie;
+        
+        return $this;
+    }
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
-
+    
     /**
      * @return Collection<int, Panier>
      */
@@ -151,6 +165,11 @@ class Produit
         }
         
         return $this;
+    }
+
+    public function getTTC(): float
+    {
+        return round($this->prixHt * (1 + ($this->TVA / 100)), 2);
     }
     
 }
