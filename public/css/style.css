@@ -105,4 +105,50 @@ body{
     .burger-user i{
         color:#55211A;
     }
-    
+
+    .catalog-title{
+        text-align: center;
+        font-family: "Bubblegum Sans", sans-serif;
+        color: #55211A;
+        font-size: 1.8em;
+    }
+
+    .catalog-description{
+        text-align: center;
+        padding: 30px;
+        margin-bottom: 20px;
+        font-family: "Open Sans", sans-serif;
+        color: #55211A;
+        font-size: 1.2em;
+    }
+
+    .catalog-link{
+        color: #FFA85C;
+        font-weight: bold;
+        font-family: "Open Sans", sans-serif;
+    }
+
+    .choux-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        list-style: none; 
+        padding: 0;
+    }
+
+    .choux-grid li {
+        border: 1px solid #ccc; 
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        background-color: #f9f9f9;
+    }
+
+    .choux-grid h2 {
+        font-size: 1.2em;
+        margin: 10px 0;
+    }
+
+    .choux-grid p {
+        margin: 5px 0;
+    }

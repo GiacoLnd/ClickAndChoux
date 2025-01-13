@@ -3,8 +3,13 @@
 {% block title %}Choux Salés{% endblock %}
 
 {% block body %}
-<h1>Les Choux Salés</h1>
-<ul>
+<h2 class="catalog-title">Les Choux Salés</h1>
+<p class="catalog-description">Tous nos choux se vendent par lot de six.<br>
+    Vous ne trouvez pas votre douceur ? Commandez vos choux sur-mesure 
+    en cliquant sur ce <a href="/" class="catalog-link">lien</a>.<br>
+    En cas d’allergie, merci de consulter notre page <a href="/" class="catalog-link">dédiée</a>.
+</p>
+<ul class="choux-grid">
     {% for produit in produits %}
         <li>
             <h2>{{ produit.nomProduit }}</h2>
