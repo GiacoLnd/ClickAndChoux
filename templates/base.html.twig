@@ -15,6 +15,7 @@
     </head>
     <body style="background-color: #FFFFFF">
         <div id="wrapper">
+        <header>
             <nav>
                 <div id="container">
 
@@ -42,8 +43,57 @@
                     </ul>
                 </div>
             </nav>
+        </header>
         {% block body %}{% endblock %}
+        <footer>
+            <div class="footer-container">
+                <div class="footer-left">
+                    <div class="footer-logo">
+                        <img src="{{ asset('img/logo.png') }}" alt="ClickAndChoux">
+                        <h3 class="footer-title">Click&Choux</h3>
+                    </div>
+                    <div class="inner-footer">
+                        <div class="footer-adress">
+                            <p>12 rue des Choux</p>
+                            <p>67530, Boersch</p>
+                            <p class="phone">Tel. : 03 88 xx xx xx</p>
+                            <div class="mail">E-mail : <a href="mailto:exemple@exemple.com">exemple@exemple.com</a></div>
+                            <p>Du lundi au Vendredi, de 9h00 à 19h00</p>
+                        </div>
+                        <div class="footer-social">
+                            <a href="/"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="/"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="/"><i class="fa-brands fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-right">
+                    <div class="footer-text">
+                        <ul>
+                            <li>
+                                F.A.Q.
+                            </li>                     
+                            <li>
+                                Liste des allergènes
+                            </li>                     
+                            <li>
+                                Nous contacter
+                            </li>                     
+                            <li>
+                                Mentions Légales
+                            </li>                     
+                            <li>
+                                Conditions Générales de Ventes
+                            </li>                     
+                            <li>
+                                Protection des données
+                            </li>                     
+                        </ul>
+                    </div>
+                </div>
+        </footer>
         </div>
+
     {% block javascripts %}
         <script type="module" src="{{ asset('js/script.js') }}"></script>
     {% endblock %}

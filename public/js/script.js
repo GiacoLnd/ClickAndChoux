@@ -1,3 +1,6 @@
+
+// script for burger menu
+
 document.addEventListener('DOMContentLoaded', () => {
     const burgerButton = document.getElementById('burger-button');
     const burgerIcon = document.getElementById('burger-icon');
@@ -14,3 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// script for catalog searchbar
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('search-input');
+        const searchForm = searchInput.closest('form');
+
+        searchInput.addEventListener('input', () => {
+
+            // Soumettre le formulaire dès qu'une modification est détectée
+            searchForm.submit();
+        });
+    });
+

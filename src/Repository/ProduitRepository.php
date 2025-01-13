@@ -40,4 +40,18 @@ class ProduitRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    // Fonction permettant de rechercher des produits par nom en fonction de la catégorie
+    public function findBySearchQuery($query, $categorie)
+    {
+        $qb = $this->createQueryBuilder('p');
+        
+        $qb->where('p.nomProduit LIKE :query')
+           ->andWhere('p.categorie = :categorie')
+           ->setParameter('query', '%'.$query.'%')
+           ->setParameter('categorie', $categorie)
+           ->orderBy('p.nomProduit', 'ASC');
+        
+        return $qb->getQuery()->getResult();
+    }
 }
