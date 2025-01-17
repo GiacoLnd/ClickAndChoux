@@ -25,8 +25,8 @@
         <ul class="choux-grid">
             {% for produit in produits %}
                 <li>
-                    <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}">
-                    <h2>{{ produit.nomProduit }}</h2>
+                    <a href="{{ path('produit_detail', {'id': produit.id}) }}"><img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image"></a>
+                    <a href="{{ path('produit_detail', {'id': produit.id}) }}"><h2>{{ produit.nomProduit }}</h2></a>
                     <p class="catalog-price">{{ produit.getTTC }}€</p>
                 </li>
             {% endfor %}

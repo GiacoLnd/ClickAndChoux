@@ -194,10 +194,10 @@ body{
         color: #55211A;
         font-size: 1.3em;
     }
-    .choux-grid li img {
-        width: 250px;
-        height: 300px;
-        border-radius: 75px;
+    .catalog-image{
+        width: 200x;
+        height: 200px;
+        border-radius: 50px;
         object-fit: cover;
     }
     .catalog-price{
@@ -283,3 +283,49 @@ body{
     padding: 20px;
     }
 
+    .details-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        padding: 10px;
+        margin: 30px;
+    }
+
+    .list-details{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        margin-left: 15px;
+        font-family: "Open Sans", sans-serif;
+        color: #55211A;
+        font-size: 1.1em;
+        font-weight: 500;
+    }
+    
+    .details-image{
+        width: 250px;
+        height: 250px;
+        border-radius: 50px;
+        object-fit: cover;
+    }
+    .details-description{
+        padding: 10px 0 0 0;
+    }
+    .details-title{
+        font-family: "Bubblegum Sans", sans-serif;
+        color: #55211A;
+        font-size: 1.8em;
+    }
+    .details-allergene{
+        font-weight: 300;
+        font-size: 0.9em;
+        border-bottom: #55211A 1px solid;
+        padding: 10px 0 20px 0;
+    }
+    .details-price{
+        font-weight: 400;
+        font-size: 1.3em;
+        padding: 15px 10px 10px 0;
+    }

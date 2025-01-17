@@ -64,5 +64,24 @@ class ProduitController extends AbstractController
             'query' => $query, 
         ]);
     }
-    
+
+    #[Route('/produit/{id}', name: 'produit_detail')]
+    public function detail(
+        int $id, 
+        ProduitRepository $produitRepository
+        ): Response {
+            
+        // Récupère le produit par son ID
+        $produit = $produitRepository->find($id);
+
+        // Si le produit n'existe pas, lancer une erreur 404
+        if (!$produit) {
+            throw $this->createNotFoundException('Produit non trouvé');
+        }
+
+        return $this->render('produit/show.html.twig', [
+            'produit' => $produit,
+        ]);
+    }
 }
+
