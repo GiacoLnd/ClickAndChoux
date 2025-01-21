@@ -329,3 +329,33 @@ body{
         font-size: 1.3em;
         padding: 15px 10px 10px 0;
     }
+
+    #minus-btn, #plus-btn{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+    }
+    #minus-btn i, #plus-btn i{
+        color: #FFA85C;
+        font-size: 1.5em;
+    }
+    #quantity{
+        border: none;
+        text-align: center;
+        font-size: 1.3em;
+        width: 20%;
+    }
+    #quantity:hover {
+        pointer-events: none;
+    }
+    .add-to-cart-button{
+        background-color: #FFA85C;
+        color: white;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50px;
+        font-family: "Bubblegum Sans", sans-serif;
+        font-size: 1.1em;
+    }

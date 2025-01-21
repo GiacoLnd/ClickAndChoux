@@ -2,11 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Panier;
+use App\Entity\Produit;
+use App\Form\PanierType;
+use App\Controller\PanierController;
 use App\Repository\ProduitRepository;
 use App\Repository\CategorieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProduitController extends AbstractController
@@ -66,21 +72,33 @@ class ProduitController extends AbstractController
     }
 
     #[Route('/produit/{id}', name: 'produit_detail')]
-    public function detail(
-        int $id, 
-        ProduitRepository $produitRepository
-        ): Response {
-            
-        // Récupère le produit par son ID
-        $produit = $produitRepository->find($id);
-
-        // Si le produit n'existe pas, lancer une erreur 404
+    public function detail(int $id, Request $request, SessionInterface $session, EntityManagerInterface $em): Response
+    {
+        $produit = $em->getRepository(Produit::class)->find($id);
+    
+        // erreur 404 si produit inexistant
         if (!$produit) {
-            throw $this->createNotFoundException('Produit non trouvé');
+            throw $this->createNotFoundException('Produit introuvable.');
         }
+    
+        // Création du formulaire
+        $form = $this->createForm(PanierType::class);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer la quantité depuis le formulaire
+            $quantity = $form->get('quantity')->getData();
 
+            // Rediriger vers PanierController pour ajouter au panier
+            return $this->redirectToRoute('panier_add', [
+                'id' => $produit->getId(),
+                'quantity' => $quantity,
+            ]);
+        }
+    
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
+            'form' => $form->createView(),
         ]);
     }
 }

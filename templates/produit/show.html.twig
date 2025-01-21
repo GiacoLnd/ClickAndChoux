@@ -18,14 +18,15 @@
             <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
             
     
-            <form method="GET" action="{{ path('panier_add', {'id': produit.id}) }}" class="quantity-form">
-                <label for="quantite">Quantité :</label>
-                <div class="quantity-controls">
-                    <button type="button" id="minus-btn"><i class="fa-solid fa-minus"></i></button>
-                    <input type="number" name="quantite" id="quantity" value="1" class="quantity-input">
-                    <button type="button" id="plus-btn"><i class="fa-solid fa-plus"></i></button>
-                </div>
-                <button type="submit" class="add-to-cart-button">Ajouter au panier</button>
+            <h1>{{ produit.nomProduit }}</h1>
+            <p>{{ produit.description }}</p>
+            <p>Prix : {{ produit.getTTC }}€</p>
+            
+            <form method="post" action="{{ path('panier_add', { id: produit.id }) }}">
+                {{ form_start(form) }}
+                    {{ form_row(form.quantity) }}
+                    <button type="submit">Ajouter au panier</button>
+                {{ form_end(form) }}
             </form>
         </div>
     </div>

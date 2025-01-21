@@ -17,7 +17,7 @@ class Panier
     private ?int $quantity = null;
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
-    private ?Produit $Produit = null;
+    private ?Produit $produit = null;
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
     #[ORM\JoinColumn(nullable: false)]
@@ -42,12 +42,12 @@ class Panier
 
     public function getProduit(): ?Produit
     {
-        return $this->Produit;
+        return $this->produit;
     }
 
-    public function setProduit(?Produit $Produit): static
+    public function setProduit(?Produit $produit): static
     {
-        $this->Produit = $Produit;
+        $this->Produit = $produit;
 
         return $this;
     }
