@@ -330,24 +330,20 @@ body{
         padding: 15px 10px 10px 0;
     }
 
-    #minus-btn, #plus-btn{
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 10px;
+    #quantity-container {
+        display: flex;
+        align-items: center;
+        justify-content: start;
     }
-    #minus-btn i, #plus-btn i{
-        color: #FFA85C;
-        font-size: 1.5em;
-    }
-    #quantity{
-        border: none;
+    .quantity{
+        border: solid 2px #55211A;
+        border-radius: 50px;
         text-align: center;
         font-size: 1.3em;
-        width: 20%;
-    }
-    #quantity:hover {
-        pointer-events: none;
+        width: 15%;
+        color: #55211A;
+        font-family: 'Open Sans', sans-serif;
+        padding-left: 11px;
     }
     .add-to-cart-button{
         background-color: #FFA85C;
@@ -359,3 +355,4 @@ body{
         font-family: "Bubblegum Sans", sans-serif;
         font-size: 1.1em;
     }
+    

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Panier;
 use App\Entity\Produit;
 use App\Entity\Commande;
@@ -44,53 +45,15 @@ class PanierRepository extends ServiceEntityRepository
     //    }
 
 
-    public function findPanierItem(Commande $commande, Produit $produit): ?Panier
+    public function findByUser(User $user): array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.commande = :commande')
-            ->andWhere('p.produit = :produit')
-            ->setParameter('commande', $commande)
-            ->setParameter('produit', $produit)
+            ->join('p.commande', 'c')
+            ->where('c.user = :user')
+            ->andWhere('c.statut = :statut')
+            ->setParameter('user', $user)
+            ->setParameter('statut', 'panier')
             ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    public function addOrUpdateProduct(Commande $commande, Produit $produit, int $quantity): void
-    {
-        $panierItem = $this->findPanierItem($commande, $produit);
-
-        if ($panierItem) {
-            // Si le produit existe déjà, mettre à jour la quantité
-            $panierItem->setQuantity($panierItem->getQuantity() + $quantity);
-        } else {
-            // Sinon, créer un nouvel élément de panier
-            $panierItem = new Panier();
-            $panierItem->setCommande($commande);
-            $panierItem->setProduit($produit);
-            $panierItem->setQuantity($quantity);
-            $this->_em->persist($panierItem);
-        }
-
-        $this->_em->flush();
-    }
-
-     public function removeProduct(Commande $commande, Produit $produit): void
-    {
-        $panierItem = $this->findPanierItem($commande, $produit);
-
-        if ($panierItem) {
-            $this->_em->remove($panierItem);
-            $this->_em->flush();
-        }
-    }
-
-    public function clearPanier(Commande $commande): void
-    {
-        $this->createQueryBuilder('p')
-            ->delete()
-            ->andWhere('p.commande = :commande')
-            ->setParameter('commande', $commande)
-            ->getQuery()
-            ->execute();
+            ->getResult();
     }
 }

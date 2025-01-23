@@ -25,11 +25,14 @@ class Commande
     #[ORM\Column]
     private ?float $montantTotal = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $datePaiement = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateLivraison = null;
+    
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $token = null;
 
     /**
      * @var Collection<int, Panier>
@@ -40,6 +43,8 @@ class Commande
     #[ORM\ManyToOne(inversedBy: 'Commandes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+
 
     public function __construct()
     {
@@ -123,7 +128,7 @@ class Commande
     {
         if (!$this->paniers->contains($panier)) {
             $this->paniers->add($panier);
-            $panier->setCommandes($this);
+            $panier->setCommande($this);
         }
 
         return $this;
@@ -152,4 +157,15 @@ class Commande
 
         return $this;
     }
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
+        return $this;
+    }
+
 }

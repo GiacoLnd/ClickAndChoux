@@ -21,13 +21,13 @@ class PanierType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('quantity', IntegerType::class, [
+        $builder
+        ->add('quantity', IntegerType::class, [
             'label' => 'Quantité',
-            'mapped' => false, // Empêche les données imbriquées
-            'attr' => [
-                'min' => 1,
-                'class' => 'quantity-input',
-            ],
+            'attr' => ['min' => 1],
+        ])
+        ->add('ajouter', SubmitType::class, [
+            'label' => 'Ajouter au panier',
         ]);
     }
 

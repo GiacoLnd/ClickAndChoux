@@ -5,39 +5,48 @@
 {% block body %}
     <h1>Votre Panier</h1>
 
-    {% if panier is empty %}
+    {% if paniers is empty %}
         <p>Votre panier est vide.</p>
     {% else %}
         <table>
             <thead>
                 <tr>
                     <th>Produit</th>
+                    <th>Prix</th>
                     <th>Quantité</th>
-                    <th>Prix Unitaire</th>
                     <th>Total</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for item in panier %}
-                    <tr>
-                        <td>{{ item.name }}</td> 
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.price }} €</td> 
-                        <td>{{ item.price * item.quantity }} €</td>
-                        <td>
-                            <a href="{{ path('panier_remove', {id: item.id}) }}" class="btn btn-danger">Retirer</a>
-                        </td>
-                    </tr>
+                {% for item in paniers %}
+                <tr>
+                    <td>{{ item.produit.nomProduit }}</td>
+                    <td>{{ item.produit.getTTC }} €</td>
+                    <td>
+                        <form action="{{ path('panier_increase', { id: item.produit.id }) }}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </form>
+                        {{ item.quantity }}
+                        <form action="{{ path('panier_decrease', { id: item.produit.id }) }}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td>{{ (item.produit.getTTC * item.quantity) }} €</td>
+                    <td/>
+                        <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3">Total :</td>
-                    <td>{{ total }} €</td>
-                </tr>
-            </tfoot>
         </table>
-        <a href="{{ path('panier_clear')}}" class="btn btn-danger">Supprimer le panier</a>
+        <form action="{{ path('panier_clear') }}" method="post">
+            <button type="submit" class="btn btn-danger">Vider le panier</button>
+        </form>
     {% endif %}
 {% endblock %}

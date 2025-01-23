@@ -63,4 +63,13 @@ class Panier
 
         return $this;
     }
+
+    public function getTotalTTC(): float
+    {
+        if ($this->produit === null) {
+            return 0.0;
+        }
+
+        return $this->produit->getTTC() * $this->quantity;
+    }
 }

@@ -3,31 +3,28 @@
 {% block title %}{{ produit.nomProduit }} - Détails{% endblock %}
 
 {% block body %}
-    <div class="details-container">
-        <div class="image">
-            <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image">
-        </div>
-        <div class="list-details">
-            <div class="details-description">
-                <h2 class="details-title">{{ produit.nomProduit }}</h2>
-                <p>{{ produit.description }}</p>
-            </div>
-            
-            <p class="details-allergene">Allergènes : {{ produit.allergene }}</p>
-            
-            <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
-            
-    
-            <h1>{{ produit.nomProduit }}</h1>
-            <p>{{ produit.description }}</p>
-            <p>Prix : {{ produit.getTTC }}€</p>
-            
-            <form method="post" action="{{ path('panier_add', { id: produit.id }) }}">
-                {{ form_start(form) }}
-                    {{ form_row(form.quantity) }}
-                    <button type="submit">Ajouter au panier</button>
-                {{ form_end(form) }}
-            </form>
-        </div>
+<div class="details-container">
+    <div class="image">
+        <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image">
     </div>
+    <div class="list-details">
+        <div class="details-description">
+            <h2 class="details-title">{{ produit.nomProduit }}</h2>
+            <p>{{ produit.description }}</p>
+        </div>
+        
+        <p class="details-allergene">Allergènes : {{ produit.allergene }}</p>
+        <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
+
+        <h2>Ajouter au panier</h2>
+        {{ form_start(form, {'attr': {'id': 'quantity-form'}}) }}
+        <div id="quantity-container" style="display: flex; align-items: center; gap: 10px;">
+                {{ form_widget(form.quantity) }}
+            <div class="add-container">
+                {{ form_row(form.ajouter) }}
+            </div>
+        </div>
+    {{ form_end(form) }}
+    </div>
+</div>
 {% endblock %}
