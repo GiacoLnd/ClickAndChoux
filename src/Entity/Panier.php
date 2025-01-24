@@ -21,7 +21,7 @@ class Panier
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Commande $Commande = null;
+    private ?Commande $commande = null; // Correction : "commande" avec un "c" minuscule
 
     public function getId(): ?int
     {
@@ -47,20 +47,18 @@ class Panier
 
     public function setProduit(?Produit $produit): static
     {
-        $this->Produit = $produit;
-
+        $this->produit = $produit; // Correction du nom de la propriété
         return $this;
     }
 
     public function getCommande(): ?Commande
     {
-        return $this->Commande;
+        return $this->commande; // Correction du nom de la propriété
     }
 
-    public function setCommande(?Commande $Commande): static
+    public function setCommande(?Commande $commande): static
     {
-        $this->Commande = $Commande;
-
+        $this->commande = $commande; // Correction du nom de la propriété
         return $this;
     }
 

@@ -3,50 +3,35 @@
 {% block title %}Votre Panier{% endblock %}
 
 {% block body %}
-    <h1>Votre Panier</h1>
-
+    <div class="cart-container">
+    <h1 class="login-title">Votre Panier</h1>
     {% if paniers is empty %}
         <p>Votre panier est vide.</p>
     {% else %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Produit</th>
-                    <th>Prix</th>
-                    <th>Quantité</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in paniers %}
-                <tr>
-                    <td>{{ item.produit.nomProduit }}</td>
-                    <td>{{ item.produit.getTTC }} €</td>
-                    <td>
-                        <form action="{{ path('panier_increase', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                            <button type="submit" class="btn btn-success btn-sm">
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
-                        </form>
-                        {{ item.quantity }}
-                        <form action="{{ path('panier_decrease', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                <i class="fa-solid fa-minus"></i>
-                            </button>
-                        </form>
-                    </td>
-                    <td>{{ (item.produit.getTTC * item.quantity) }} €</td>
-                    <td/>
-                        <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            {% for item in paniers %}
+            <div class="cart-product">
+                {{ (item.produit.nomProduit) }} 
+                <form action="{{ path('panier_decrease', { id: item.produit.id }) }}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                </form>
+                {{ item.quantity }}
+                <form action="{{ path('panier_increase', { id: item.produit.id }) }}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </form>
+                {{ (item.produit.getTTC * item.quantity) }} €
+                <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                </form>
+            </div>
+            {% endfor %}
+        <p>Total : {{ montantTotal }} €</p>
         <form action="{{ path('panier_clear') }}" method="post">
             <button type="submit" class="btn btn-danger">Vider le panier</button>
         </form>
+    </div>
     {% endif %}
 {% endblock %}

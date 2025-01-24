@@ -22,32 +22,49 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PanierController extends AbstractController
 {
     #[Route('/panier', name: 'panier_afficher')]
-    #[Route('/panier', name: 'panier_afficher')]
-    public function afficherPanier(SessionInterface $session, PanierRepository $panierRepository, ProduitRepository $produitRepository): Response {
-        $user = $this->getUser();
-        $paniers = [];
-    
-        if ($user) {
-            // Récupérer les paniers depuis la base de données
-            $paniers = $panierRepository->findBy(['commande' => ['statut' => 'panier']]);
-        } else {
-            // Récupérer le panier depuis la session
-            $cart = $session->get('panier', []);
-            foreach ($cart as $productId => $quantity) {
-                $produit = $produitRepository->find($productId);
-                if ($produit) {
-                    $paniers[] = [
-                        'produit' => $produit,
-                        'quantity' => $quantity,
-                    ];
-                }
+public function afficherPanier(
+    SessionInterface $session,
+    PanierRepository $panierRepository,
+    ProduitRepository $produitRepository,
+    CommandeRepository $commandeRepository
+): Response {
+    $user = $this->getUser();
+    $paniers = [];
+    $montantTotal = 0;
+
+    if ($user) {
+        // Récupère la commande en statut "panier" pour l'utilisateur connecté
+        $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
+
+        if ($commande) {
+            // Récupère le panier liés à cette commande
+            $paniers = $panierRepository->findBy(['commande' => $commande]);
+
+            foreach ($paniers as $panier) {
+                $montantTotal += $panier->getTotalTTC();
             }
         }
-    
-        return $this->render('panier/index.html.twig', [
-            'paniers' => $paniers,
-        ]);
+    } else {
+        $cart = $session->get('panier', []);
+        foreach ($cart as $productId => $quantity) {
+            $produit = $produitRepository->find($productId);
+            if ($produit) {
+                $montanttotal = $produit->getPrix() * $quantity;
+                $paniers[] = [
+                    'produit' => $produit,
+                    'quantity' => $quantity,
+                    'montantTotal' => $montantTotal
+                ];
+            }
+        }
     }
+
+    return $this->render('panier/index.html.twig', [
+        'paniers' => $paniers,
+        'montantTotal' => $montantTotal
+    ]);
+}
+
     #[Route('/panier/add/{id}', name: 'panier_add', methods: ['POST'])]
     public function ajouterAuPanier(
         Produit $produit,

@@ -122,6 +122,13 @@ class ProduitController extends AbstractController
                     $commande->setStatut('panier');
                     $commande->setDateCommande(new \DateTime());
                     $commande->setUser($user);
+                    
+                    $montantTotal = 0;
+                    foreach ($commande->getPaniers() as $panier) {
+                        $montantTotal += $panier->getTotalTTC();
+                    }
+                    $commande->setMontantTotal($montantTotal);
+                    
                     $em->persist($commande);
                     $em->flush();
                 }

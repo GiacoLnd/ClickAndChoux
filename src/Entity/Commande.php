@@ -28,7 +28,7 @@ class Commande
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $datePaiement = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateLivraison = null;
     
     #[ORM\Column(length: 64, nullable: true)]
@@ -44,6 +44,7 @@ class Commande
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+  
 
 
     public function __construct()
@@ -146,6 +147,19 @@ class Commande
         return $this;
     }
 
+
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
+        return $this;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -155,16 +169,6 @@ class Commande
     {
         $this->user = $user;
 
-        return $this;
-    }
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-    public function setToken(?string $token): static
-    {
-        $this->token = $token;
         return $this;
     }
 
