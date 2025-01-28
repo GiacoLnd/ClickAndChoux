@@ -6,10 +6,12 @@
     <div class="cart-container">
     <h1 class="login-title">Votre Panier</h1>
     {% if paniers is empty %}
-        <p>Votre panier est vide.</p>
+        <p class="catalog-description">Votre panier est vide.</p>
     {% else %}
+        <div class="cart-content">
             {% for item in paniers %}
             <div class="cart-product">
+                <img src="/img/{{ item.produit.image }}" alt="{{ item.produit.nomProduit }}" class="cart-image">
                 {{ (item.produit.nomProduit) }} 
                 <form action="{{ path('panier_decrease', { id: item.produit.id }) }}" method="post" style="display: inline;">
                     <button type="submit" class="btn btn-danger btn-sm">
@@ -28,10 +30,10 @@
                 </form>
             </div>
             {% endfor %}
-        <p>Total : {{ montantTotal }} €</p>
-        <form action="{{ path('panier_clear') }}" method="post">
-            <button type="submit" class="btn btn-danger">Vider le panier</button>
-        </form>
+            <h3>Total général : {{ montantTotal }} €</h3>
+            <form action="{{ path('panier_clear') }}" method="post">
+                <button type="submit" class="btn btn-danger">Vider le panier</button>
+            </form>
     </div>
     {% endif %}
 {% endblock %}

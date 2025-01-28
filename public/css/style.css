@@ -376,10 +376,6 @@ body{
         height: 50vh;          
     }
 
-    label {
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
 
     .login-title {
         margin-bottom: 20px;
@@ -387,11 +383,25 @@ body{
         color: #55211A;
         font-size: 2em;
     }
-    
+    .login-container ul{
+        list-style: none;
+        padding: 5px;
+        margin: 0;
+    }
+    .login-container ul li{
+        color: #FFA85C;
+        font-family: "Open Sans", sans-serif;
+        font-size: 1.1em;
+        font-weight: 600;
+    }
     .security-text{
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-family: "Open Sans", sans-serif;
         color: #55211A;
-        font-size: 1.1em
+        font-size: 1.1em;
+        padding: 10px;
     }
 
     .login-container input {
@@ -401,6 +411,13 @@ body{
         margin-bottom: 20px;
         border: 3px solid #55211A;
         border-radius: 50px;
+    }
+    .login-container input[type="checkbox"] {
+        margin: 0;
+        width: auto;
+        padding: 0;
+        border: none;
+        border-radius: 0;
     }
 
     .login-container button {
@@ -412,6 +429,30 @@ body{
         border-radius: 50px;
         font-family: "Bubblegum Sans", sans-serif;
         font-size: 1.1em;
+    }
+    .remember-me {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px; 
+        padding-bottom: 20px;
+    }
+    .login-container p {
+        font-family: "Open Sans", sans-serif;
+        color: #55211A;
+        font-size: 1.1em;
+        padding: 15px;
+        margin-top: 20px;
+    }
+    .register-link{
+        font-family: "Open Sans", sans-serif;
+        text-decoration: none;
+        color: #FFA85C;
+    }
+    .remember-me{
+        font-family: "Open Sans", sans-serif;
+        color: #55211A;
+        font-size: 0.9em
     }
     .form-group {
         display: flex;
@@ -437,3 +478,24 @@ body{
         gap: 20px;
         padding: 15px;
     }
+    .cart-content button{
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #FFA85C;
+        font-size: 1.2em;
+    }
+    .cart-content{
+        font-size: 1.2em;
+        font-family: "Open Sans", sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .cart-image{
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+    }
+

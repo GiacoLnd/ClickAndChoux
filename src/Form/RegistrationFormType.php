@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -60,11 +61,30 @@ class RegistrationFormType extends AbstractType
                 ],
                 
             ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
-                'label_attr' => ['class' => 'security-text'],
+                'type' => PasswordType::class,
+                'required' => true,
+                'invalid_message' => 'Les mots de passes ne correspondent pas',
+                'error_bubbling' => true,
+                'first_options' => [
+                    'label' => 'Mot de passe :',
+                    'label_attr' => ['class' => 'security-text'],
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                        'class' => 'form-control',
+                    ],
+                ],
+                'second_options' => [
+                    'label' => 'Confirmez le mot de passe :',
+                    'label_attr' => ['class' => 'security-text'],
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                        'class' => 'form-control',
+                    ],
+                ],
                 'attr' => [
                     'autocomplete' => 'new-password',
                     'class' => 'form-control',

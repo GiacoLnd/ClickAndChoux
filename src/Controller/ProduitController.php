@@ -162,9 +162,13 @@ class ProduitController extends AbstractController
             }
     
             $this->addFlash('success', 'Produit ajouté au panier !');
-            return $this->redirectToRoute('panier_afficher');
+
+            if ($produit->getCategorie()->getNomCategorie() === 'Sucré') {
+                return $this->redirectToRoute('sweety_produit');
+            } elseif ($produit->getCategorie()->getNomCategorie() === 'Salé') {
+                return $this->redirectToRoute('salty_produit');
+            }
         }
-    
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
             'form' => $form->createView(),

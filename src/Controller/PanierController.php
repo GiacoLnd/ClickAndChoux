@@ -49,11 +49,12 @@ public function afficherPanier(
         foreach ($cart as $productId => $quantity) {
             $produit = $produitRepository->find($productId);
             if ($produit) {
-                $montanttotal = $produit->getPrix() * $quantity;
+                $totalProduit = $produit->getTTC() * $quantity; 
+                $montantTotal += $totalProduit; 
                 $paniers[] = [
                     'produit' => $produit,
                     'quantity' => $quantity,
-                    'montantTotal' => $montantTotal
+                    'montantTotal' => $totalProduit,
                 ];
             }
         }

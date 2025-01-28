@@ -30,8 +30,8 @@
                     <div class="burger-user">
                         <a href="{{ path('panier_afficher') }}"><i class="fa-solid fa-cart-shopping"></i></a>
                         {% if app.user %}
-                            <a href="/"><i class="fa-solid fa-user" style="color: #38B000"></i></a>
                             <a href="{{ path('app_logout') }}"><i class="fa-solid fa-power-off"></i></a>
+                            <a href="/"><i class="fa-solid fa-user" style="color: #38B000"></i></a>
                         {% else %}
                         <a href="{{ path('app_login') }}"><i class="fa-solid fa-user" style="color: #9D0208"></i></a>
                         {% endif %}
