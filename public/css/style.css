@@ -458,6 +458,8 @@ body{
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        text-align: center;
     }
     .register-mail{
         display: flex;
@@ -499,3 +501,46 @@ body{
         border-radius: 50%;
     }
 
+    .profile-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Open Sans", sans-serif;
+    color: #55211A;
+    font-size: 1.2em;
+    gap: 15px;
+    }
+
+    .profile-container input{
+        margin-bottom: 15px;
+        width: 500px;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 3px solid #55211A;
+        border-radius: 50px;
+    }
+
+    .profile-info{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        padding: 10px;
+        margin-top: 15px;
+    }
+
+    .update-container{
+        display: flex;
+        flex-direction: row;
+        gap: 40px;
+    }
+
+    .update-button{
+        text-decoration: none;
+        color: #FFA85C;
+        font-size: 1.1em;
+        font-family: "Bubblegum Sans", sans-serif;
+        padding: 20px;
+    }

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    <div class="profile-container">
+            <h2 class="details-title">Profil</h2>
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            <div class="profile-info">
+                <p>Salutations, {{ user.nickName }} !</p>
+                <p>Email : {{ user.email }}</p>
+            </div>
+            <div class="update-container">
+                <a href="{{ path('app_update_profile') }}" class="update-button">Modifier mes informations</a>
+                <a href="{{ path('app_update_password') }}" class="update-button">Modifier mon mot de passe</a>
+            </div>
+        </div>
+{% endblock %}
