@@ -61,12 +61,12 @@ class ProduitController extends AbstractController
         Request $request
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
-        $query = $request->query->get('query', '');  // Récupère la valeur du paramètre query dans l'URL
+        $query = $request->query->get('query', '');  // Get query value from URL
     
-        // Si la valeur du paramètre query n'est pas vide, effectue une recherche
+        // When query is not empty, perform search
         if ($query) {
             $produits = $produitRepository->findBySearchQuery($query, $categorie);
-        } else { // Sinon, affiche tous les produits de la catégorie Sucré
+        } else { // Else display all products of the Sweet category
             $produits = $produitRepository->findBy(['categorie' => $categorie]);
         }
     
@@ -88,7 +88,6 @@ class ProduitController extends AbstractController
         
         $user = $this->getUser();
     
-        // Créer un formulaire d'ajout au panier
         $panier = new Panier();
         $form = $this->createFormBuilder($panier)
         ->add('quantity', IntegerType::class, [
@@ -110,11 +109,11 @@ class ProduitController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupération de la quantité en s'assurant que c'est bien un entier
+            // Get the quantity from the form
             $quantity = (int) $form->get('quantity')->getData();
     
             if ($user) {
-                // Utilisateur connecté : gestion via la base de données
+                // Connected User : handle via DB
                 $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
     
                 if (!$commande) {
@@ -146,18 +145,18 @@ class ProduitController extends AbstractController
     
                 $em->flush();
             } else {
-                // Utilisateur non connecté : gestion via session
+                // Unconnected User : handle via Session
                 $cart = $session->get('panier', []);
                 $productId = $produit->getId();
     
-                // S'assurer que l'élément existant dans $cart[$productId] est un entier
+                // Assuring that $cart is an int
                 if (isset($cart[$productId])) {
                     $cart[$productId] = (int) $cart[$productId] + $quantity;
                 } else {
                     $cart[$productId] = $quantity;
                 }
     
-                // Mettre à jour la session avec le panier corrigé
+                // Updating cart in session
                 $session->set('panier', $cart);
             }
     

@@ -52,6 +52,16 @@ nav{
     font-weight: bold;
     font-family: "Open Sans", sans-serif;
 }
+#cart-badge{
+    background-color: #FFA85C;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-weight: bold;
+    width: 25px;
+    height: 25px;
+}
 body{
     background: white;
     height: 100%;

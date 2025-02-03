@@ -56,7 +56,7 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => [
-                    'class' => 'form-control',
+                    'class' => 'form-group',
                     'autocomplete' => 'email',
                 ],
                 
