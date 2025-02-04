@@ -199,7 +199,6 @@ body{
 
     .choux-grid li {
         border: 1px solid #55211A; 
-        padding: 15px;
         border-radius: 8px;
         text-align: center;
         background: transparent;
@@ -210,12 +209,27 @@ body{
         flex-direction: column;
         align-items: center;
         padding: 10px;
+        margin-bottom: 20px;
     }
     .choux-grid li h2{
         font-family: "Bubblegum Sans", sans-serif;
         color: #55211A;
         font-size: 1.3em;
     }
+    .favori-btn {
+        color: pink; /* Rose par défaut */
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        font-size: 20px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .favori-btn.favori-active {
+        color: red; /* Rouge si favori */
+    }
+    
+    
     .catalog-image{
         width: 200x;
         height: 200px;
@@ -250,7 +264,7 @@ body{
     .inner-footer{
         display: flex;
         justify-content: space-around;
-        align-items: center;
+        align-items: center;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahttp://127.0.0.1:8000
     }
     .footer-logo{
         display: flex;
@@ -325,7 +339,18 @@ body{
         font-size: 1.1em;
         font-weight: 500;
     }
-    
+    .product-info{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .favori-btn{
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2em;
+    }
     .details-image{
         width: 250px;
         height: 250px;
@@ -553,4 +578,12 @@ body{
         font-size: 1.1em;
         font-family: "Bubblegum Sans", sans-serif;
         padding: 20px;
+    }
+
+    .profile-link{
+        text-decoration: none;
+        color: #FFA85C;
+        font-size: 1.4em;
+        font-family: "Bubblegum Sans", sans-serif;
+        padding: 15px;
     }

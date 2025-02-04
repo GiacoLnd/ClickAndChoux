@@ -43,10 +43,17 @@ class Produit
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    /**
+     * @var Collection<int, Favoris>
+     */
+    #[ORM\OneToMany(targetEntity: Favoris::class, mappedBy: 'produit', orphanRemoval: true)]
+    private Collection $favoris;
+
 
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,6 +177,36 @@ class Produit
     public function getTTC(): float
     {
         return round($this->prixHt * (1 + ($this->TVA / 100)), 2);
+    }
+
+    /**
+     * @return Collection<int, Favoris>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Favoris $favori): static
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris->add($favori);
+            $favori->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Favoris $favori): static
+    {
+        if ($this->favoris->removeElement($favori)) {
+            // set the owning side to null (unless already changed)
+            if ($favori->getProduit() === $this) {
+                $favori->setProduit(null);
+            }
+        }
+
+        return $this;
     }
     
 }
