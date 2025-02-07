@@ -3,16 +3,18 @@
 {% block title %}Mes Favoris{% endblock %}
 
 {% block body %}
-<h2 class="catalog-title">Mes favoris</h2>
-<div class="choux-grid-container">
-    <ul class="choux-grid">
-        {% for favori in favoris %}
-            <li>
-                <a href="{{ path('produit_detail', {'id': favori.produit.id}) }}"><img src="/img/{{ favori.produit.image }}" alt="{{ favori.produit.nomProduit }}" class="catalog-image"></a><button class="favori-btn" data-id="{{ favori.produit.id }}"><i class="fa-solid fa-heart"></i></button>
-                <a href="{{ path('produit_detail', {'id': favori.produit.id}) }}"><h2>{{ favori.produit.nomProduit }}</h2></a>
-                <p class="catalog-price">{{ favori.produit.getTTC }}€</p>      
-            </li>
-        {% endfor %}
-    </ul>
+<div class="catalog-page">
+    <h2 class="catalog-title">Mes favoris</h2>
+    <div class="choux-grid-container">
+        <ul class="choux-grid">
+            {% for favori in favoris %}
+                <li>
+                    <a href="{{ path('produit_detail', {'id': favori.produit.id}) }}"><img src="/img/{{ favori.produit.image }}" alt="{{ favori.produit.nomProduit }}" class="catalog-image"></a><button class="favori-btn" data-id="{{ favori.produit.id }}"><i class="fa-solid fa-heart"></i></button>
+                    <a href="{{ path('produit_detail', {'id': favori.produit.id}) }}"><h2>{{ favori.produit.nomProduit }}</h2></a>
+                    <p class="catalog-price">{{ favori.produit.getTTC }}€</p>      
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}

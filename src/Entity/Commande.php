@@ -37,7 +37,7 @@ class Commande
     /**
      * @var Collection<int, Panier>
      */
-    #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'Commandes', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'commande', cascade: ['persist', 'remove'])]
     private Collection $paniers;
 
     #[ORM\ManyToOne(inversedBy: 'Commandes')]
@@ -171,5 +171,6 @@ class Commande
 
         return $this;
     }
+
 
 }

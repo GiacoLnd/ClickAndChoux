@@ -19,7 +19,7 @@ class Panier
     #[ORM\ManyToOne(inversedBy: 'paniers')]
     private ?Produit $produit = null;
 
-    #[ORM\ManyToOne(inversedBy: 'paniers')]
+    #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'paniers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Commande $commande = null; // Correction : "commande" avec un "c" minuscule
 

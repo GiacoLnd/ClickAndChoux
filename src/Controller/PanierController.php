@@ -18,6 +18,8 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 class PanierController extends AbstractController
 {
@@ -288,6 +290,28 @@ public function afficherPanier(
         return $this->redirectToRoute('panier_afficher');
     }
 
+
+    
+    #[Route('/panier/valider', name: 'panier_valider')]
+    public function validerPanier(SessionInterface $session, TokenStorageInterface $tokenStorage): Response
+    {
+        $user = $tokenStorage->getToken()?->getUser();
+    
+        if (!$user || !is_object($user)) {
+            $this->addFlash('warning', 'Veuillez vous connecter pour valider votre panier.');
+    
+            // ✅ Stocke la redirection en session
+            $session->set('redirect_after_login', $this->generateUrl('panier_afficher'));
+    
+            return $this->redirectToRoute('app_login');
+        }
+    
+        return $this->redirectToRoute('commande_valider');
+    }
+    
+    
+    
+    
     
 
 

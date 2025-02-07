@@ -20,42 +20,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //script for fav 
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('/favoris/liste', { credentials: 'include' }) // Récupère les favoris de l'utilisateur
+    // Sélectionne la div catalog-page
+    const catalogDiv = document.querySelector('.catalog-page');
+
+    // Vérifie si la div est présente et visible avant d'exécuter l'AJAX
+    if (!catalogDiv || getComputedStyle(catalogDiv).display === 'none') {
+        console.log("Pas de div .catalog-page trouvée ou elle est cachée. Annulation de l'AJAX.");
+        return; // Stoppe immédiatement l'exécution
+    }
+
+    console.log("Div .catalog-page détectée et visible. Exécution de l'AJAX.");
+
+    fetch('/favoris/liste', { credentials: 'include' }) 
         .then(response => response.json())
         .then(data => {
-            if (data.favoris) { // Vérification des favoris
+            if (data.favoris) {
                 document.querySelectorAll('.favori-btn').forEach(button => {
-                    const produitId = button.dataset.id; // Récupère l'ID du produit depuis le bouton
-                    if (data.favoris.includes(parseInt(produitId))) { // Vérifie si le produit est en favoris
-                        button.classList.add('favori-active'); // Ajoute la classe pour indiquer que le produit est déjà en favoris
+                    const produitId = button.dataset.id;
+                    if (data.favoris.includes(parseInt(produitId))) {
+                        button.classList.add('favori-active');
                     }
                 });
             }
-        })
+        });
 
     // Gérer l'ajout et la suppression des favoris
     document.querySelectorAll('.favori-btn').forEach(button => {
         button.addEventListener('click', function () {
-            const produitId = this.dataset.id; // Récupère l'id via le coeur
-            const isFavori = this.classList.contains('favori-active'); // Vérifie si le bouton a déjà la classe "favori-active"
-            const url = isFavori ? `/favoris/supprimer/${produitId}` : `/favoris/ajouter/${produitId}`; // Si produit déjà en favoris, supprime, sinon l'ajoute
-            const method = isFavori ? 'DELETE' : 'POST'; // Si suppression : DELETE, sinon POST
+            const produitId = this.dataset.id;
+            const isFavori = this.classList.contains('favori-active');
+            const url = isFavori ? `/favoris/supprimer/${produitId}` : `/favoris/ajouter/${produitId}`;
+            const method = isFavori ? 'DELETE' : 'POST';
 
             fetch(url, {
-                method: method, // Utilise la méthode http précédente
-                credentials: 'include', // 🔹 Garde la session active
+                method: method,
+                credentials: 'include',
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest' // Précise que la requête est une requête AJAX
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(response => response.json()) // Converti la réponse en JSON
+            .then(response => response.json())
             .then(data => { 
                 if (data.message.includes('ajouté')) {
-                    this.classList.add('favori-active'); // active le coeur rouge
+                    this.classList.add('favori-active');
                 } else if (data.message.includes('retiré')) {
-                    this.classList.remove('favori-active'); // active le coeur rose
+                    this.classList.remove('favori-active');
                 }
-            })
+            });
         });
     });
 });

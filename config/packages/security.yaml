@@ -28,7 +28,7 @@ security:
                 secret: '%kernel.secret%'
                 lifetime: 604800 # Durée en secondes (7 jours ici)
                 path: /          # Chemin pour lequel le cookie sera valide
-                always_remember_me: true
+                always_remember_me: false
             stateless: false # 🔹 Assure-toi que ceci est false pour maintenir la session
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

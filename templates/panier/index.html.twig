@@ -31,6 +31,9 @@
             </div>
             {% endfor %}
             <h3>Total général : {{ montantTotal }} €</h3>
+            <form action="{{ path('commande_valider') }}" method="post">
+                <button type="submit" class="btn btn-primary">Valider le panier</button>
+            </form>
             <form action="{{ path('panier_clear') }}" method="post">
                 <button type="submit" class="btn btn-danger">Vider le panier</button>
             </form>

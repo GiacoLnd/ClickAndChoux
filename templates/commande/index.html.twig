@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande Confirmée{% endblock %}
+
+{% block body %}
+    <h1>Merci pour votre commande !</h1>
+    <p>Votre commande n°{{ commande.id }} a été confirmée.</p>
+    <p>Date : {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
+
+    <h2>Détails de la commande :</h2>
+    <ul>
+        {% for panier in commande.paniers %}
+            <li>{{ panier.produit.nomProduit }} - {{ panier.quantity }} x {{ panier.produit.getTTC }}€ : {{ panier.getTotalTTC }}€</li>
+        {% endfor %}
+    </ul>
+
+    <p><strong>Total :</strong> {{ commande.montantTotal }}€</p>
+
+    <a href="{{ path('app_user_profil') }}" class="btn btn-primary">Voir mes commandes</a>
+{% endblock %}

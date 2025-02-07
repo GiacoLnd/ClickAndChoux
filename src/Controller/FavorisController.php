@@ -6,31 +6,17 @@ use App\Entity\Favoris;
 use App\Entity\Produit;
 use App\Repository\FavorisRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 #[Route('/favoris', name: 'favoris_')]
 class FavorisController extends AbstractController
 {
-    #[Route('/liste', name: 'liste', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
-    public function liste(FavorisRepository $favorisRepository): JsonResponse
-    {
-        $user = $this->getUser();
-        if (!$user) {
-            return new JsonResponse(['message' => 'Utilisateur non connecté'], 401); // Retourne une réponse JSON avec un code HTTP 401 (Unauthorized)
-        }
-
-        $favoris = $favorisRepository->findBy(['user' => $user]); // Récupère tous les objets Favoris liés à l’utilisateur connecté
-        $favorisIds = array_map(fn($favori) => $favori->getProduit()->getId(), $favoris); // Transforme la liste des favoris en une liste d’IDs des produits favoris
-        // fn : méthode courte pour créer une fonction anonyme (fonctionn sans nom utilisée uniquement une seule fois) 
-
-        return new JsonResponse(['favoris' => $favorisIds]);
-    }
-
+    
     #[Route('/favoris/page', name: 'page', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function pageFavoris(FavorisRepository $favorisRepository): Response
@@ -92,5 +78,22 @@ class FavorisController extends AbstractController
 
         return new JsonResponse(['message' => 'Produit retiré des favoris']);
     }
+
+    #[Route('/liste', name: 'liste', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function liste(FavorisRepository $favorisRepository, TokenStorageInterface $tokenStorage): JsonResponse
+    {
+        $user = $tokenStorage->getToken()?->getUser();
+    
+        if (!$user || !is_object($user)) {
+            return new JsonResponse(['favoris' => [], 'message' => 'Utilisateur non connecté'], 200);
+        }
+    
+        $favoris = $favorisRepository->findBy(['user' => $user]);
+        $favorisIds = array_map(fn($favori) => $favori->getProduit()->getId(), $favoris);
+    
+        return new JsonResponse(['favoris' => $favorisIds]);
+    }
+    
 }
 
