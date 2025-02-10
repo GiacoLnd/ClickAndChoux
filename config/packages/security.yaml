@@ -22,14 +22,16 @@ security:
                 enable_csrf: true
             logout:
                 path: app_logout
-                # where to redirect after logout
                 target: /
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800 # Durée en secondes (7 jours ici)
-                path: /          # Chemin pour lequel le cookie sera valide
-                always_remember_me: false
-            stateless: false # 🔹 Assure-toi que ceci est false pour maintenir la session
+                lifetime: 604800        # Durée de validité du cookie en secondes (ici, 7 jours)
+                path: '/'               # Chemin pour lequel le cookie est valide
+                name: 'REMEMBERME'      # Nom du cookie
+                secure: auto            # Le cookie est transmis uniquement sur HTTPS si disponible
+                httponly: true          # Le cookie n'est pas accessible via JavaScript
+                samesite: lax           # Protection contre les attaques CSRF
+                always_remember_me: true # L'utilisateur doit cocher la case "Se souvenir de moi"
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 

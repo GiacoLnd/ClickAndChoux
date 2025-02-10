@@ -20,16 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //script for fav 
 document.addEventListener('DOMContentLoaded', function () {
-    // Sélectionne la div catalog-page
-    const catalogDiv = document.querySelector('.catalog-page');
+    // Liste des URLs où l'AJAX est autorisé
+    const urlsCatalogues = [
+        '/produit/salty',
+        '/produit/sweety'
+    ];
 
-    // Vérifie si la div est présente et visible avant d'exécuter l'AJAX
-    if (!catalogDiv || getComputedStyle(catalogDiv).display === 'none') {
-        console.log("Pas de div .catalog-page trouvée ou elle est cachée. Annulation de l'AJAX.");
-        return; // Stoppe immédiatement l'exécution
+    // Vérifie si l'URL actuelle correspond à un catalogue
+    if (!urlsCatalogues.includes(window.location.pathname)) {
+        console.log("AJAX bloqué : URL non autorisée.");
+        return;
     }
 
-    console.log("Div .catalog-page détectée et visible. Exécution de l'AJAX.");
+    console.log("AJAX activé : Page catalogue détectée.");
 
     fetch('/favoris/liste', { credentials: 'include' }) 
         .then(response => response.json())
@@ -70,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
 
 
 

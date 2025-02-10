@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\Commande;
 use App\Form\EditProfileType;
 use App\Form\ChangePasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 
 final class UserController extends AbstractController
@@ -74,7 +74,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/updatePassword', name: 'app_update_password')]
-    public function updatePassword(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, Security $security,  TokenStorageInterface $tokenStorage): Response
+    public function updatePassword(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher,  TokenStorageInterface $tokenStorage): Response
     {
         $user = $this->getUser();
     
@@ -110,5 +110,22 @@ final class UserController extends AbstractController
             'formPassword' => $formPassword->createView(),
         ]);
     }
+
+    #[Route('/profil/commandes', name: 'app_user_commandes')]
+    public function listeCommandes(EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        // Récupère toutes les commandes confirmées de l'utilisateur
+        $commandes = $entityManager->getRepository(Commande::class)->findBy(
+            ['user' => $user, 'statut' => 'confirmée'],
+            ['dateCommande' => 'DESC'] // Trier par date, de la plus récente à la plus ancienne
+        );
+
+        return $this->render('user/commandes.html.twig', [
+            'commandes' => $commandes
+        ]);
+    }
+
     
 }

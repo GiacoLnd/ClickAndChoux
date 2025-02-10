@@ -291,23 +291,18 @@ public function afficherPanier(
     }
 
 
-    
     #[Route('/panier/valider', name: 'panier_valider')]
-    public function validerPanier(SessionInterface $session, TokenStorageInterface $tokenStorage): Response
+    public function validerPanier(): Response
     {
-        $user = $tokenStorage->getToken()?->getUser();
-    
-        if (!$user || !is_object($user)) {
-            $this->addFlash('warning', 'Veuillez vous connecter pour valider votre panier.');
-    
-            // ✅ Stocke la redirection en session
-            $session->set('redirect_after_login', $this->generateUrl('panier_afficher'));
-    
+        // Redirige vers la connexion si non connecté
+        if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
     
-        return $this->redirectToRoute('commande_valider');
+        // Si l'utilisateur est connecté, rediriger directement vers la validation de commande
+        return $this->redirectToRoute('commande_confirmer');
     }
+    
     
     
     

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Validation de la commande{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Validation de votre commande</h1>
+
+        {% if commande.paniers is not empty %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix Unitaire</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for panier in commande.paniers %}
+                        <tr>
+                            <td>{{ panier.produit.nomProduit }}</td>
+                            <td>{{ panier.quantity }}</td>
+                            <td>{{ panier.produit.getTTC }}€</td>
+                            <td>{{ panier.getTotalTTC }}€</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <p><strong>Total de la commande :</strong> {{ commande.montantTotal }}€</p>
+
+            <div class="d-flex gap-3">
+                <a href="{{ path('commande_confirmer') }}" class="btn btn-success">Confirmer la commande</a>
+                <a href="{{ path('panier_afficher') }}" class="btn btn-secondary">Modifier mon panier</a>
+            </div>
+        {% else %}
+            <p class="text-danger">Votre commande est vide.</p>
+            <a href="{{ path('panier_afficher') }}" class="btn btn-primary">Retour au panier</a>
+        {% endif %}
+    </div>
+{% endblock %}

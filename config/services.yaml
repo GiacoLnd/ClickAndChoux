@@ -10,6 +10,10 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $router: '@router'                   # Injection automatique du Router
+            $requestStack: '@request_stack'                 # Injection de la session HTTP
+            $entityManager: '@doctrine.orm.entity_manager' # Injection de l'EntityManager
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -19,6 +23,14 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+        
+    App\EventListener\LoginListener:
+        arguments:
+            $router: '@router'
+            $requestStack: '@request_stack' # Injection correcte de la session via RequestStack
+            $entityManager: '@doctrine.orm.entity_manager'
+        tags:
+            - { name: kernel.event_subscriber }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
