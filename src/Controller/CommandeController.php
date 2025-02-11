@@ -3,15 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Commande;
+use App\Form\CommandeType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class CommandeController extends AbstractController
 {
-    #[Route('/commande/valider', name: 'commande_valider')]
-    public function validerCommande(EntityManagerInterface $entityManager): Response
+    #[Route('/panier/valider', name: 'commande_valider', methods: ['POST'])]
+    public function validerPanier(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
@@ -19,24 +21,23 @@ final class CommandeController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // Récupère la commande "panier"
+        // Vérifie si l'utilisateur a une commande en cours
         $commande = $entityManager->getRepository(Commande::class)->findOneBy([
             'user' => $user,
             'statut' => 'panier'
         ]);
 
         if (!$commande || $commande->getPaniers()->isEmpty()) {
-            $this->addFlash('error', 'Votre commande est vide.');
+            $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('panier_afficher');
         }
-
-        return $this->render('commande/validation.html.twig', [
-            'commande' => $commande
-        ]);
+        
+        return $this->redirectToRoute('commande_confirmer');
     }
 
+
     #[Route('/commande/confirmer', name: 'commande_confirmer')]
-    public function confirmerCommande(EntityManagerInterface $entityManager): Response
+    public function confirmerCommande(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
     
@@ -51,34 +52,45 @@ final class CommandeController extends AbstractController
         ]);
     
         if (!$commande || $commande->getPaniers()->isEmpty()) {
-            $this->addFlash('error', 'Aucune commande à valider.');
+            $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('panier_afficher');
         }
     
-        // Vérifie si la commande a déjà une référence (évite la génération en double)
+        // Génération d'une référence unique si elle n'existe pas
         if (!$commande->getReference()) {
             do {
-                $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4))); // bin2hex() convertit les octets en chaîne hexadécimale - random_bytes(4) génère 4 octets aléatoires
-                // 8 caractères hexadécimaux car bin2hex() convertit 4 bytes * 2 = 8 bytes en hexadécimal
+                $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
             } while ($entityManager->getRepository(Commande::class)->findOneBy(['reference' => $reference]));
     
             $commande->setReference($reference);
         }
     
-        // Calcule le montant total
+        // Calcul du montant total
         $total = 0.0;
         foreach ($commande->getPaniers() as $panier) {
-            $total += $panier->getTotalTTC();
+            $total += $panier->getProduit()->getTTC() * $panier->getQuantity();
         }
         $commande->setMontantTotal($total);
-        $commande->setStatut('confirmée');
-        $commande->setDateCommande(new \DateTime());
     
-        $entityManager->flush();
+        // Création du formulaire d'adresse de livraison
+        $form = $this->createForm(CommandeType::class, $commande);
+        $form->handleRequest($request);
     
-        return $this->redirectToRoute('commande_confirmation', ['id' => $commande->getId()]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $commande->setStatut('confirmée');
+            $commande->setDateCommande(new \DateTime());
+    
+            $entityManager->flush();
+            $this->addFlash('success', 'Commande confirmée avec succès !');
+    
+            return $this->redirectToRoute('commande_confirmation', ['id' => $commande->getId()]);
+        }
+    
+        return $this->render('commande/confirmation.html.twig', [
+            'commande' => $commande,
+            'form' => $form->createView(),
+        ]);
     }
-    
     
     #[Route('/commande/confirmation/{id}', name: 'commande_confirmation')]
     public function confirmationCommande(Commande $commande): Response
@@ -87,4 +99,5 @@ final class CommandeController extends AbstractController
             'commande' => $commande
         ]);
     }
+
 }

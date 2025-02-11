@@ -4,7 +4,8 @@
 
 {% block body %}
     <h1>Merci pour votre commande !</h1>
-    <p>Votre commande n°{{ commande.id }} a été confirmée.</p>
+    <p>Votre command a été confirmée.</p>
+    <p>Référence de votre commande : {{ commande.reference }} </p>
     <p>Date : {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
 
     <h2>Détails de la commande :</h2>

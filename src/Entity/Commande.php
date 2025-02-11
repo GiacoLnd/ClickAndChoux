@@ -47,6 +47,15 @@ class Commande
     #[ORM\Column(length: 50)]
     private ?string $reference = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $adresseLivraison = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $codePostalLivraison = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $villeLivraison = null;
+
   
 
 
@@ -183,6 +192,42 @@ class Commande
     public function setReference(string $reference): static
     {
         $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getAdresseLivraison(): ?string
+    {
+        return $this->adresseLivraison;
+    }
+
+    public function setAdresseLivraison(?string $adresseLivraison): static
+    {
+        $this->adresseLivraison = $adresseLivraison;
+
+        return $this;
+    }
+
+    public function getCodePostalLivraison(): ?string
+    {
+        return $this->codePostalLivraison;
+    }
+
+    public function setCodePostalLivraison(?string $codePostalLivraison): static
+    {
+        $this->codePostalLivraison = $codePostalLivraison;
+
+        return $this;
+    }
+
+    public function getVilleLivraison(): ?string
+    {
+        return $this->villeLivraison;
+    }
+
+    public function setVilleLivraison(?string $villeLivraison): static
+    {
+        $this->villeLivraison = $villeLivraison;
 
         return $this;
     }

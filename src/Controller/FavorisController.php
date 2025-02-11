@@ -79,24 +79,21 @@ class FavorisController extends AbstractController
         return new JsonResponse(['message' => 'Produit retiré des favoris']);
     }
 
-    //TODO : Fix la partie affichage des favoris
-    //Actuellement, affiche la réponse JSON dans le navigateur après une connexion réussie
+    #[Route('/liste', name: 'liste', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function liste(FavorisRepository $favorisRepository, TokenStorageInterface $tokenStorage): JsonResponse
+    {
+        $user = $tokenStorage->getToken()?->getUser();
     
-    // #[Route('/liste', name: 'liste', methods: ['GET'])]
-    // #[IsGranted('ROLE_USER')]
-    // public function liste(FavorisRepository $favorisRepository, TokenStorageInterface $tokenStorage): JsonResponse
-    // {
-    //     $user = $tokenStorage->getToken()?->getUser();
+        if (!$user || !is_object($user)) {
+            return new JsonResponse(['favoris' => [], 'message' => 'Utilisateur non connecté'], 200);
+        }
     
-    //     if (!$user || !is_object($user)) {
-    //         return new JsonResponse(['favoris' => [], 'message' => 'Utilisateur non connecté'], 200);
-    //     }
+        $favoris = $favorisRepository->findBy(['user' => $user]);
+        $favorisIds = array_map(fn($favori) => $favori->getProduit()->getId(), $favoris);
     
-    //     $favoris = $favorisRepository->findBy(['user' => $user]);
-    //     $favorisIds = array_map(fn($favori) => $favori->getProduit()->getId(), $favoris);
-    
-    //     return new JsonResponse(['favoris' => $favorisIds]);
-    // }
+        return new JsonResponse(['favoris' => $favorisIds]);
+    }
     
 }
 

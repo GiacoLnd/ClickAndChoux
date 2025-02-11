@@ -56,7 +56,7 @@ class LoginListener implements EventSubscriberInterface
                 $this->entityManager->flush();
             }
 
-            // Créé une nouvelle commande "panier"
+            // Création d'une nouvelle commande "panier"
             $nouvelleCommande = new Commande();
             $nouvelleCommande->setStatut('panier');
             $nouvelleCommande->setDateCommande(new \DateTime());
@@ -64,7 +64,7 @@ class LoginListener implements EventSubscriberInterface
 
             // Génère une référence unique pour la commande
             do {
-                $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4))); // bin2hex() convertit les 4 bytes randoms * 2 en chaîne hexadécimale - random_bytes(4) génère 4 octets aléatoires
+                $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
             } while ($this->entityManager->getRepository(Commande::class)->findOneBy(['reference' => $reference]));
 
             $nouvelleCommande->setReference($reference);
@@ -89,15 +89,18 @@ class LoginListener implements EventSubscriberInterface
             }
 
             $nouvelleCommande->setMontantTotal($total);
-
             $this->entityManager->flush();
 
             // Supprime le panier en session après transfert
             $session->remove('panier');
+
+            // Redirection vers la validation de commande
+            $response = new RedirectResponse($this->router->generate('commande_valider'));
+        } else {
+            // Si le panier est vide, redirection vers l'accueil
+            $response = new RedirectResponse($this->router->generate('app_home'));
         }
 
-        // Redirection après connexion vers la validation de commande
-        $response = new RedirectResponse($this->router->generate('commande_valider'));
         $event->setResponse($response);
     }
 }
