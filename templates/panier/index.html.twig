@@ -3,6 +3,14 @@
 {% block title %}Votre Panier{% endblock %}
 
 {% block body %}
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+
+{% for message in app.flashes('warning') %}
+    <div class="alert alert-warning">{{ message }}</div>
+{% endfor %}
+
     <div class="cart-container">
     <h1 class="login-title">Votre Panier</h1>
     {% if paniers is empty %}
@@ -13,17 +21,26 @@
             <div class="cart-product">
                 <img src="/img/{{ item.produit.image }}" alt="{{ item.produit.nomProduit }}" class="cart-image">
                 {{ (item.produit.nomProduit) }} 
+
                 <form action="{{ path('panier_decrease', { id: item.produit.id }) }}" method="post" style="display: inline;">
                     <button type="submit" class="btn btn-danger btn-sm">
                         <i class="fa-solid fa-minus"></i>
                     </button>
                 </form>
-                {{ item.quantity }}
+                
+                <div class="cart-quantity">
+                    {{ form_start(forms[item.produit.id]) }}
+                        {{ form_widget(forms[item.produit.id].quantity) }}
+                        {{ form_widget(forms[item.produit.id].ajouter, { 'label': '<i class="fa-solid fa-pen"></i>', 'label_html': true }) }}
+                    {{ form_end(forms[item.produit.id]) }}
+                </div>
+
                 <form action="{{ path('panier_increase', { id: item.produit.id }) }}" method="post" style="display: inline;">
                     <button type="submit" class="btn btn-success btn-sm">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </form>
+
                 {{ (item.produit.getTTC * item.quantity) }} €
                 <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
                     <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>

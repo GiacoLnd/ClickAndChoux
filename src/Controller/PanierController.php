@@ -24,111 +24,59 @@ use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundE
 class PanierController extends AbstractController
 {
     #[Route('/panier', name: 'panier_afficher')]
-public function afficherPanier(
-    SessionInterface $session,
-    PanierRepository $panierRepository,
-    ProduitRepository $produitRepository,
-    CommandeRepository $commandeRepository
-): Response {
-    $user = $this->getUser();
-    $paniers = [];
-    $montantTotal = 0;
-
-    if ($user) {
-        // Récupère la commande en statut "panier" pour l'utilisateur connecté
-        $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-
-        if ($commande) {
-            // Récupère le panier liés à cette commande
-            $paniers = $panierRepository->findBy(['commande' => $commande]);
-
-            foreach ($paniers as $panier) {
-                $montantTotal += $panier->getTotalTTC();
-            }
-        }
-    } else {
-        $cart = $session->get('panier', []);
-        foreach ($cart as $productId => $quantity) {
-            $produit = $produitRepository->find($productId);
-            if ($produit) {
-                $totalProduit = $produit->getTTC() * $quantity; 
-                $montantTotal += $totalProduit; 
-                $paniers[] = [
-                    'produit' => $produit,
-                    'quantity' => $quantity,
-                    'montantTotal' => $totalProduit,
-                ];
-            }
-        }
-    }
-
-    return $this->render('panier/index.html.twig', [
-        'paniers' => $paniers,
-        'montantTotal' => $montantTotal
-    ]);
-}
-
-    #[Route('/panier/add/{id}', name: 'panier_add', methods: ['POST'])]
-    public function ajouterAuPanier(
-        Produit $produit,
-        Request $request,
+    public function afficherPanier(
         SessionInterface $session,
-        EntityManagerInterface $em,
-        CommandeRepository $commandeRepository,
-        PanierRepository $panierRepository
+        PanierRepository $panierRepository,
+        ProduitRepository $produitRepository,
+        CommandeRepository $commandeRepository
     ): Response {
         $user = $this->getUser();
-        $quantity = $request->request->getInt('quantity', 1);
+        $paniers = [];
+        $montantTotal = 0;
+        $forms = [];
 
-        if (!$user) {
-            // Utilisateur non connecté : Gestion via session
-            $panier = $session->get('panier', []);
-
-            // Ajouter ou mettre à jour le produit dans le panier
-            if (isset($panier[$produit->getId()])) {
-                $panier[$produit->getId()] += $quantity;
-            } else {
-                $panier[$produit->getId()] = $quantity;
-            }
-
-            $session->set('panier', $panier);
-
-            $this->addFlash('success', 'Produit ajouté au panier (session).');
-        } else {
-            // Utilisateur connecté : Gestion via base de données
+        // Récupération des produits du panier
+        if ($user) {
             $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
 
-            if (!$commande) {
-                $commande = new Commande();
-                $commande->setStatut('panier');
-                $commande->setDateCommande(new \DateTime());
-                $commande->setUser($user);
-                $em->persist($commande);
-                $em->flush();
+            if ($commande) {
+                $paniers = $panierRepository->findBy(['commande' => $commande]);
             }
-
-            $existingPanier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
-
-            if ($existingPanier) {
-                // Mettre à jour la quantité
-                $existingPanier->setQuantity($existingPanier->getQuantity() + $quantity);
-            } else {
-                // Créer une nouvelle ligne dans le panier
-                $panier = new Panier();
-                $panier->setProduit($produit);
-                $panier->setQuantity($quantity);
-                $panier->setCommande($commande);
-                $em->persist($panier);
+        } else {
+            $cart = $session->get('panier', []);
+            foreach ($cart as $productId => $quantity) {
+                $produit = $produitRepository->find($productId);
+                if ($produit) {
+                    $panier = new Panier();
+                    $panier->setProduit($produit);
+                    $panier->setQuantity($quantity);
+                    $paniers[] = $panier;
+                }
             }
-
-            $em->flush();
-
-            $this->addFlash('success', 'Produit ajouté au panier (base de données).');
         }
 
-        return $this->redirectToRoute('panier_afficher');
+        // Calcul du montant total
+        foreach ($paniers as $panier) {
+            $montantTotal += $panier->getProduit()->getTTC() * $panier->getQuantity();
+        }
+
+        // Génération du formulaire pour chaque produit
+        foreach ($paniers as $panier) {
+            $forms[$panier->getProduit()->getId()] = $this->createForm(PanierType::class, $panier, [
+                'action' => $this->generateUrl('panier_update', ['id' => $panier->getProduit()->getId()]),
+                'method' => 'POST',
+            ])->createView();
+        }
+
+        return $this->render('panier/index.html.twig', [
+            'paniers' => $paniers,
+            'montantTotal' => $montantTotal,
+            'forms' => $forms,
+        ]);
     }
 
+    
+    // Fonction de suppression d'un produit du panier
     #[Route('/panier/remove/{id}', name: 'panier_remove', methods: ['POST'])]
     public function supprimerProduit(
         Produit $produit,
@@ -170,6 +118,7 @@ public function afficherPanier(
     return $this->redirectToRoute('panier_afficher');
     }
 
+    // Fonction de suppression de tous les produits du panier
     #[Route('/panier/clear', name: 'panier_clear', methods: ['POST'])]
     public function supprimerToutPanier(
         SessionInterface $session,
@@ -205,7 +154,7 @@ public function afficherPanier(
         return $this->redirectToRoute('panier_afficher');
     }
 
-
+    // Fonction d'augmentation de la quantité du panier via icone plus
     #[Route('/panier/increase/{id}', name: 'panier_increase', methods: ['POST'])]
     public function augmenterQuantite(
         Produit $produit,
@@ -244,6 +193,7 @@ public function afficherPanier(
         return $this->redirectToRoute('panier_afficher');
     }
 
+    // Fonction de diminution de la quantité du panier via icone moins
     #[Route('/panier/decrease/{id}', name: 'panier_decrease', methods: ['POST'])]
     public function diminuerQuantite(
         Produit $produit,
@@ -290,7 +240,7 @@ public function afficherPanier(
         return $this->redirectToRoute('panier_afficher');
     }
 
-
+    // Fonction Validant le panier
     #[Route('/panier/valider', name: 'panier_valider')]
     public function validerPanier(): Response
     {
@@ -303,12 +253,72 @@ public function afficherPanier(
         return $this->redirectToRoute('commande_confirmer');
     }
     
-    
-    
-    
-    
-    
 
+    // Adaptation de la quantité directement depuis un form dans le panier
+    #[Route('/panier/update/{id}', name: 'panier_update', methods: ['POST'])]
+    public function updateQuantity(
+        Request $request,
+        PanierRepository $panierRepository,
+        ProduitRepository $produitRepository,
+        CommandeRepository $commandeRepository,
+        EntityManagerInterface $em,
+        int $id
+    ): Response {
+        $user = $this->getUser();
+        
+        // Utilisateur connecté
+        if ($user) {
+            $produit = $produitRepository->find($id);
+            $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
+
+            if ($produit && $commande) {
+                $panier = $panierRepository->findOneBy([
+                    'produit' => $produit,
+                    'commande' => $commande
+                ]);
+
+                if ($panier) {
+                    $form = $this->createForm(PanierType::class, $panier);
+                    $form->handleRequest($request);
+
+                    if ($form->isSubmitted() && $form->isValid()) {
+                        $quantity = $form->get('quantity')->getData();
+
+                        if ($quantity < 1) {
+                            $this->addFlash('error', 'Quantité invalide.');
+                        } else {
+                            $panier->setQuantity($quantity);
+                            $em->flush();
+                            $this->addFlash('success', 'Quantité mise à jour.');
+                        }
+                    }
+                }
+            }
+        } else {
+            // Utilisateur non connecté : Session
+            $session = $request->getSession();
+            $cart = $session->get('panier', []);
+
+            if (isset($cart[$id])) {
+                $form = $this->createForm(PanierType::class);
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $quantity = $form->get('quantity')->getData();
+
+                    if ($quantity < 1) {
+                        $this->addFlash('error', 'Quantité invalide.');
+                    } else {
+                        $cart[$id] = $quantity;
+                        $session->set('panier', $cart);
+                        $this->addFlash('success', 'Quantité mise à jour.');
+                    }
+                }
+            }
+        }
+
+        return $this->redirectToRoute('panier_afficher');
+    }
 
 }
 
