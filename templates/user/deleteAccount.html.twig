@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="profile-container">
+        <h2 class="details-title">Supprimer mon compte</h2>
+        <p>Attention, cette action est irréversible.</p>
+        <p>Veuillez confirmer votre mot de passe.</p>
+        
+        {{ form_start(formDelete) }}
+            {{ form_row(formDelete.password) }}
+            <div class="form-group">
+                {{ form_row(formDelete.submit) }}
+            </div>
+        {{ form_end(formDelete) }}
+
+        <a href="{{ path('app_user_profil') }}" class="register-link">Retour à votre profil</a>
+    </div>
+{% endblock %}

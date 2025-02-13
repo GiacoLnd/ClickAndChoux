@@ -561,6 +561,7 @@ body{
     color: #55211A;
     font-size: 1.2em;
     gap: 15px;
+    margin: 15px;
     }
 
     .profile-container input{
@@ -604,6 +605,13 @@ body{
         padding: 15px;
     }
 
+    .delete-link{
+        text-decoration: none;
+        color: red;
+        font-size: 1.4em;
+        font-family: "Bubblegum Sans", sans-serif;
+        padding: 15px;
+    }
     .commande-list { 
         display: flex; 
         flex-wrap: wrap; 
@@ -675,4 +683,3 @@ body{
         font-family: "Bubblegum Sans", sans-serif;
         font-size: 1.1em;
     }
-

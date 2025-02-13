@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Commentaire>
      */
-    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
     private Collection $Commentaires;
 
     #[ORM\Column]
@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Favoris>
      */
-    #[ORM\OneToMany(targetEntity: Favoris::class, mappedBy: 'User', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Favoris::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
     private Collection $favoris;
 
     public function __construct()

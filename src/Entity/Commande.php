@@ -40,8 +40,8 @@ class Commande
     #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'commande', cascade: ['persist', 'remove'])]
     private Collection $paniers;
 
-    #[ORM\ManyToOne(inversedBy: 'Commandes')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commandes')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
     #[ORM\Column(length: 50)]

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Commande;
 use App\Form\EditProfileType;
+use App\Form\DeleteAccountType;
 use App\Form\ChangePasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,20 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 final class UserController extends AbstractController
 {
-    #[Route('/user', name: 'app_user')]
-    public function index(): Response
-    {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
     #[Route('/profil', name: 'app_user_profil')]
     #[IsGranted('ROLE_USER')]
     public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
@@ -117,7 +110,7 @@ final class UserController extends AbstractController
         $user = $this->getUser();
 
         // Récupère toutes les commandes confirmées de l'utilisateur
-        $commandes = $entityManager->getRepository(Commande::class)->findBy(
+       $commandes = $entityManager->getRepository(Commande::class)->findBy(
             ['user' => $user, 'statut' => 'confirmée'],
             ['dateCommande' => 'DESC'] // Trier par date, de la plus récente à la plus ancienne
         );
@@ -127,5 +120,53 @@ final class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/profil/supprimer', name: 'app_profile_delete', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function deleteAccount(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
+        $user = $this->getUser();
+
+        // Création du formulaire
+        $formDelete = $this->createForm(DeleteAccountType::class);
+        $formDelete->handleRequest($request);
+    
+        if ($formDelete->isSubmitted() && $formDelete->isValid()) {
+            // Récupération du mot de passe soumis
+            $password = $formDelete->get('password')->getData();
+    
+            // Vérification du mot de passe
+            if (!$passwordHasher->isPasswordValid($user, $password)) {
+                $this->addFlash('error', 'Mot de passe incorrect.');
+                return $this->redirectToRoute('app_profile_delete');
+            }
+    
+            // Dissocier les commandes de l'utilisateur
+            foreach ($user->getCommandes() as $commande) {
+                $commande->setUser(null);
+            }
+            
+            $entityManager->flush(); // Enregistre la dissociation avant suppression
+    
+            // Suppression de l'utilisateur
+                $entityManager->remove($user);
+                $entityManager->flush();
+    
+            // Déconnecter l'utilisateur
+            $this->container->get('security.token_storage')->setToken(null);
+            $request->getSession()->invalidate();
+    
+            $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+            return $this->redirectToRoute('app_home');
+        }
+    
+        return $this->render('user/deleteAccount.html.twig', [
+            'formDelete' => $formDelete->createView(),
+        ]);
+    }
+    
+    
     
 }
