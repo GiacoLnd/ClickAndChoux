@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class FavorisController extends AbstractController
 {
     
-    #[Route('/favoris/page', name: 'page', methods: ['GET'])]
+    #[Route('/page', name: 'page', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function pageFavoris(FavorisRepository $favorisRepository): Response
     {

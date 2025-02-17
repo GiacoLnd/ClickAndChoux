@@ -4,8 +4,8 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -25,7 +26,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Pseudo :',
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => [
-                    'class' => 'form-control',
+                    'class' => 'form-group text-center',
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -42,8 +43,9 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email :',
                 'label_attr' => ['class' => 'security-text'],
+                'required' => true,
                 'attr' => [
-                    'class' => 'form-control',
+                    'class' => 'form-group text-center',
                     'autocomplete' => 'email',
                 ],
             ])
@@ -56,7 +58,7 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => [
-                    'class' => 'form-group',
+                    'class' => 'form-group text-center',
                     'autocomplete' => 'email',
                 ],
                 
@@ -74,7 +76,7 @@ class RegistrationFormType extends AbstractType
                     'label_attr' => ['class' => 'security-text'],
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'form-control',
+                        'class' => 'form-group',
                     ],
                 ],
                 'second_options' => [
@@ -82,12 +84,12 @@ class RegistrationFormType extends AbstractType
                     'label_attr' => ['class' => 'security-text'],
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'form-control',
+                        'class' => 'form-group',
                     ],
                 ],
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'class' => 'form-control',
+                    'class' => 'form-group text-center',
                     ],
                 'constraints' => [
                     new NotBlank([
@@ -97,6 +99,10 @@ class RegistrationFormType extends AbstractType
                         'min' => 12,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
                         'max' => 4096,
+                    ]),
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&,;-_])[A-Za-z\d@$!%*?&,;-_]{12,}$/', //.* 0 ou plusieurs caractères sauf retour à la ligne peut importe le placement dans le password -  [a-z] au moins 1 minuscule - [A-Z] au moins 1 majuscule - \d au moins un chiffre - [@$!%*?&,;-_] au moins un symbole parmis ceux proposés - {12,} au moins 12 caractères
+                        'message' => 'Votre mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
                     ]),
                 ],
             ])

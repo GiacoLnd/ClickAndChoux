@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Liste des URLs où l'AJAX est autorisé
     const urlsCatalogues = [
         '/produit/salty',
-        '/produit/sweety'
+        '/produit/sweety',
+        '/favoris/page',
     ];
 
     // Vérifie si l'URL actuelle correspond à un catalogue
@@ -68,6 +69,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.classList.add('favori-active');
                 } else if (data.message.includes('retiré')) {
                     this.classList.remove('favori-active');
+
+                    const productElement = this.closest('.favori-item');  // Trouve l'élément parent : .favori-item
+                    if (productElement) {
+                        productElement.remove();  // Retirer l'élément du DOM 
+                    }
                 }
             });
         });

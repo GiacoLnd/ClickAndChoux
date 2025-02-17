@@ -3,7 +3,8 @@
 {% block title %}Commande Confirmée{% endblock %}
 
 {% block body %}
-    <h1>Merci pour votre commande !</h1>
+    <div class="product-info">
+    <h2 class="login-title">Merci pour votre commande !</h1>
     <p>Votre command a été confirmée.</p>
     <p>Référence de votre commande : {{ commande.reference }} </p>
     <p>Date : {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
@@ -17,5 +18,6 @@
 
     <p><strong>Total :</strong> {{ commande.montantTotal }}€</p>
 
-    <a href="{{ path('app_user_profil') }}" class="btn btn-primary">Voir mes commandes</a>
+    <a href="{{ path('app_user_profil') }}" class="add-to-cart-button">Voir mes commandes</a>
+    </div>
 {% endblock %}

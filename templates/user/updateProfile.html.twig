@@ -3,6 +3,15 @@
 {% block title %}Modifier mon profil{% endblock %}
 
 {% block body %}
+    <div class="text-center">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
 <div class="profile-container">
     <h2 class="details-title">Modifier mon profil</h2>
     <a class="update-button" href="{{path('app_user_profil')}}">Retour au profil</a>

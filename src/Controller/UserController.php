@@ -46,6 +46,17 @@ final class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/admin', name: 'app_admin_profil')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function dashboardAdmin(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        
+        return $this->render('user/admin.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
     #[Route('/updateProfile', name: 'app_update_profile')]
     public function updateProfile(Request $request, EntityManagerInterface $entityManager): Response {
         $user = $this->getUser();
@@ -132,34 +143,36 @@ final class UserController extends AbstractController
         // Création du formulaire
         $formDelete = $this->createForm(DeleteAccountType::class);
         $formDelete->handleRequest($request);
-    
-        if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-            // Récupération du mot de passe soumis
-            $password = $formDelete->get('password')->getData();
-    
-            // Vérification du mot de passe
-            if (!$passwordHasher->isPasswordValid($user, $password)) {
-                $this->addFlash('error', 'Mot de passe incorrect.');
-                return $this->redirectToRoute('app_profile_delete');
+        
+        if($this->isGranted('ROLE_USER')){
+            if ($formDelete->isSubmitted() && $formDelete->isValid()) {
+                // Récupération du mot de passe soumis
+                $password = $formDelete->get('password')->getData();
+        
+                // Vérification du mot de passe
+                if (!$passwordHasher->isPasswordValid($user, $password)) {
+                    $this->addFlash('error', 'Mot de passe incorrect.');
+                    return $this->redirectToRoute('app_profile_delete');
+                }
+        
+                // Dissocier les commandes de l'utilisateur
+                foreach ($user->getCommandes() as $commande) {
+                    $commande->setUser(null);
+                }
+                
+                $entityManager->flush(); // Enregistre la dissociation avant suppression
+        
+                // Suppression de l'utilisateur
+                    $entityManager->remove($user);
+                    $entityManager->flush();
+        
+                // Déconnecter l'utilisateur
+                $this->container->get('security.token_storage')->setToken(null);
+                $request->getSession()->invalidate();
+        
+                $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
+                return $this->redirectToRoute('app_home');
             }
-    
-            // Dissocier les commandes de l'utilisateur
-            foreach ($user->getCommandes() as $commande) {
-                $commande->setUser(null);
-            }
-            
-            $entityManager->flush(); // Enregistre la dissociation avant suppression
-    
-            // Suppression de l'utilisateur
-                $entityManager->remove($user);
-                $entityManager->flush();
-    
-            // Déconnecter l'utilisateur
-            $this->container->get('security.token_storage')->setToken(null);
-            $request->getSession()->invalidate();
-    
-            $this->addFlash('success', 'Votre compte a été supprimé avec succès.');
-            return $this->redirectToRoute('app_home');
         }
     
         return $this->render('user/deleteAccount.html.twig', [

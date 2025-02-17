@@ -3,14 +3,13 @@
 {% block title %}Votre Panier{% endblock %}
 
 {% block body %}
-{% for message in app.flashes('error') %}
-    <div class="alert alert-danger">{{ message }}</div>
-{% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
 
-{% for message in app.flashes('warning') %}
-    <div class="alert alert-warning">{{ message }}</div>
-{% endfor %}
-
+    {% for message in app.flashes('warning') %}
+        <div class="alert alert-warning">{{ message }}</div>
+    {% endfor %}
     <div class="cart-container">
     <h1 class="login-title">Votre Panier</h1>
     {% if paniers is empty %}

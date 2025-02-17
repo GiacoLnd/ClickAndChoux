@@ -13,19 +13,19 @@
 
         {{ form_start(registrationForm) }}
             <div class="register-mail">
-                <div class="form-group">
+                <div class="form-group text-center">
                     {{ form_label(registrationForm.nickName, 'Pseudo :') }}
-                    {{ form_widget(registrationForm.nickName, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(registrationForm.nickName, { 'attr': {'class': 'form-control text-center'} }) }}
                     {{ form_errors(registrationForm.nickName) }}
                 </div>
-                <div class="form-group">
+                <div class="form-group text-center">
                     {{ form_label(registrationForm.email, 'Email :') }}
-                    {{ form_widget(registrationForm.email, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(registrationForm.email, { 'attr': {'class': 'form-control text-center'} }) }}
                     {{ form_errors(registrationForm.email) }}
                 </div>
                 
-                <div class="form-group">
-                    {{ form_widget(registrationForm.plainPassword, { 'attr': {'class': 'form-control'} }) }}
+                <div class="form-group text-center">
+                    {{ form_widget(registrationForm.plainPassword, { 'attr': {'class': 'form-control text-center'} }) }}
                     {{ form_errors(registrationForm.plainPassword) }}
                 </div>
                 

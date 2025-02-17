@@ -112,70 +112,74 @@ class ProduitController extends AbstractController
             // Récupération de la quantité du formulaire
             $quantity = (int) $form->get('quantity')->getData();
 
-            if ($user) {
-                // Vérifie si une commande "panier" existe pour cet utilisateur
-                $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-
-                if (!$commande) {
-                    $commande = new Commande();
-                    $commande->setStatut('panier');
-                    $commande->setDateCommande(new \DateTime());
-                    $commande->setUser($user);
-                    
-                    $commande->setMontantTotal(0.0);
-                
-                    // Génération de la référence
-                    do {
-                        $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
-                    } while ($commandeRepository->findOneBy(['reference' => $reference]));
-                
-                    $commande->setReference($reference);
-                
-                    $em->persist($commande);
-                    $em->flush();
-                }
-
-                // Vérifie si ce produit est déjà dans le panier pour cette commande
-                $existingPanier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
-
-                if ($existingPanier) {
-                    $existingPanier->setQuantity($existingPanier->getQuantity() + $quantity);
-                } else {
-                    $panier->setProduit($produit);
-                    $panier->setQuantity($quantity);
-                    $panier->setCommande($commande);
-                    $em->persist($panier);
-                }
-
-                // Mets à jour le montant total de la commande
-                $montantTotal = 0;
-                foreach ($commande->getPaniers() as $p) {
-                    $montantTotal += $p->getTotalTTC();
-                }
-                $commande->setMontantTotal($montantTotal);
-
-                $em->flush();
+            if($quantity < 0){
+                $this->addFlash('danger', 'La quantité doit être supérieure à 0 !');
             } else {
-                // Utilisateur non connecté : Gestion via la session
-                $cart = $session->get('panier', []);
-                $productId = $produit->getId();
+                if ($user) {
+                    // Vérifie si une commande "panier" existe pour cet utilisateur
+                    $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
 
-                if (isset($cart[$productId])) {
-                    $cart[$productId] = (int) $cart[$productId] + $quantity;
+                    if (!$commande) {
+                        $commande = new Commande();
+                        $commande->setStatut('panier');
+                        $commande->setDateCommande(new \DateTime());
+                        $commande->setUser($user);
+                        
+                        $commande->setMontantTotal(0.0);
+                    
+                        // Génération de la référence
+                        do {
+                            $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
+                        } while ($commandeRepository->findOneBy(['reference' => $reference]));
+                    
+                        $commande->setReference($reference);
+                    
+                        $em->persist($commande);
+                        $em->flush();
+                    }
+
+                    // Vérifie si ce produit est déjà dans le panier pour cette commande
+                    $existingPanier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
+
+                    if ($existingPanier) {
+                        $existingPanier->setQuantity($existingPanier->getQuantity() + $quantity);
+                    } else {
+                        $panier->setProduit($produit);
+                        $panier->setQuantity($quantity);
+                        $panier->setCommande($commande);
+                        $em->persist($panier);
+                    }
+
+                    // Mets à jour le montant total de la commande
+                    $montantTotal = 0;
+                    foreach ($commande->getPaniers() as $p) {
+                        $montantTotal += $p->getTotalTTC();
+                    }
+                    $commande->setMontantTotal($montantTotal);
+
+                    $em->flush();
                 } else {
-                    $cart[$productId] = $quantity;
+                    // Utilisateur non connecté : Gestion via la session
+                    $cart = $session->get('panier', []);
+                    $productId = $produit->getId();
+
+                    if (isset($cart[$productId])) {
+                        $cart[$productId] = (int) $cart[$productId] + $quantity;
+                    } else {
+                        $cart[$productId] = $quantity;
+                    }
+
+                    // Mets à jour le panier en session
+                    $session->set('panier', $cart);
                 }
 
-                // Mets à jour le panier en session
-                $session->set('panier', $cart);
-            }
+                $this->addFlash('success', 'Produit ajouté au panier !');
 
-            $this->addFlash('success', 'Produit ajouté au panier !');
-
-            if ($produit->getCategorie()->getNomCategorie() === 'Sucré') {
-                return $this->redirectToRoute('sweety_produit');
-            } elseif ($produit->getCategorie()->getNomCategorie() === 'Salé') {
-                return $this->redirectToRoute('salty_produit');
+                if ($produit->getCategorie()->getNomCategorie() === 'Sucré') {
+                    return $this->redirectToRoute('sweety_produit');
+                } elseif ($produit->getCategorie()->getNomCategorie() === 'Salé') {
+                    return $this->redirectToRoute('salty_produit');
+                }
             }
         }
 

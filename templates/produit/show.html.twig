@@ -3,6 +3,15 @@
 {% block title %}{{ produit.nomProduit }} - Détails{% endblock %}
 
 {% block body %}
+    <div class="text-center">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
 <div class="details-container">
     <div class="image">
         <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image">

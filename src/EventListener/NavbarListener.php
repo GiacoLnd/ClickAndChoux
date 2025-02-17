@@ -44,14 +44,24 @@ class NavbarListener
             
             // fetching product from commande
             $panier = $commande ? $this->entityManager->getRepository(Panier::class)->findBy(['commande' => $commande]) : [];
+            $result = 0;
+            foreach($panier as $p){
+                $result += $p->getQuantity();
+            }
+            $quantity = $result;
         } else {
             // If not connected, fetching product from session
             $session = $this->requestStack->getSession();
-            $panier = $session ? $session->get('panier', []) : [];
+            $panier =$session->get('panier', []);
+            $result = 0;
+            foreach($panier as $p){
+                $result += $p->getQuantity();
+            }
+            $quantity = $result;
         }
     
         // Sharing Panier with all TWIG templates
-        $this->twig->addGlobal('panier', $panier);
+        $this->twig->addGlobal('quantity', $quantity);
     }
     
 }

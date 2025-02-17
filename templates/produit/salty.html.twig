@@ -3,6 +3,15 @@
 {% block title %}Choux Salés{% endblock %}
 
 {% block body %}
+    <div class="text-center">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     <div class="catalog-page">
         <h2 class="catalog-title">Les Choux Salés</h2>
         <p class="catalog-description">Tous nos choux se vendent par lot de six.<br>
@@ -10,7 +19,7 @@
             en cliquant sur ce <a href="/" class="catalog-link">lien</a>.<br>
             En cas d’allergie, merci de consulter notre page <a href="/" class="catalog-link">dédiée</a>.
         </p>
-
+ 
         <div>
             <form method="GET" action="{{ path('salty_produit') }}" class="searchbar">
                 <input type="text" name="query" placeholder="Rechercher un produit..." value="{{ query }}" class="search-input">
