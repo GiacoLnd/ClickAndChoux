@@ -15,7 +15,6 @@ nav{
     align-items: center;
     padding: 10px;
     text-decoration: none;
-    
 }
 .navbar-logo{
     display: flex;
@@ -52,7 +51,7 @@ nav{
     font-weight: bold;
     font-family: "Open Sans", sans-serif;
 }
-#cart-badge{
+.cart-badge{
     background-color: #FFA85C;
     display: flex;
     justify-content: center;
@@ -61,6 +60,7 @@ nav{
     font-weight: bold;
     width: 25px;
     height: 25px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 body{
     background: white;
@@ -133,6 +133,7 @@ body{
         font-family: "Bubblegum Sans", sans-serif;
         color: #55211A;
         font-size: 1.8em;
+        padding: 15px;
     }
 
     .catalog-description{
@@ -353,6 +354,13 @@ body{
         cursor: pointer;
         font-size: 1.2em;
     }
+    .favori-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        justify-content: center;
+    }
     .details-image{
         width: 250px;
         height: 250px;
@@ -509,21 +517,7 @@ body{
         align-items: center;
         justify-content: center;
         color: #55211A;
-    }
-    .cart-quantity{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-    }
-    .cart-quantity input{
-        width: 50px;
-        height: 50px;
-        text-align: center;
-        border: none;
-        font-family: "Open Sans", sans-serif;
-        color: #55211A;
-        font-size: 1.1em;
+        gap: 20px;
     }
     .cart-product{
         display: flex;
@@ -531,6 +525,12 @@ body{
         align-items: center;
         gap: 20px;
         padding: 15px;
+    }
+    .cart-item{
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
     }
     .cart-content button{
         background: transparent;
@@ -545,7 +545,7 @@ body{
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: center; 
     }
     .cart-image{
         width: 75px;
@@ -683,4 +683,33 @@ body{
         border-radius: 50px;
         font-family: "Bubblegum Sans", sans-serif;
         font-size: 1.1em;
+    }
+
+    .commande-liste{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .table{
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        text-align: center;
+        color: #55211A;
+        font-family: "Open Sans", sans-serif;
+    }
+
+    .commande-details{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: #55211A;
     }

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -34,6 +35,7 @@ class PanierController extends AbstractController
         $paniers = [];
         $montantTotal = 0;
         $forms = [];
+        $response['cartQuantity'] = 0;
 
         // Récupération des produits du panier
         if ($user) {
@@ -60,13 +62,7 @@ class PanierController extends AbstractController
             $montantTotal += $panier->getProduit()->getTTC() * $panier->getQuantity();
         }
 
-        // Génération du formulaire pour chaque produit
-        foreach ($paniers as $panier) {
-            $forms[$panier->getProduit()->getId()] = $this->createForm(PanierType::class, $panier, [
-                'action' => $this->generateUrl('panier_update', ['id' => $panier->getProduit()->getId()]),
-                'method' => 'POST',
-            ])->createView();
-        }
+        // Génération du formulaire pour chaque produi
 
         return $this->render('panier/index.html.twig', [
             'paniers' => $paniers,
@@ -154,92 +150,6 @@ class PanierController extends AbstractController
         return $this->redirectToRoute('panier_afficher');
     }
 
-    // Fonction d'augmentation de la quantité du panier via icone plus
-    #[Route('/panier/increase/{id}', name: 'panier_increase', methods: ['POST'])]
-    public function augmenterQuantite(
-        Produit $produit,
-        SessionInterface $session,
-        EntityManagerInterface $em,
-        CommandeRepository $commandeRepository,
-        PanierRepository $panierRepository
-    ): Response {
-        $user = $this->getUser();
-
-        if ($user) {
-            // Utilisateur connecté : gestion via la base de données
-            $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-
-            if ($commande) {
-                $panier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
-
-                if ($panier) {
-                    $panier->setQuantity($panier->getQuantity() + 1);
-                    $em->flush();
-                    $this->addFlash('success', 'Quantité augmentée (base de données).');
-                }
-            }
-        } else {
-            // Utilisateur non connecté : gestion via session
-            $cart = $session->get('panier', []);
-            $productId = $produit->getId();
-
-            if (isset($cart[$productId])) {
-                $cart[$productId]++;
-                $session->set('panier', $cart);
-                $this->addFlash('success', 'Quantité augmentée (session).');
-            }
-        }
-
-        return $this->redirectToRoute('panier_afficher');
-    }
-
-    // Fonction de diminution de la quantité du panier via icone moins
-    #[Route('/panier/decrease/{id}', name: 'panier_decrease', methods: ['POST'])]
-    public function diminuerQuantite(
-        Produit $produit,
-        SessionInterface $session,
-        EntityManagerInterface $em,
-        CommandeRepository $commandeRepository,
-        PanierRepository $panierRepository
-    ): Response {
-        $user = $this->getUser();
-
-        if ($user) {
-            // Utilisateur connecté : gestion via la base de données
-            $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-
-            if ($commande) {
-                $panier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
-
-                if ($panier && $panier->getQuantity() > 1) {
-                    $panier->setQuantity($panier->getQuantity() - 1);
-                    $em->flush();
-                    $this->addFlash('success', 'Quantité diminuée (base de données).');
-                } elseif ($panier && $panier->getQuantity() === 1) {
-                    $em->remove($panier);
-                    $em->flush();
-                    $this->addFlash('success', 'Produit supprimé du panier (base de données).');
-                }
-            }
-        } else {
-            // Utilisateur non connecté : gestion via session
-            $cart = $session->get('panier', []);
-            $productId = $produit->getId();
-
-            if (isset($cart[$productId])) {
-                if ($cart[$productId] > 1) {
-                    $cart[$productId]--;
-                } else {
-                    unset($cart[$productId]);
-                }
-                $session->set('panier', $cart);
-                $this->addFlash('success', 'Quantité diminuée (session).');
-            }
-        }
-
-        return $this->redirectToRoute('panier_afficher');
-    }
-
     // Fonction Validant le panier
     #[Route('/panier/valider', name: 'panier_valider')]
     public function validerPanier(): Response
@@ -249,76 +159,164 @@ class PanierController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
     
-        // Si l'utilisateur est connecté, rediriger directement vers la validation de commande
+        // Si l'utilisateur est connecté, redirige directement vers la validation de commande
         return $this->redirectToRoute('commande_confirmer');
     }
     
 
-    // Adaptation de la quantité directement depuis un form dans le panier
-    #[Route('/panier/update/{id}', name: 'panier_update', methods: ['POST'])]
-    public function updateQuantity(
-        Request $request,
-        PanierRepository $panierRepository,
-        ProduitRepository $produitRepository,
-        CommandeRepository $commandeRepository,
+    // Fonction AJAX d'augmentation de la quantité en panier 
+    #[Route('/panier/increase-ajax/{id}', name: 'panier_increase_ajax', methods: ['POST'])]
+    public function augmenterQuantiteAjax(
+        Produit $produit,
+        SessionInterface $session,
         EntityManagerInterface $em,
-        int $id
-    ): Response {
+        CommandeRepository $commandeRepository,
+        PanierRepository $panierRepository
+    ): JsonResponse {
         $user = $this->getUser();
-        
-        // Utilisateur connecté
+        // Structure de base pour la réponse JSON
+        $response = [
+            'success'      => false,
+            'message'      => '',
+            'newQuantity'  => 0,
+            'newTotal'     => 0,
+            'cartQuantity' => 0,
+        ];
+    
+        // Cas 1 : Utilisateur connecté
         if ($user) {
-            $produit = $produitRepository->find($id);
+            // Récupération de la commande 'panier' de l'utilisateur
             $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-
-            if ($produit && $commande) {
-                $panier = $panierRepository->findOneBy([
-                    'produit' => $produit,
-                    'commande' => $commande
-                ]);
-
+            if ($commande) {
+                $panier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
                 if ($panier) {
-                    $form = $this->createForm(PanierType::class, $panier);
-                    $form->handleRequest($request);
-
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        $quantity = $form->get('quantity')->getData();
-
-                        if ($quantity < 1) {
-                            $this->addFlash('error', 'Quantité invalide.');
-                        } else {
-                            $panier->setQuantity($quantity);
-                            $em->flush();
-                            $this->addFlash('success', 'Quantité mise à jour.');
-                        }
-                    }
+                    $panier->setQuantity($panier->getQuantity() + 1);
+                    $em->flush();
+                }
+                // Recalcul du total global
+                $paniers = $panierRepository->findBy(['commande' => $commande]);
+                $newTotal = 0;
+                $cartQuantity = 0;
+                foreach ($paniers as $p) {
+                    $newTotal += $p->getProduit()->getTTC() * $p->getQuantity();
+                    $cartQuantity += $p->getQuantity();
+                }
+    
+                $response['success']      = true;
+                $response['newTotal']     = $newTotal;
+                $response['cartQuantity'] = $cartQuantity;
+                $response['newQuantity']  = $panier ? $panier->getQuantity() : 0;
+            }
+        } 
+        // Cas 2 : Utilisateur non connecté
+        else {
+            $cart = $session->get('panier', []);
+            $productId = $produit->getId();
+    
+            if (isset($cart[$productId])) {
+                $cart[$productId]++; 
+            } else {
+                $cart[$productId] = 1;
+            }
+            $session->set('panier', $cart);
+    
+            // Recalcul du total et la quantité globale
+            $newTotal = 0;
+            $cartQuantity = 0;
+            foreach ($cart as $prodId => $qty) {
+                $prod = $em->getRepository(Produit::class)->find($prodId); 
+                if ($prod) {
+                    $newTotal += $prod->getTTC() * $qty;
+                    $cartQuantity += $qty;
                 }
             }
-        } else {
-            // Utilisateur non connecté : Session
-            $session = $request->getSession();
-            $cart = $session->get('panier', []);
-
-            if (isset($cart[$id])) {
-                $form = $this->createForm(PanierType::class);
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $quantity = $form->get('quantity')->getData();
-
-                    if ($quantity < 1) {
-                        $this->addFlash('error', 'Quantité invalide.');
-                    } else {
-                        $cart[$id] = $quantity;
-                        $session->set('panier', $cart);
-                        $this->addFlash('success', 'Quantité mise à jour.');
+    
+            $response['success']      = true;
+            $response['newTotal']     = $newTotal;
+            $response['cartQuantity'] = $cartQuantity;
+            $response['newQuantity']  = $cart[$productId] ?? 0;
+        }
+    
+        return new JsonResponse($response);
+    }
+    
+    // Fonction AJAX de diminution de la quantité en panier 
+    #[Route('/panier/decrease-ajax/{id}', name: 'panier_decrease_ajax', methods: ['POST'])]
+    public function diminuerQuantiteAjax(
+        Produit $produit,
+        SessionInterface $session,
+        EntityManagerInterface $em,
+        CommandeRepository $commandeRepository,
+        PanierRepository $panierRepository
+    ): JsonResponse {
+        $user = $this->getUser();
+    
+        $response = [
+            'success'      => false,
+            'message'      => '',
+            'newQuantity'  => 0,
+            'newTotal'     => 0,
+            'cartQuantity' => 0,
+        ];
+    
+        // Cas 1 : Utilisateur connecté 
+        if ($user) {
+            $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
+            if ($commande) {
+                $panier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
+                if ($panier) {
+                    // Interdiction de passer sous 1 - suppression gérée par route panier_remove
+                    if ($panier->getQuantity() > 1) {
+                        $panier->setQuantity($panier->getQuantity() - 1);
+                        $em->flush();
                     }
                 }
+                // Recalcul du total et la quantité du panier
+                $paniers = $panierRepository->findBy(['commande' => $commande]);
+                $newTotal = 0;
+                $cartQuantity = 0;
+                foreach ($paniers as $p) {
+                    $newTotal += $p->getProduit()->getTTC() * $p->getQuantity();
+                    $cartQuantity += $p->getQuantity();
+                }
+    
+                $response['success']      = true;
+                $response['newTotal']     = $newTotal;
+                $response['cartQuantity'] = $cartQuantity;
+                $response['newQuantity']  = $panier ? $panier->getQuantity() : 0;
             }
         }
-
-        return $this->redirectToRoute('panier_afficher');
+        // Cas 2 : Utilisateur non connecté
+        else {
+            $cart = $session->get('panier', []);
+            $productId = $produit->getId();
+    
+            if (isset($cart[$productId])) {
+                // Empêche de passer en dessous de 1
+                if ($cart[$productId] > 1) {
+                    $cart[$productId]--;
+                }
+                $session->set('panier', $cart);
+            }
+    
+            // Recalcul du total et de la quantité globale
+            $newTotal = 0;
+            $cartQuantity = 0;
+            foreach ($cart as $prodId => $qty) {
+                $prod = $em->getRepository(Produit::class)->find($prodId);
+                if ($prod) {
+                    $newTotal += $prod->getTTC() * $qty;
+                    $cartQuantity += $qty;
+                }
+            }
+    
+            $response['success']      = true;
+            $response['newTotal']     = $newTotal;
+            $response['cartQuantity'] = $cartQuantity;
+            $response['newQuantity']  = $cart[$productId] ?? 0;
+        }
+    
+        return new JsonResponse($response);
     }
-
+    
 }
-

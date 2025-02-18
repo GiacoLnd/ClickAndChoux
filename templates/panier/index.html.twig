@@ -10,49 +10,53 @@
     {% for message in app.flashes('warning') %}
         <div class="alert alert-warning">{{ message }}</div>
     {% endfor %}
+
     <div class="cart-container">
-    <h1 class="login-title">Votre Panier</h1>
-    {% if paniers is empty %}
-        <p class="catalog-description">Votre panier est vide.</p>
-    {% else %}
-        <div class="cart-content">
-            {% for item in paniers %}
-            <div class="cart-product">
-                <img src="/img/{{ item.produit.image }}" alt="{{ item.produit.nomProduit }}" class="cart-image">
-                {{ (item.produit.nomProduit) }} 
+        <h1 class="login-title">Votre Panier</h1>
+        {% if paniers is empty %}
+            <p class="catalog-description">Votre panier est vide.</p>
+        {% else %}
+            <div class="cart-content">
+                {% for item in paniers %}
+                    <div class="cart-product">
+                        <div class="cart-item" data-price="{{ item.produit.getTTC }}">
+                            <a href="{{ path('produit_detail', {'id': item.produit.id}) }}"><img src="/img/{{ item.produit.image }}" alt="{{ item.produit.nomProduit }}" class="cart-image"></a>
+                            {{ (item.produit.nomProduit) }} 
 
-                <form action="{{ path('panier_decrease', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="fa-solid fa-minus"></i>
-                    </button>
-                </form>
-                
-                <div class="cart-quantity">
-                    {{ form_start(forms[item.produit.id]) }}
-                        {{ form_widget(forms[item.produit.id].quantity) }}
-                        {{ form_widget(forms[item.produit.id].ajouter, { 'label': '<i class="fa-solid fa-pen"></i>', 'label_html': true }) }}
-                    {{ form_end(forms[item.produit.id]) }}
-                </div>
+                            <!-- Diminution -->
+                            <button class="btn btn-danger decrease-btn" data-id="{{ item.produit.id }}">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                        
+                            <!-- Quantité Dynamique-->
+                            <span id="quantity-{{ item.produit.id }}">{{ item.quantity }}</span>
+                        
+                            <!-- Augmentation -->
+                            <button class="btn btn-success increase-btn" data-id="{{ item.produit.id }}">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                            
+                            <!-- Prix total unitaire -->
+                            <span id="line-total-{{ item.produit.id }}"> {{ (item.produit.getTTC * item.quantity)|number_format(2, '.', '')  }} </span> €
 
-                <form action="{{ path('panier_increase', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                    <button type="submit" class="btn btn-success btn-sm">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                </form>
+                            <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- Montant total -->
+                <h3 id="montant-total">Total : {{ montantTotal|number_format(2, ',', ' ') }} €</h3>
 
-                {{ (item.produit.getTTC * item.quantity) }} €
-                <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                <form action="{{ path('commande_valider') }}" method="post">
+                    <button type="submit" class="btn btn-success">Valider le panier</button>
                 </form>
-            </div>
-            {% endfor %}
-            <h3>Total général : {{ montantTotal }} €</h3>
-            <form action="{{ path('commande_valider') }}" method="post">
-                <button type="submit" class="btn btn-primary">Valider le panier</button>
-            </form>
-            <form action="{{ path('panier_clear') }}" method="post">
-                <button type="submit" class="btn btn-danger">Vider le panier</button>
-            </form>
-    </div>
+                <form action="{{ path('panier_clear') }}" method="post">
+                    <button type="submit" class="btn btn-danger">Vider le panier</button>
+                </form>
+        </div>
     {% endif %}
 {% endblock %}
+
+
+

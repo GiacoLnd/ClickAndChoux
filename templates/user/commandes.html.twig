@@ -13,7 +13,7 @@
         {% endfor %}
     </div>
     <div class="container">
-        <h1>Mes Commandes</h1>
+        <h1 class="login-title text-center p-4">Mes Commandes</h1>
 
         {% if commandes is empty %}
             <p>Aucune commande passée pour le moment.</p>
@@ -31,7 +31,7 @@
                 <tbody>
                     {% for commande in commandes %}
                         <tr>
-                            <td>#{{ commande.reference }}</td>
+                            <td>{{ commande.reference }}</td>
                             <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
                             <td>{{ commande.montantTotal }}€</td>
                             <td>
@@ -42,7 +42,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{{ path('commande_confirmation', { id: commande.id }) }}" class="btn btn-info btn-sm">
+                                <a href="{{ path('commande_detail', { id: commande.id }) }}" class="profile-link">
                                     Voir
                                 </a>
                             </td>
@@ -51,7 +51,8 @@
                 </tbody>
             </table>
         {% endif %}
-        
-        <a href="{{ path('app_user_profil') }}" class="btn btn-secondary">Retour au Profil</a>
+        <div class="d-flex justify-content-center align-items-center p-3">
+            <a href="{{ path('app_user_profil') }}" class="profile-link">Retour au Profil</a>
+        </div>
     </div>
 {% endblock %}
