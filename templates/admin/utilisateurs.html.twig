@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+    <table>
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users%}
+            <tr>
+                <td>{{user.nickName}}</td>
+                <td>{{user.email}}</td>
+                <td>
+                <div class="dropdown">
+                    <button class="btn btn-sm m-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-square-caret-down" style="color: #FFA85C"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="{{ path('admin_user_commandes', { id: user.id }) }}"><i class="fa-solid fa-eye" style="color: #FFA85C"></i> Voir les commandes</a> </li>
+                        <li><a class="dropdown-item" href="{{ path('admin_user_edit_profile', { id: user.id }) }}"><i class="fa-solid fa-pen-to-square" style="color: #FFA85C"></i> Edit. données personnelles</a></li>
+                        <li><a class="dropdown-item" href="{{ path('admin_user_edit_password', { id: user.id }) }}"><i class="fa-solid fa-key" style="color: #FFA85C"></i></i> Edit. mot de passe</a></li>
+                    </ul>
+                </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-center align-items-center p-3">
+        <a class="profile-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
+    </div>
+{% endblock %}
+ 

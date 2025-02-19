@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+    <div class="text-center">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <div class="profile-container">
+        <h2 class="details-title">Modifier mon profil</h2>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+            {{ form_start(formProfile) }}
+                {{ form_row(formProfile.nickName) }}
+                {{ form_row(formProfile.email) }}
+                <div class="form-group">
+                    {{ form_row(formProfile.save) }}
+                </div>
+            {{ form_end(formProfile) }}
+        <a class="register-link p-5" href="{{path('admin_list_user')}}">Retour</a>
+    </div>
+{% endblock %}
+ 

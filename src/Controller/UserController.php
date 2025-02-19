@@ -46,17 +46,6 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin', name: 'app_admin_profil')]
-    #[IsGranted('ROLE_ADMIN')]
-    public function dashboardAdmin(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->getUser();
-        
-        return $this->render('user/admin.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
     #[Route('/updateProfile', name: 'app_update_profile')]
     public function updateProfile(Request $request, EntityManagerInterface $entityManager): Response {
         $user = $this->getUser();
@@ -119,12 +108,9 @@ final class UserController extends AbstractController
     public function listeCommandes(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
-
+        $statutExclu = 'panier';
         // Récupère toutes les commandes confirmées de l'utilisateur
-       $commandes = $entityManager->getRepository(Commande::class)->findBy(
-            ['user' => $user, 'statut' => 'confirmée'],
-            ['dateCommande' => 'DESC'] // Trier par date, de la plus récente à la plus ancienne
-        );
+       $commandes = $entityManager->getRepository(Commande::class)->findCommandesUserSansStatut($user, $statutExclu);
 
         return $this->render('user/commandes.html.twig', [
             'commandes' => $commandes

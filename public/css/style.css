@@ -713,3 +713,25 @@ body{
         padding: 20px;
         color: #55211A;
     }
+
+    table{
+        margin: auto;
+        width: 80%;
+        border-collapse: collapse;
+    }
+    
+    td, th{
+        text-align: center;
+        padding: 10px;
+        color: #55211A;
+        font-family: "Open sans", sans-serif;
+        font-size: 1.1em;
+    }
+
+    .flex-row-between{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 30px;
+        padding: 20px;
+    }

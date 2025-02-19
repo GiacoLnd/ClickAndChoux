@@ -104,8 +104,11 @@ final class CommandeController extends AbstractController
     #[Route('/commande/{id}', name: 'commande_detail', methods: ['GET'])]
     public function detailCommande(Commande $commande): Response
     {
+        $user = $this->getUser();
+
         return $this->render('commande/detail.html.twig', [
             'commande' => $commande,
+            'user' => $user,
         ]);
     }
 }

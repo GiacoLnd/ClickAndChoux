@@ -11,9 +11,9 @@
             <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
             <link rel="icon" type="image/png" href="{{ asset('img/favicon-96x96.png') }}" sizes="96x96" />
             <link rel="icon" type="image/svg+xml" href="{{ asset('img/favicon.svg') }}" />
-            <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" />
+            <link rel="shortcut icon" href="/img/favicon.ico" />
             <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/apple-touch-icon.png') }}" />
-            <link rel="manifest" href="{{ asset('site.webmanifest') }}" />
+            <link rel="manifest" href="/site.webmanifest" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
             <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         {% endblock %}
@@ -51,8 +51,8 @@
                                 {% if app.user %}
                                     {% if is_granted('ROLE_ADMIN') %}
                                     <li>
-                                        <a class="dropdown-item" href="{{ path('app_admin_profil') }}">
-                                        <i class="fa-solid fa-user"></i> Administrateur</a>
+                                        <a class="dropdown-item" href="{{ path('admin_profile') }}">
+                                        <i class="fa-solid fa-kitchen-set"></i> Administrateur</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
@@ -60,8 +60,8 @@
                                     </a></li>
                                     {% else %} 
                                     <li>
-                                        <a class="dropdown-item" href="{{ path('app_user_profil') }}">
-                                        <i class="fa-solid fa-user"></i> Mon profil</a>
+                                        <a class="dropdown-item" style="color: #55211A;" href="{{ path('app_user_profil') }}">
+                                        <i class="fa-solid fa-id-card-clip"></i> Mon profil</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">

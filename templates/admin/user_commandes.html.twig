@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des commandes{% endblock %}
+
+{% block body %}
+    <h2 class="login-title text-center p-5">Commande de {{ user.nickName }} :</h2>
+    {% if commandes is empty %}
+        <p>Aucune commande passée pour le moment.</p>
+    {% else %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N° Commande</th>
+                    <th>Date</th>
+                    <th>Montant Total</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandes %}
+                    <tr>
+                        <td>{{ commande.reference }}</td>
+                        <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                        <td>{{ commande.montantTotal }}€</td>
+                        <td>
+                        {% if commande.statut == 'confirmée' %}
+                            <span class="badge bg-success">Confirmée</span>
+                        {% else %}
+                            <span class="badge bg-warning">{{ commande.statut }}</span>
+                        {% endif %}
+                        </td>
+                        <td><a href="{{ path('commande_detail', { id: commande.id }) }}" class="profile-link">Voir</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center align-items-center p-3">
+            <a class="profile-link" href="{{ path('admin_list_user') }}">Retour</a>
+        </div>
+    {% endif %}
+{% endblock %}
+ 

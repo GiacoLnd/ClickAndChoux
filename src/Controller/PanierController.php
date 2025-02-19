@@ -134,6 +134,8 @@ class PanierController extends AbstractController
                 foreach ($paniers as $panier) {
                     $em->remove($panier);
                 }
+                
+                $em->remove($commande);
 
                 $em->flush();
 
