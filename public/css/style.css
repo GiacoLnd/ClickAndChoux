@@ -695,7 +695,7 @@ body{
 
     .table{
         border-collapse: collapse;
-        width: 100%;
+        width: 500px;
     }
 
     .table th, .table td {
@@ -713,12 +713,6 @@ body{
         padding: 20px;
         color: #55211A;
     }
-
-    table{
-        margin: auto;
-        width: 80%;
-        border-collapse: collapse;
-    }
     
     td, th{
         text-align: center;
@@ -735,3 +729,46 @@ body{
         gap: 30px;
         padding: 20px;
     }
+
+    table.dataTable thead th, table.dataTable tbody td{
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .dt-layout-row{
+        padding: 40px;
+        color: #55211A;
+        font-size: 0.9em;
+        font-family: "Open sans", sans-serif;
+    }
+    #commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
+        background: transparent;
+        color: #FFA85C;
+        font-size: 1.2em;
+        font-family: "Bubblegum Sans", sans-serif;
+    }
+    #commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
+        border: none;
+        padding: 5px;
+    }
+    #commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-end > div{
+        font-family: "Open Sans", sans-serif;
+        font-size: 1.2em;
+    }
+
+    #dt-search-0{
+        border: 2px solid #FFA85C;
+        border-radius: 50px;
+        margin: 10px;
+        text-align: center;
+    }
+    #commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-start > div > label{
+        font-family: "Open Sans", sans-serif;
+        font-size: 1.2em;
+    }
+    #dt-length-0{
+        border: 2px solid #FFA85C;
+        border-radius: 50px;
+        text-align: center;
+    }
+

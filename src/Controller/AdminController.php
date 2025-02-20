@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Produit;
 use App\Entity\Commande;
+use App\Form\ProduitType;
 use App\Form\EditProfileType;
 use Doctrine\ORM\EntityManager;
 use App\Form\ChangePasswordType;
@@ -13,8 +15,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -105,10 +109,8 @@ final class AdminController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
     
-            // Ajout d'un message flash
             $this->addFlash('success', 'Mot de passe modifié avec succès.');
     
-            // Rediriger vers le profil sans passer par la page de connexion
             return $this->redirectToRoute('admin_profile');
         }
     
@@ -116,6 +118,45 @@ final class AdminController extends AbstractController
         return $this->render('admin/user_edit_password.html.twig', [
             'user' => $user,
             'formPassword' => $formPassword->createView(),
+        ]);
+    }
+    #[Route('/admin/produit/ajouter', name: 'add_product')]
+    public function ajouterProduit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    {
+        $produit = new Produit();
+        $form = $this->createForm(ProduitType::class, $produit);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupération de l'image transmise
+            $imageFile = $form->get('image')->getData();
+            // Gestion du nom du fichier
+            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename); // Slug : transformation d'un nom de fichier en une chaîne de caractères sécurisée compatible
+            //Génération d'un nom de fichier unique (nom du fichier sluggé + id unique + extention)
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+        
+            try {
+                $imageFile->move(
+                    $this->getParameter('images_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                $this->addFlash('danger', 'Erreur lors du téléchargement de l\'image.');
+                return $this->redirectToRoute('admin_produit_ajouter');
+            }
+        
+            $produit->setImage($newFilename);
+        
+            $entityManager->persist($produit);
+            $entityManager->flush();
+        
+            $this->addFlash('success', 'Produit ajouté avec succès !');
+            return $this->redirectToRoute('admin_profile');
+        }
+
+        return $this->render('admin/add_product.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 

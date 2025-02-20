@@ -7,10 +7,11 @@
     {% if commandes is empty %}
         <p>Aucune commande passée pour le moment.</p>
     {% else %}
-        <table class="table">
+        <table class="table" id="commandesTable"  style="width: 70%;">
             <thead>
                 <tr>
                     <th>N° Commande</th>
+                    <th>Client</th>
                     <th>Date</th>
                     <th>Montant Total</th>
                     <th>Statut</th>

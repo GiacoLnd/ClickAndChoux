@@ -71,7 +71,24 @@ final class CommandeController extends AbstractController
             $total += $panier->getProduit()->getTTC() * $panier->getQuantity();
         }
         $commande->setMontantTotal($total);
-    
+        
+        // Gestion de l'historique JSON final
+        $historiqueProduits = [];
+        foreach ($commande->getPaniers() as $panier) {
+            $produit = $panier->getProduit();
+            $historiqueProduits[] = [
+                'id' => $produit->getId(),
+                'nomProduit' => $produit->getNomProduit(),
+                'prixHt' => $produit->getPrixHt(),
+                'TVA' => $produit->getTVA(),
+                'prixTTC' => $produit->getPrixHt() * (1 + $produit->getTVA() / 100),
+                'image' => $produit->getImage(),
+                'categorie' => $produit->getCategorie()->getNomCategorie(),
+                'quantite' => $panier->getQuantity(),
+            ];
+        }
+        $commande->setHistorique(['produits' => $historiqueProduits]);
+
         // Création du formulaire d'adresse de livraison
         $form = $this->createForm(CommandeType::class, $commande);
         $form->handleRequest($request);

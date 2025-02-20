@@ -76,6 +76,9 @@ class ProduitController extends AbstractController
         ]);
     }
 
+
+    // Fonction d'affichage des détails produit
+    // Attention : cette fonction gère l'ajout au panier avec une adaptation de la quantité via un input number
     #[Route('/produit/{id}', name: 'produit_detail', methods: ['GET', 'POST'])]
     public function detailProduit(
         Produit $produit,
@@ -109,38 +112,36 @@ class ProduitController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupération de la quantité du formulaire
             $quantity = (int) $form->get('quantity')->getData();
-
-            if($quantity < 0){
+        
+            if ($quantity < 0) {
                 $this->addFlash('danger', 'La quantité doit être supérieure à 0 !');
             } else {
                 if ($user) {
                     // Vérifie si une commande "panier" existe pour cet utilisateur
                     $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-
+        
                     if (!$commande) {
                         $commande = new Commande();
                         $commande->setStatut('panier');
                         $commande->setDateCommande(new \DateTime());
                         $commande->setUser($user);
-                        
                         $commande->setMontantTotal(0.0);
-                    
-                        // Génération de la référence
+        
+                        // Génération de la référence unique
                         do {
                             $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
                         } while ($commandeRepository->findOneBy(['reference' => $reference]));
-                    
+        
                         $commande->setReference($reference);
-                    
+                        $commande->setHistorique([]); // Initialiser l'historique
                         $em->persist($commande);
                         $em->flush();
                     }
-
+        
                     // Vérifie si ce produit est déjà dans le panier pour cette commande
                     $existingPanier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
-
+        
                     if ($existingPanier) {
                         $existingPanier->setQuantity($existingPanier->getQuantity() + $quantity);
                     } else {
@@ -149,32 +150,38 @@ class ProduitController extends AbstractController
                         $panier->setCommande($commande);
                         $em->persist($panier);
                     }
-
+        
+                    // Créer un instantané du produit pour l'historique JSON
+                    $historiqueProduit = [
+                        'id' => $produit->getId(),
+                        'nomProduit' => $produit->getNomProduit(),
+                        'prixHt' => $produit->getPrixHt(),
+                        'TVA' => $produit->getTVA(),
+                        'prixTTC' => $produit->getPrixHt() * (1 + $produit->getTVA() / 100),
+                        'description' => $produit->getDescription(),
+                        'allergene' => $produit->getAllergene(),
+                        'image' => $produit->getImage(),
+                        'categorie' => $produit->getCategorie() ? $produit->getCategorie()->getNomCategorie() : "Non défini",
+                        'quantite' => $quantity
+                    ];
+        
+                    // Ajouter le produit à l'historique de la commande
+                    $historiqueCommande = $commande->getHistorique();
+                    $historiqueCommande['produits'][] = $historiqueProduit;
+                    $commande->setHistorique($historiqueCommande);
+        
                     // Mets à jour le montant total de la commande
                     $montantTotal = 0;
                     foreach ($commande->getPaniers() as $p) {
                         $montantTotal += $p->getTotalTTC();
                     }
                     $commande->setMontantTotal($montantTotal);
-
+        
                     $em->flush();
-                } else {
-                    // Utilisateur non connecté : Gestion via la session
-                    $cart = $session->get('panier', []);
-                    $productId = $produit->getId();
-
-                    if (isset($cart[$productId])) {
-                        $cart[$productId] = (int) $cart[$productId] + $quantity;
-                    } else {
-                        $cart[$productId] = $quantity;
-                    }
-
-                    // Mets à jour le panier en session
-                    $session->set('panier', $cart);
                 }
-
+        
                 $this->addFlash('success', 'Produit ajouté au panier !');
-
+        
                 if ($produit->getCategorie()->getNomCategorie() === 'Sucré') {
                     return $this->redirectToRoute('sweety_produit');
                 } elseif ($produit->getCategorie()->getNomCategorie() === 'Salé') {

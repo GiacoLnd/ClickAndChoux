@@ -62,7 +62,7 @@ class PanierController extends AbstractController
             $montantTotal += $panier->getProduit()->getTTC() * $panier->getQuantity();
         }
 
-        // Génération du formulaire pour chaque produi
+        // Génération du formulaire pour chaque produit
 
         return $this->render('panier/index.html.twig', [
             'paniers' => $paniers,
@@ -82,18 +82,32 @@ class PanierController extends AbstractController
         PanierRepository $panierRepository
     ): Response {
         $user = $this->getUser();
-
+    
         if ($user) {
-            // Utilisateur connecté : gestion via la base de données
+            // Utilisateur connecté : gestion via base de données
             $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-
+    
             if ($commande) {
                 $panier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
-
+    
                 if ($panier) {
+                    // Supprimer le produit du panier
                     $em->remove($panier);
+                    
+                    // Suppression du produit de l’historique de la commande
+                    $historiqueCommande = $commande->getHistorique();
+                    if (!empty($historiqueCommande['produits'])) {
+                        $historiqueCommande['produits'] = array_filter(
+                            $historiqueCommande['produits'],
+                            fn($p) => $p['id'] !== $produit->getId()
+                        );
+                        // Dans l'ordre : Récupération de l'historique sous table JSON, puis nouvelle table JSON = ancienne table sans le produit supprimé puis setter pour modifier le fichier JSON    (fn() : fonction fléchée - anonyme)
+
+                    }
+                    $commande->setHistorique($historiqueCommande);
+    
                     $em->flush();
-                    $this->addFlash('success', 'Produit supprimé du panier (base de données).');
+                    $this->addFlash('success', 'Produit supprimé du panier et de l’historique.');
                 } else {
                     $this->addFlash('warning', 'Produit non trouvé dans le panier.');
                 }
@@ -101,7 +115,7 @@ class PanierController extends AbstractController
         } else {
             // Utilisateur non connecté : gestion via session
             $cart = $session->get('panier', []);
-
+    
             if (isset($cart[$produit->getId()])) {
                 unset($cart[$produit->getId()]);
                 $session->set('panier', $cart);
@@ -110,9 +124,10 @@ class PanierController extends AbstractController
                 $this->addFlash('warning', 'Produit non trouvé dans le panier.');
             }
         }
-
-    return $this->redirectToRoute('panier_afficher');
+    
+        return $this->redirectToRoute('panier_afficher');
     }
+    
 
     // Fonction de suppression de tous les produits du panier
     #[Route('/panier/clear', name: 'panier_clear', methods: ['POST'])]
@@ -189,8 +204,10 @@ class PanierController extends AbstractController
         if ($user) {
             // Récupération de la commande 'panier' de l'utilisateur
             $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
+
             if ($commande) {
                 $panier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
+                
                 if ($panier) {
                     $panier->setQuantity($panier->getQuantity() + 1);
                     $em->flush();

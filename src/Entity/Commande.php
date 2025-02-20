@@ -56,6 +56,9 @@ class Commande
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $villeLivraison = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $historique = [];
+
   
 
 
@@ -228,6 +231,18 @@ class Commande
     public function setVilleLivraison(?string $villeLivraison): static
     {
         $this->villeLivraison = $villeLivraison;
+
+        return $this;
+    }
+
+    public function getHistorique(): ?array
+    {
+        return $this->historique;
+    }
+
+    public function setHistorique(?array $historique): static
+    {
+        $this->historique = $historique;
 
         return $this;
     }
