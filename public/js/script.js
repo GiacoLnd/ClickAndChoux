@@ -213,6 +213,21 @@ $(document).ready(function() {
     });
 });
 
+// Datatable script for user list
+$(document).ready(function() {
+    var table = $('#utilisateurTable').DataTable({
+        "paging": true,       // Active la pagination
+        "searching": true,    // Active la recherche
+        "ordering": true,  
+        "order": [[2, "desc"]], // Trie par date (colonne 2) en ordre décroissant
+        "info": false,         // Désactive les informations sur le nombre d'éléments
+        "pagingType": "numbers", // Désactive 
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
+        },
+    });
+});
+
 
 
 // Admin add product dataTables

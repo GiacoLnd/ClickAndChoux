@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Produit{% endblock %}
+
+{% block body %}
+    <div class="flex-column-center">
+        <h2 class="login-title">Supprimer un ou plusieurs Produit(s)</h2>
+        
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+        <div class="flex-row-wrap">
+        {% for item in form.produits %}
+            <div class="checkbox-item">
+                {{ form_row(item) }}
+            </div>
+        {% endfor %}
+        </div> 
+
+        <div class="text-center">
+            <button type="submit" class="delete-button">Supprimer</button>
+            {{ form_end(form) }}
+            <a class="profile-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
+        </div>
+    </div>
+{% endblock %}

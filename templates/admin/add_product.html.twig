@@ -3,10 +3,9 @@
 {% block title %}Ajouter un Produit{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h2 class="mb-4">Ajouter un Produit</h2>
+<div class="profile-container">
+    <h2 class="login-title">Ajouter un Produit</h2>
 
-    <!-- Affichage des messages de succès ou d'erreur -->
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
@@ -14,58 +13,56 @@
         <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
 
-    <div class="card p-4 shadow-sm">
-        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+        {{ form_start(form) }}
 
-        <div class="mb-3">
-            <label class="form-label">{{ form_label(form.nomProduit) }}</label>
-            {{ form_widget(form.nomProduit, {'attr': {'class': 'form-control'}}) }}
+    <div class="flex-row-around">
+        <div class="profile-container">
+            <label>{{ form_label(form.nomProduit) }}</label>
+            {{ form_widget(form.nomProduit) }}
             {{ form_errors(form.nomProduit) }}
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">{{ form_label(form.prixHt) }}</label>
-            {{ form_widget(form.prixHt, {'attr': {'class': 'form-control'}}) }}
+        <div class="profile-container">
+            <label>{{ form_label(form.prixHt) }}</label>
+            {{ form_widget(form.prixHt) }}
             {{ form_errors(form.prixHt) }}
         </div>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">{{ form_label(form.description) }}</label>
-            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.description) }}
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">{{ form_label(form.allergene) }}</label>
-            {{ form_widget(form.allergene, {'attr': {'class': 'form-control'}}) }}
+    <div class="flex-row-around">
+        <div class="profile-container">
+            <label>{{ form_label(form.allergene) }}</label>
+            {{ form_widget(form.allergene) }}
             {{ form_errors(form.allergene) }}
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">{{ form_label(form.TVA) }}</label>
-            {{ form_widget(form.TVA, {'attr': {'class': 'form-control'}}) }}
+        <div class="profile-container">
+            <label>{{ form_label(form.TVA) }}</label>
+            {{ form_widget(form.TVA) }}
             {{ form_errors(form.TVA) }}
         </div>
-
-        <!-- Champ pour l'upload de l'image -->
-        <div class="mb-3">
-            <label class="form-label">{{ form_label(form.image) }}</label>
-            {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.image) }}
-        </div>
-
-        <!-- Sélection de la catégorie -->
-        <div class="mb-3">
-            <label class="form-label">{{ form_label(form.categorie) }}</label>
-            {{ form_widget(form.categorie, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="flex-row-around">
+        <div class="profile-container">
+            <label>{{ form_label(form.categorie) }}</label>
+            {{ form_widget(form.categorie) }}
             {{ form_errors(form.categorie) }}
         </div>
-
-        <div>
-            <button type="submit" class="btn btn-success">Ajouter</button>
+        <div class="profile-container">
+            <label>{{ form_label(form.image) }}</label>
+            {{ form_widget(form.image)}}
+            {{ form_errors(form.image) }}
+        </div>
+    </div>
+        <div class="profile-container">
+            <label>{{ form_label(form.description) }}</label>
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
         </div>
 
+    <div class="profile-container">
+        {{ form_row(form.save) }}
         {{ form_end(form) }}
     </div>
+    <a class="profile-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
 </div>
 {% endblock %}

@@ -5,8 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Produit;
 use App\Entity\Commande;
-use App\Form\ProduitType;
+use App\Form\AddProduitType;
 use App\Form\EditProfileType;
+use App\Form\DeleteProduitType;
 use Doctrine\ORM\EntityManager;
 use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
@@ -124,7 +125,7 @@ final class AdminController extends AbstractController
     public function ajouterProduit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $produit = new Produit();
-        $form = $this->createForm(ProduitType::class, $produit);
+        $form = $this->createForm(AddProduitType::class, $produit);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -160,4 +161,30 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/produit/supprimer', name: 'delete_product')]
+    public function deleteProduit(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $produits = $entityManager->getRepository(Produit::class)->findAll();
+        $form = $this->createForm(DeleteProduitType::class, null, [
+            'produits' => $produits,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $deletedProducts = $form->get('produits')->getData();
+            
+            foreach($deletedProducts as $product){
+                $entityManager->remove($product);
+            }
+            $entityManager->flush();
+            $this->addFlash('success', count($deletedProducts) . ' produits supprimés avec succès.');
+            
+            return $this->redirectToRoute('admin_profile');
+        }
+
+        return $this->render('admin/delete_product.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }

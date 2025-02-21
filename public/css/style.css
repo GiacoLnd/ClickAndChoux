@@ -612,6 +612,14 @@ body{
         font-size: 1.4em;
         font-family: "Bubblegum Sans", sans-serif;
         padding: 15px;
+    } 
+    .delete-button{
+        background-color: transparent;
+        border: none;
+        color: red;
+        font-size: 1.4em;
+        font-family: "Bubblegum Sans", sans-serif;
+        padding: 15px;
     }
     .commande-list { 
         display: flex; 
@@ -747,8 +755,20 @@ body{
         font-size: 1.2em;
         font-family: "Bubblegum Sans", sans-serif;
     }
+    #utilisateurTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
+        background: transparent;
+        color: #FFA85C;
+        font-size: 1.2em;
+        font-family: "Bubblegum Sans", sans-serif;
+    }
     #commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
         border: none;
+        background: none;
+        padding: 5px;
+    }
+    #utilisateurTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
+        border: none;
+        background: none;
         padding: 5px;
     }
     #commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-end > div{
@@ -771,4 +791,65 @@ body{
         border-radius: 50px;
         text-align: center;
     }
+    
+    textarea{
+        width: 500px;
+        height: 250px;
+        border: #55211A 3px solid;
+        border-radius: 50px;
+        font-family: "Open sans", sans-serif;
+        font-size: 1.1em;
+    }
 
+    input[type="file"]::file-selector-button {
+        width: auto;
+        background: transparent;
+        font-family: "Bubblegum Sans", sans-serif;
+        font-size: 1.1em;
+        color: #FFA85C;
+        border: none;
+        padding-right: 10px;
+        cursor: pointer;
+    }
+
+    .profile-container select{
+        width: 200px;
+        text-align: center;
+        border: #55211A 3px solid;
+        border-radius: 50px;
+        padding: 5px;
+        font-family: "Open sans", sans-serif;
+        color: #55211A;
+    }
+
+    .flex-row-around{
+        display: flex;
+        flex-direction: row;
+        justify-content:center;
+        align-items: center;
+    }
+    
+    .flex-column-center{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .flex-row-wrap{
+        display: grid;
+        grid-template-columns: repeat(4, 3fr);
+        gap: 50px;
+        font-family: "Open sans", sans-serif;
+        color: #55211A;
+        font-size: 1.1em;
+    }
+
+    .checkbox-item{
+        display: flex;
+        align-items: center;
+        justify-content: end;
+    }
+    .checkbox-item input[type="checkbox"]{
+        margin: 15px;
+    }

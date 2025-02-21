@@ -16,31 +16,43 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ProduitType extends AbstractType
+class AddProduitType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('nomProduit', TextType::class, [
-                'label' => 'Nom du produit'
+                'label' => 'Nom du produit',
+                'label_attr' => ['class' => 'security-text'],
+                'attr' => ['class' => 'form-group'],
             ])
             ->add('prixHt', MoneyType::class, [
-                'label' => 'Prix HT',
-                'currency' => 'EUR'
+                'label' => 'Prix hors taxes €',
+                'label_attr' => ['class' => 'security-text'],
+                'currency' => false,
+                'attr' => ['class' => 'form-group'],
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'Description'
+                'label' => 'Description',
+                'label_attr' => ['class' => 'security-text'],
+                'attr' => ['class' => 'form-group'],
             ])
             ->add('allergene', TextType::class, [
-                'label' => 'Allergènes'
+                'label' => 'Allergènes',
+                'label_attr' => ['class' => 'security-text'],
+                'attr' => ['class' => 'form-group'],
             ])
             ->add('TVA', NumberType::class, [
-                'label' => 'TVA (%)'
+                'label' => 'TVA (%)',
+                'label_attr' => ['class' => 'security-text'],
+                'attr' => ['class' => 'form-group'],
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image du produit',
+                'label_attr' => ['class' => 'security-text'],
                 'mapped' => false, 
-                'required' => true, 
+                'required' => true,
+                'attr' => ['class' => 'form-group'],
                 'constraints' => [
                     new Assert\NotBlank(['message' => "Veuillez sélectionner une image."]),
                     new Assert\Image([
@@ -53,11 +65,13 @@ class ProduitType extends AbstractType
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'nomCategorie',
-                'label' => 'Catégorie'
+                'label' => 'Catégorie',
+                'label_attr' => ['class' => 'security-text'],
+                'attr' => ['class' => 'form-group']
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Ajouter le produit',
-                'attr' => ['class' => 'btn btn-success']
+                'attr' => ['class' => 'add-to-cart-button']
             ]);
     }
 
@@ -68,3 +82,4 @@ class ProduitType extends AbstractType
         ]);
     }
 }
+ 
