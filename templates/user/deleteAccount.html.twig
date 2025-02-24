@@ -17,11 +17,11 @@
         
         {{ form_start(formDelete) }}
             {{ form_row(formDelete.password) }}
-            <div class="form-group">
+            <div class="flex-column-center">
                 {{ form_row(formDelete.submit) }}
             </div>
         {{ form_end(formDelete) }}
 
-        <a href="{{ path('app_user_profil') }}" class="register-link">Retour à votre profil</a>
+        <a href="{{ path('app_user_profil') }}" class="bubblegum-link">Retour à votre profil</a>
     </div>
 {% endblock %}

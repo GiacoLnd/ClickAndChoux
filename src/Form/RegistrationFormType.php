@@ -26,7 +26,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Pseudo :',
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => [
-                    'class' => 'form-group text-center',
+                    'class' => 'flex-column-center',
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -45,7 +45,7 @@ class RegistrationFormType extends AbstractType
                 'label_attr' => ['class' => 'security-text'],
                 'required' => true,
                 'attr' => [
-                    'class' => 'form-group text-center',
+                    'class' => 'flex-column-center',
                     'autocomplete' => 'email',
                 ],
             ])
@@ -58,7 +58,7 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => [
-                    'class' => 'form-group text-center',
+                    'class' => 'flex-column-center',
                     'autocomplete' => 'email',
                 ],
                 
@@ -76,7 +76,7 @@ class RegistrationFormType extends AbstractType
                     'label_attr' => ['class' => 'security-text'],
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'form-group',
+                        'class' => 'flex-column-center',
                     ],
                 ],
                 'second_options' => [
@@ -84,12 +84,12 @@ class RegistrationFormType extends AbstractType
                     'label_attr' => ['class' => 'security-text'],
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'form-group',
+                        'class' => 'flex-column-center',
                     ],
                 ],
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'class' => 'form-group text-center',
+                    'class' => 'flex-column-center',
                     ],
                 'constraints' => [
                     new NotBlank([

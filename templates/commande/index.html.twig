@@ -3,8 +3,8 @@
 {% block title %}Commande Confirmée{% endblock %}
 
 {% block body %}
-    <div class="product-info">
-    <h2 class="login-title">Commande Validée</h1>
+    <div class="flex-column-center">
+    <h2 class="page-title">Commande Validée</h1>
     <p>Félicitation, votre commande a été validée !</p>
     <p>Vous pouvez retrouver votre commande dans votre espace personnel</p>
     <p>Référence de votre commande : {{ commande.reference }} </p>
@@ -19,6 +19,6 @@
 
     <p><strong>Total :</strong> {{ commande.montantTotal }}€</p>
 
-    <a href="{{ path('app_user_profil') }}" class="add-to-cart-button">Voir mes commandes</a>
+    <a href="{{ path('app_user_profil') }}" class="validate-button">Voir mes commandes</a>
     </div>
 {% endblock %}

@@ -178,10 +178,25 @@ class ProduitController extends AbstractController
                     $commande->setMontantTotal($montantTotal);
         
                     $em->flush();
+                } else {
+                    // Si l'utilisateur n'est pas connecté, gestion du panier via la session
+                    $cart = $session->get('panier', []);
+    
+                    if (isset($cart[$produit->getId()])) {
+                        // Si le produit est déjà dans le panier, on met à jour la quantité
+                        $cart[$produit->getId()] += $quantity;
+                    } else {
+                        // Si le produit n'est pas dans le panier, on l'ajoute avec la quantité
+                        $cart[$produit->getId()] = $quantity;
+                    }
+    
+                    // On met à jour la session avec le panier modifié
+                    $session->set('panier', $cart);
+    
+                    $this->addFlash('success', 'Produit ajouté au panier !');
                 }
-        
-                $this->addFlash('success', 'Produit ajouté au panier !');
-        
+    
+                // Redirection vers la page de catégorie
                 if ($produit->getCategorie()->getNomCategorie() === 'Sucré') {
                     return $this->redirectToRoute('sweety_produit');
                 } elseif ($produit->getCategorie()->getNomCategorie() === 'Salé') {
@@ -195,8 +210,4 @@ class ProduitController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-    
-    
 }
-

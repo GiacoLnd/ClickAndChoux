@@ -22,7 +22,7 @@ class CommandeType extends AbstractType
                     new Assert\NotBlank(['message' => 'L\'adresse est obligatoire.']),
                 ],
                 'attr' => [
-                    'class' => 'form-group',
+                    'class' => 'flex-column-center',
                     'autocomplete' => 'email',
                 ],
             ])
@@ -38,7 +38,7 @@ class CommandeType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-group',
+                    'class' => 'flex-column-center',
                     'autocomplete' => 'email',
                 ],
             ])
@@ -50,7 +50,7 @@ class CommandeType extends AbstractType
                     new Assert\NotBlank(['message' => 'La ville est obligatoire.']),
                 ],
                 'attr' => [
-                    'class' => 'form-group',
+                    'class' => 'flex-column-center',
                     'autocomplete' => 'email',
                 ],
             ]);

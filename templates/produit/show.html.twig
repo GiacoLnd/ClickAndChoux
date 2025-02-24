@@ -13,7 +13,7 @@
         {% endfor %}
     </div>
 <div class="details-container">
-    <div class="image">
+    <div class="details-image">
         <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image">
     </div>
     <div class="list-details">
@@ -27,13 +27,12 @@
 
         <h2>Ajouter au panier</h2>
         {{ form_start(form, {'attr': {'id': 'quantity-form'}}) }}
-        <div id="quantity-container" style="display: flex; align-items: center; gap: 10px;">
+        <div id="quantity-container">
                 {{ form_widget(form.quantity) }}
-            <div class="add-container">
-                {{ form_row(form.ajouter) }}
-            </div>
+                {{ form_widget(form.ajouter) }}
         </div>
     {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}
+ 

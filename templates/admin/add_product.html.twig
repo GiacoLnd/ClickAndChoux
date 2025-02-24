@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="profile-container">
-    <h2 class="login-title">Ajouter un Produit</h2>
+    <h2 class="page-title">Ajouter un Produit</h2>
 
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">{{ message }}</div>
@@ -63,6 +63,6 @@
         {{ form_row(form.save) }}
         {{ form_end(form) }}
     </div>
-    <a class="profile-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
+    <a class="bubblegum-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
 </div>
 {% endblock %}

@@ -36,6 +36,9 @@ class NavbarListener
         // Extracting User from Token, else null
         $user = $token ? $token->getUser() : null;
     
+        // Initializing quantity
+        $quantity = 0;
+
         // If user connected
         if ($user) {
             // Fetching last (sorted by id DESC) command of the user with status "panier" 
@@ -49,19 +52,21 @@ class NavbarListener
                 $result += $p->getQuantity();
             }
             $quantity = $result;
-        } else {
+        }  else {
             // If not connected, fetching product from session
             $session = $this->requestStack->getSession();
-            $panier =$session->get('panier', []);
+            $panier = $session->get('panier', []);
+    
             $result = 0;
-            foreach($panier as $p){
-                $result += $p->getQuantity();
+            foreach($panier as $productId => $quantity) {
+                $result += $quantity;  // Accumulate the quantity of products in session
             }
+    
             $quantity = $result;
         }
-    
         // Sharing Panier with all TWIG templates
         $this->twig->addGlobal('quantity', $quantity);
     }
-    
 }
+    
+

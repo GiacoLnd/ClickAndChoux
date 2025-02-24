@@ -12,8 +12,8 @@
             {% endfor %}
         {% endfor %}
     </div>
-    <div class="favori-list">  
-        <h2 class="catalog-title">Mes favoris</h2>
+    <div class="flex-column-center">  
+        <h2 class="page-title">Mes favoris</h2>
         <div class="choux-grid-container">
             <ul class="choux-grid">
                 {% for favori in favoris %}
@@ -29,7 +29,7 @@
             </ul>
         </div>
         <div class="d-flex justify-content-center align-items-center p-3">
-            <a class="profile-link fw-bold" href="{{ path('app_user_profil') }}"> Retour au profil</a>
+            <a class="bubblegum-link fw-bold" href="{{ path('app_user_profil') }}"> Retour au profil</a>
         </div>
     </div>
 {% endblock %}

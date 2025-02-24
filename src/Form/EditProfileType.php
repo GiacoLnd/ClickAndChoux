@@ -18,16 +18,16 @@ class EditProfileType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
                 'label_attr' => ['class' => 'security-text'],
-                'attr' => ['class' => 'form-group']
+                'attr' => ['class' => 'flex-column-center']
             ])
             ->add('nickName', TextType::class, [
                 'label' => 'Pseudo',
                 'label_attr' => ['class' => 'security-text'],
-                'attr' => ['class' => 'form-group']
+                'attr' => ['class' => 'flex-column-center']
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Mettre à jour',
-                'attr' => ['class' => 'add-to-cart-button']
+                'attr' => ['class' => 'validate-button']
             ]);
         ;
     }

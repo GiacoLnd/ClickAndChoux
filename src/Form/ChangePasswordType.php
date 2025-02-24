@@ -23,7 +23,7 @@ class ChangePasswordType extends AbstractType
                 'label_attr' => ['class' => 'security-text'],
                 'mapped' => false,
                 'required' => true,
-                'attr' => ['class' => 'form-group'],
+                'attr' => ['class' => 'flex-column-center'],
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Veuillez entrer votre ancien mot de passe.']),
                     new UserPassword(['message' => 'L\'ancien mot de passe est incorrect.'])
@@ -38,7 +38,7 @@ class ChangePasswordType extends AbstractType
                 'first_options'  => [
                     'label' => 'Nouveau mot de passe',
                     'label_attr' => ['class' => 'security-text'],
-                    'attr' => ['class' => 'form-group'],
+                    'attr' => ['class' => 'flex-column-center'],
                     'constraints' => [
                         new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                         new Assert\Length([
@@ -54,14 +54,14 @@ class ChangePasswordType extends AbstractType
                 'second_options' => [
                     'label' => 'Confirmez le mot de passe',
                     'label_attr' => ['class' => 'security-text'],
-                    'attr' => ['class' => 'form-group']
+                    'attr' => ['class' => 'flex-column-center']
                 ],
                 'mapped' => false
             ])
 
             ->add('save', SubmitType::class, [
                 'label' => 'Changer le mot de passe',
-                'attr' => ['class' => 'add-to-cart-button']
+                'attr' => ['class' => 'validate-button']
             ]);
     }
 

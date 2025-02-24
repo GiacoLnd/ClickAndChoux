@@ -28,6 +28,7 @@ class PanierType extends AbstractType
         ])
         ->add('ajouter', SubmitType::class, [
             'label' => 'Ajouter au panier',
+            'attr' => ['class' => 'validate-button',]
         ]);
     }
 

@@ -24,35 +24,35 @@ class AddProduitType extends AbstractType
             ->add('nomProduit', TextType::class, [
                 'label' => 'Nom du produit',
                 'label_attr' => ['class' => 'security-text'],
-                'attr' => ['class' => 'form-group'],
+                'attr' => ['class' => 'flex-column-center'],
             ])
             ->add('prixHt', MoneyType::class, [
                 'label' => 'Prix hors taxes €',
                 'label_attr' => ['class' => 'security-text'],
                 'currency' => false,
-                'attr' => ['class' => 'form-group'],
+                'attr' => ['class' => 'flex-column-center'],
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'label_attr' => ['class' => 'security-text'],
-                'attr' => ['class' => 'form-group'],
+                'attr' => ['class' => 'flex-column-center'],
             ])
             ->add('allergene', TextType::class, [
                 'label' => 'Allergènes',
                 'label_attr' => ['class' => 'security-text'],
-                'attr' => ['class' => 'form-group'],
+                'attr' => ['class' => 'flex-column-center'],
             ])
             ->add('TVA', NumberType::class, [
                 'label' => 'TVA (%)',
                 'label_attr' => ['class' => 'security-text'],
-                'attr' => ['class' => 'form-group'],
+                'attr' => ['class' => 'flex-column-center'],
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image du produit',
                 'label_attr' => ['class' => 'security-text'],
                 'mapped' => false, 
                 'required' => true,
-                'attr' => ['class' => 'form-group'],
+                'attr' => ['class' => 'flex-column-center'],
                 'constraints' => [
                     new Assert\NotBlank(['message' => "Veuillez sélectionner une image."]),
                     new Assert\Image([
@@ -67,11 +67,11 @@ class AddProduitType extends AbstractType
                 'choice_label' => 'nomCategorie',
                 'label' => 'Catégorie',
                 'label_attr' => ['class' => 'security-text'],
-                'attr' => ['class' => 'form-group']
+                'attr' => ['class' => 'flex-column-center']
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Ajouter le produit',
-                'attr' => ['class' => 'add-to-cart-button']
+                'attr' => ['class' => 'validate-button']
             ]);
     }
 

@@ -45,29 +45,33 @@ class PanierController extends AbstractController
                 $paniers = $panierRepository->findBy(['commande' => $commande]);
             }
         } else {
-            $cart = $session->get('panier', []);
+            // Si l'utilisateur n'est pas connecté, récupérer le panier depuis la session
+            $cart = $session->get('panier', []);  // On récupère le panier dans la session
+    
+            // On parcourt le panier de la session pour récupérer les produits et leurs quantités
             foreach ($cart as $productId => $quantity) {
-                $produit = $produitRepository->find($productId);
+                // Assure-toi que la quantité est bien un entier
+                $quantity = (int) $quantity;  // Conversion explicite en entier
+    
+                $produit = $produitRepository->find($productId);  // Récupérer le produit par son ID
                 if ($produit) {
+                    // Si le produit existe, on le prépare pour l'affichage
                     $panier = new Panier();
                     $panier->setProduit($produit);
-                    $panier->setQuantity($quantity);
+                    $panier->setQuantity($quantity);  // Associer la quantité en tant qu'entier
                     $paniers[] = $panier;
                 }
             }
         }
-
+    
         // Calcul du montant total
         foreach ($paniers as $panier) {
             $montantTotal += $panier->getProduit()->getTTC() * $panier->getQuantity();
         }
-
-        // Génération du formulaire pour chaque produit
-
+    
         return $this->render('panier/index.html.twig', [
-            'paniers' => $paniers,
-            'montantTotal' => $montantTotal,
-            'forms' => $forms,
+            'paniers' => $paniers,       // Liste des produits dans le panier
+            'montantTotal' => $montantTotal, // Montant total du panier
         ]);
     }
 

@@ -13,7 +13,7 @@
         {% endfor %}
     </div>
     <div class="commande-container">
-        <h2 class="login-title">Votre commande :</h2>
+        <h2 class="page-title">Votre commande :</h2>
             <div class="commande-list">
                 {% for panier in commande.paniers %}
                     <div class="commande-product">
@@ -27,7 +27,7 @@
         
         <h3>Montant total : {{ commande.montantTotal|number_format(2, ',', ' ') }} €</h3>
 
-        <h2 class="login-title">Adresse de livraison</h2>
+        <h2 class="page-title">Adresse de livraison</h2>
         {{ form_start(form) }}
             <div class="livraison-container">
                 {{ form_row(form.adresseLivraison) }}

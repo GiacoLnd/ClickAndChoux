@@ -12,16 +12,16 @@
             {% endfor %}
         {% endfor %}
     </div>
-    <div class="profile-container">
-        <h2 class="details-title">Panneau Administrateur</h2>
+    <div class="flex-column-center">
+        <h2 class="page-title">Panneau Administrateur</h2>
         <div class="profile-info">
             <p>Bonjour, cheffe {{ user.nickName }} !</p>
             <p>Email Admin : {{ user.email }}</p>
         </div>
-        <a href="{{ path('admin_list_user') }}" class="profile-link">Liste des utilisateurs</a>
-        <a href="{{ path('admin_list_commandes') }}" class="profile-link">Liste des Commandes</a>
-        <a href="{{ path('admin_add_product') }}" class="profile-link">Ajouter un produit</a>
-        <a href="{{ path('admin_delete_product') }}" class="profile-link">Supprimer un ou plusieurs produit(s)</a>
+        <a href="{{ path('admin_list_user') }}" class="bubblegum-link">Liste des utilisateurs</a>
+        <a href="{{ path('admin_list_commandes') }}" class="bubblegum-link">Liste des Commandes</a>
+        <a href="{{ path('admin_add_product') }}" class="bubblegum-link">Ajouter un produit</a>
+        <a href="{{ path('admin_delete_product') }}" class="bubblegum-link">Supprimer un ou plusieurs produit(s)</a>
     </div>
 {% endblock %}
  
