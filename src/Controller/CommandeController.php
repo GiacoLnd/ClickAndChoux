@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Commande;
 use App\Form\CommandeType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class CommandeController extends AbstractController
 {
     #[Route('/panier/valider', name: 'commande_valider', methods: ['POST'])]
-    public function validerPanier(EntityManagerInterface $entityManager): Response
+    public function validerPanier(EntityManagerInterface $entityManager, Security $security): Response
     {
         $user = $this->getUser();
 
@@ -27,6 +28,11 @@ final class CommandeController extends AbstractController
             'statut' => 'panier'
         ]);
 
+        // Protection de la propriété de la commande des modifications de l'URL
+        if (!$security->isGranted('ROLE_ADMIN') && $commande->getUser() !== $user) {
+            throw $this->createAccessDeniedException("Accès non-autorisé");
+        }
+
         if (!$commande || $commande->getPaniers()->isEmpty()) {
             $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('panier_afficher');
@@ -37,7 +43,7 @@ final class CommandeController extends AbstractController
 
 
     #[Route('/commande/confirmer', name: 'commande_confirmer')]
-    public function confirmerCommande(Request $request, EntityManagerInterface $entityManager): Response
+    public function confirmerCommande(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $user = $this->getUser();
     
@@ -50,7 +56,11 @@ final class CommandeController extends AbstractController
             'user' => $user,
             'statut' => 'panier'
         ]);
-    
+        
+        if (!$security->isGranted('ROLE_ADMIN') && $commande->getUser() !== $user) {
+            throw $this->createAccessDeniedException("Accès non-autorisé");
+        }
+
         if (!$commande || $commande->getPaniers()->isEmpty()) {
             $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('panier_afficher');
@@ -110,8 +120,13 @@ final class CommandeController extends AbstractController
     }
     
     #[Route('/commande/confirmation/{id}', name: 'commande_confirmation')]
-    public function confirmationCommande(Commande $commande): Response
+    public function confirmationCommande(Commande $commande, Security $security): Response
     {
+        $user = $this->getUser();
+
+        if (!$security->isGranted('ROLE_ADMIN') && $commande->getUser() !== $user) {
+            throw $this->createAccessDeniedException("Accès non-autorisé");
+        }
         return $this->render('commande/index.html.twig', [
             'commande' => $commande
         ]);
@@ -119,9 +134,13 @@ final class CommandeController extends AbstractController
 
 
     #[Route('/commande/{id}', name: 'commande_detail', methods: ['GET'])]
-    public function detailCommande(Commande $commande): Response
+    public function detailCommande(Commande $commande, Security $security): Response
     {
         $user = $this->getUser();
+
+        if (!$security->isGranted('ROLE_ADMIN') && $commande->getUser() !== $user) {
+            throw $this->createAccessDeniedException("Vous n'avez pas accès à cette commande.");
+        }
 
         return $this->render('commande/detail.html.twig', [
             'commande' => $commande,

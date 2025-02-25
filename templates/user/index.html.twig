@@ -12,19 +12,16 @@
             {% endfor %}
         {% endfor %}
     </div>
-    <div class="profile-container">
-        <h2 class="details-title">Profil</h2>
-        <div class="profile-info">
-            <p>Salutations, {{ user.nickName }} !</p>
+        <h2 class="page-title">Profil</h2>
             <p>Email : {{ user.email }}</p>
-         </div>
-        <div class="update-container">
-            <a href="{{ path('app_update_profile') }}" class="update-button">Modifier mes informations</a>
-            <a href="{{ path('app_update_password') }}" class="update-button">Modifier mon mot de passe</a>
+        <div class="flex-row-center">
+            <a href="{{ path('app_update_profile') }}" class="bubblegum-link">Modifier mes informations</a>
+            <a href="{{ path('app_update_password') }}" class="bubblegum-link">Modifier mon mot de passe</a>
         </div>
-        <a href="{{ path('favoris_page') }}" class="bubblegum-link">Mes Favoris</a>
-        <a href="{{ path('app_user_commandes') }}" class="bubblegum-link">Mes Commandes</a>
+        <div class="flex-row-center">
+            <a href="{{ path('app_user_commandes') }}" class="bubblegum-link">Mes Commandes</a>
+            <a href="{{ path('favoris_page') }}" class="bubblegum-link">Mes Favoris</a>
+        </div>
         <a href="{{ path('app_profile_delete') }}" class="delete-link">Supprimer mon compte</a>
-    </div>
 {% endblock %}
  

@@ -3,7 +3,6 @@
 {% block title %}Ajouter un Produit{% endblock %}
 
 {% block body %}
-<div class="profile-container">
     <h2 class="page-title">Ajouter un Produit</h2>
 
     {% for message in app.flashes('success') %}
@@ -15,54 +14,54 @@
 
         {{ form_start(form) }}
 
-    <div class="flex-row-around">
-        <div class="profile-container">
+    <div class="flex-row-center">
+        <div class="flex-column-center">
             <label>{{ form_label(form.nomProduit) }}</label>
             {{ form_widget(form.nomProduit) }}
             {{ form_errors(form.nomProduit) }}
         </div>
-        <div class="profile-container">
+        <div class="flex-column-center">
             <label>{{ form_label(form.prixHt) }}</label>
             {{ form_widget(form.prixHt) }}
             {{ form_errors(form.prixHt) }}
         </div>
     </div>
 
-    <div class="flex-row-around">
-        <div class="profile-container">
+    <div class="flex-row-center">
+        <div class="flex-column-center">
             <label>{{ form_label(form.allergene) }}</label>
             {{ form_widget(form.allergene) }}
             {{ form_errors(form.allergene) }}
         </div>
-
-        <div class="profile-container">
+        <div class="flex-column-center">
             <label>{{ form_label(form.TVA) }}</label>
             {{ form_widget(form.TVA) }}
             {{ form_errors(form.TVA) }}
         </div>
     </div>
-    <div class="flex-row-around">
-        <div class="profile-container">
+
+    <div class="flex-row-center">
+        <div class="flex-column-center">
             <label>{{ form_label(form.categorie) }}</label>
             {{ form_widget(form.categorie) }}
             {{ form_errors(form.categorie) }}
         </div>
-        <div class="profile-container">
+        <div class="flex-column-center">
             <label>{{ form_label(form.image) }}</label>
             {{ form_widget(form.image)}}
             {{ form_errors(form.image) }}
         </div>
     </div>
-        <div class="profile-container">
-            <label>{{ form_label(form.description) }}</label>
-            {{ form_widget(form.description) }}
-            {{ form_errors(form.description) }}
-        </div>
 
-    <div class="profile-container">
+    <div class="flex-column-center mb-3">
+        <label>{{ form_label(form.description) }}</label>
+        {{ form_widget(form.description) }}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <div class="flex-column-center">
         {{ form_row(form.save) }}
         {{ form_end(form) }}
     </div>
     <a class="bubblegum-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
-</div>
 {% endblock %}

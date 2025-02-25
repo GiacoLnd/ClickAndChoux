@@ -24,10 +24,7 @@ class DeleteAccountType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Supprimer mon compte',
-                'attr' => [
-                    'class' => 'btn btn-danger',
-                    'style' => 'border-radius: 50px',
-                ],
+                'attr' => [ 'class' => 'delete-link' ],
             ]);
     }
 

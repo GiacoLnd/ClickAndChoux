@@ -18,10 +18,14 @@
             <p>Bonjour, cheffe {{ user.nickName }} !</p>
             <p>Email Admin : {{ user.email }}</p>
         </div>
-        <a href="{{ path('admin_list_user') }}" class="bubblegum-link">Liste des utilisateurs</a>
-        <a href="{{ path('admin_list_commandes') }}" class="bubblegum-link">Liste des Commandes</a>
+        <div class="flex-rox-center">
+            <a href="{{ path('admin_list_user') }}" class="bubblegum-link">Liste des utilisateurs</a>
+            <a href="{{ path('admin_list_commandes') }}" class="bubblegum-link">Liste des Commandes</a>
+        </div>
+        <div class="flex-rox-center">
         <a href="{{ path('admin_add_product') }}" class="bubblegum-link">Ajouter un produit</a>
         <a href="{{ path('admin_delete_product') }}" class="bubblegum-link">Supprimer un ou plusieurs produit(s)</a>
+        </div>
     </div>
 {% endblock %}
  

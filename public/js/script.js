@@ -198,9 +198,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Datatables scripts 
 
-// Admin orders list dataTables
+// User orders list dataTables
 $(document).ready(function() {
     var table = $('#commandesTable').DataTable({
+        "paging": true,       // Active la pagination
+        "searching": true,    // Active la recherche
+        "ordering": true,  
+        "order": [[2, "desc"]], // Trie par date (colonne 2) en ordre décroissant
+        "info": false,         // Désactive les informations sur le nombre d'éléments
+        "pagingType": "numbers", // Désactive 
+        "lengthChange": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
+        },
+    });
+});
+
+// Admin orders list dataTables
+$(document).ready(function() {
+    var table = $('#commandesAdminTable').DataTable({
         "paging": true,       // Active la pagination
         "searching": true,    // Active la recherche
         "ordering": true,  

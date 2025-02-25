@@ -3,28 +3,32 @@
 {% block title %}Détail de la commande{% endblock %}
 
 {% block body %}
-    <div class="commande-details">
-        <h2 class="page-title p-4">Détail de la commande</h2>
+        <h2 class="page-title">Détail de la commande</h2>
         <p><strong>Référence :</strong> {{ commande.reference }}</p>
         <p><strong>Date :</strong> {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
         <p><strong>Statut :</strong> {{ commande.statut }}</p>
-
-        <h2 class="page-title pt-4">Produits commandés</h2>
-        <ul>
-            {% for panier in commande.paniers %}
-                <li>{{ panier.produit.nomProduit }} - {{ panier.quantity }} x {{ panier.produit.getTTC }}€ : {{ panier.getTotalTTC }}€</li>
-            {% endfor %}
-        </ul>
-
-        <h3>Total : {{ commande.montantTotal }}€</h3>
-
-            {% if is_granted('ROLE_ADMIN') %}
-                <div class="flex-row-between">
-                    <p><a class="bubblegum-link" href="{{ path('admin_user_commandes', { id: commande.user.id }) }}">Liste des commandes de {{ commande.user.nickName }}</a></p>
-                    <p><a class="bubblegum-link" href="{{ path('admin_list_commandes') }}">Retour à la liste des commandes</a></p>
-                </div>
-            {% else %}
-                <a class="bubblegum-link" href="{{ path('app_user_commandes') }}">Retour aux commandes</a>
-            {% endif %}
+        <h3 class="page-title">Total : {{ commande.montantTotal }}€</h3>
+    
+    
+    <h2 class="page-title pt-4">Produits commandés</h2>
+    <div class="commande-list">
+        {% for panier in commande.paniers %}
+        <div class="commande-product">
+            <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
+            <h3>{{ panier.produit.nomProduit }}</h3>
+            <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
+            <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
+        </div>
+        {% endfor %}
     </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="flex-row-center">
+                <p><a class="bubblegum-link" href="{{ path('admin_user_commandes', { id: commande.user.id }) }}">Liste des commandes de {{ commande.user.nickName }}</a></p>
+                <p><a class="bubblegum-link" href="{{ path('admin_list_commandes') }}">Retour à la liste des commandes</a></p>
+            </div>
+        {% else %}
+            <a class="bubblegum-link" href="{{ path('app_user_commandes') }}">Retour aux commandes</a>
+        {% endif %}
+
 {% endblock %}

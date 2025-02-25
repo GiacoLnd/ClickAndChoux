@@ -23,25 +23,78 @@ p{
     font-family: var(--font-family-primary);
 }
 
-/* Liens communs */
+
+/* Input communs */
+textarea{
+    width: 500px;
+    height: 250px;
+    border: #55211A 3px solid;
+    border-radius: 50px;
+    font-family: var(--font-family-primary);
+    font-size: 1.1em;
+}
+
+input[type="file"]{
+    border: solid 3px #55211A;
+    border-radius: 50px;
+    padding: 5px;
+}
+
+input[type="file"]::file-selector-button {
+    font-family: var(--link-family-primary);
+    font-size: 1.1em;
+    color: var(--link-color);
+    border: none;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+select{
+    width: auto;
+    border: #55211A 3px solid;
+    border-radius: 50px;
+    padding: 5px;
+}
+
+/* Liens et titre communs */
+.page-title{
+    text-align: center;
+    font-family: var(--link-family-primary);
+    color: var(--font-color);
+    font-size: 1.8em;
+    padding: 25px;
+}
+
 .bubblegum-link{
     text-decoration: none;
     color: var(--link-color);
     font-size: var(--link-size);
     font-family: var(--link-family-primary);
-    padding: 15px;
+    padding: 25px;
+    margin: 10px;
     background:transparent;
     border: none;
+    transition: transform 0.3s ease;
+}
+.bubblegum-link:hover{
+    text-decoration: underline;
+    transform: scale(1.1)
 }
 
 .delete-link{
-    text-decoration: none;
-    background:transparent;
-    border: none;
-    color: red;
-    font-size: var(--link-size);
-    font-family: var(--link-family-primary);
-    padding: 15px;
+    text-decoration: none !important;
+    background:transparent !important;
+    border: none !important;
+    border-radius: 50px ;
+    color: red !important;
+    font-size: 1.1em !important;
+    font-family: var(--link-family-primary) !important;
+    padding: 10px !important;
+    transition: transform 0.3s ease;
+} 
+.delete-link:hover{
+    text-decoration: underline !important;
+    transform: scale(1.1)
 } 
 
 /* Flexbox communs*/ 
@@ -58,8 +111,9 @@ p{
     flex-direction: row;
     justify-content:center;
     align-items: center;
+    gap: 30px;
+    padding: 10px;
 }
-
 
 *{
     margin: 0;
@@ -186,14 +240,7 @@ p{
                 padding: 10px;
                 color: var(--font-color);
                 font-family: var(--font-family-primary);
-
-                .page-title{
-                    text-align: center;
-                    font-family: var(--link-family-primary);
-                    color: var(--font-color);
-                    font-size: 1.8em;
-                    padding: 15px;
-                }
+                font-size:  var(--font-size);
             }
 
             .footer-container{
@@ -328,7 +375,6 @@ p{
         }
     }
 }
-
 .choux-grid-container {
     display: flex;
     justify-content: center;
@@ -350,14 +396,16 @@ p{
             flex-direction: column;
             align-items: center;
             padding: 10px;
-            margin: auto;
+            margin: 25px;
             
             a{
-                &.catalog-image{
-                    width: 250x;
-                    height: 250px;
+                .catalog-image{
+                    width: 190px;
+                    height: 190px;
                     border-radius: 50px;
                     object-fit: cover;
+                    border: #55211a4f solid 1px;
+                    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
                 }
             } 
             
@@ -433,7 +481,7 @@ p{
         #quantity-container {
 
             .quantity{
-                border: 2px solid #55211a
+                border: 2px solid #55211a;
                 border-radius: 50px;
                 text-align: center;
                 font-size: var(--font-size);
@@ -451,7 +499,7 @@ p{
                 border-radius: 50px;
                 font-family: var(--link-family-primary);
                 font-size: 1.2em;
-                padding: 5px;
+                padding: 15px;
                 height: 30px;
             }
         }
@@ -473,13 +521,18 @@ p{
     padding: 10px;
 }
 
-.flex-column-center input[type="text"], .flex-column-center input[type="number"]  {
+.flex-column-center input[type="text"], .flex-column-center input[type="number"], .flex-column-center input[type="email"], .flex-column-center input[type="password"]  {
     margin-bottom: 15px;
     width: 500px;
     padding: 10px;
     margin-bottom: 20px;
-    border: 3px solid #55211A;
+    border: 2px solid #55211A;
     border-radius: 50px;
+}
+
+.flex-column-center input[type="text"]:focus, .flex-column-center input[type="number"]:focus, .flex-column-center input[type="email"]:focus, .flex-column-center input[type="password"]:focus {
+    border: #55211A solid 3px !important;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
 }
 
 .flex-column-center input[type="checkbox"] {
@@ -494,7 +547,8 @@ p{
     font-family: var(--link-family-primary);
     font-size: var(--link-size);
     color: white;
-    padding: 10px;
+    padding-right: 25px;
+    padding-left: 25px;
     margin: 10px;
     border: none;
     border-radius: 50px;
@@ -543,68 +597,20 @@ p{
         color: var(--link-color);
         font-size: var(--link-size);
         padding: 10px;
+    }
 }
-}
+/* Fin Panier */
 
-    .profile-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-family-primary);
-    color: var(--font-color);
-    font-size: 1.2em;
-    gap: 15px;
-    margin: 15px;
-    }
+/* Profil -> géré via style commun flex-column-center et links */ 
 
-    .profile-container input{
-        margin-bottom: 15px;
-        width: 500px;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 3px solid #55211A;
-        border-radius: 50px;
-    }
+/* Commande */
 
-    .profile-info{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        padding: 10px;
-        margin-top: 15px;
-    }
+.commande-list { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 20px; 
+    justify-content: center; 
 
-    .update-container{
-        display: flex;
-        flex-direction: row;
-        gap: 40px;
-    }
-
-    .update-button{
-        text-decoration: none;
-        color: var(--link-color);
-        font-size: 1.1em;
-        font-family: var(--link-family-primary);
-        padding: 20px;
-    }
-
-    .delete-button{
-        background-color: transparent;
-        border: none;
-        color: red;
-        font-size: 1.4em;
-        font-family: var(--link-family-primary);
-        padding: 15px;
-    }
-    .commande-list { 
-        display: flex; 
-        flex-wrap: wrap; 
-        gap: 20px; 
-        justify-content: start; 
-    }
     .commande-product { 
         display: flex; 
         flex-direction: column; 
@@ -614,204 +620,140 @@ p{
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
         padding: 15px; width: 200px; 
         text-align: center; 
-    }
-    .catalog-image { 
-        width: 120px; 
-        height: 120px; 
-        object-fit: cover; 
-        border-radius: 10px; 
-        margin-bottom: 10px; 
-    }
-    .commande-container h3 { 
-        font-size: 1.1rem; 
-        font-family: var(--link-family-primary);
-        color: var(--font-color);
-        font-size: 1.3em;
-        padding: 10px;
-    }
-    .commande-product p { 
-        margin: 5px 0; 
-        font-family: var(--font-family-primary);
-        color: var(--font-color);
-        font-size: 1.1em;
-    }
-    .commande-container{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
+        border: #FFA85C solid 1px;
+        border-radius: 20px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        padding: 15px;
+        margin: 40px;
 
-    .livraison-container{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
+        
+        .commande-image { 
+            width: 150px; 
+            height: 150px; 
+            object-fit: cover; 
+            border-radius: 10px; 
+            margin-bottom: 10px; 
+        }
     }
+}
+/* Fin commande */
 
-    .commande-container input {
-        margin-bottom: 15px;
-        width: 500px;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 3px solid var(--font-color);
-        border-radius: 50px;
-    }
-    
-    .commande-container button {
-        background-color: var(--link-color);
-        color: white;
-        padding: 20px;
-        border: none;
-        cursor: pointer;
-        border-radius: 50px;
-        font-family: var(--link-family-primary);
-        font-size: 1.1em;
-    }
 
-    .commande-liste{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+/* DataTables */
+/* DataTable styles communs */
 
-    .table{
-        border-collapse: collapse;
-        width: 500px;
-    }
+table.dataTable thead th, table.dataTable tbody td{
+    text-align: center;
+    padding: 10px;
+    width: 200px;
+}
 
-    .table th, .table td {
-        padding: 8px;
-        text-align: center;
-        color: #55211A;
-        font-family: var(--font-family-primary);
-    }
+.dt-layout-row{
+    padding: 40px;
+    color: var(--font-color);
+    font-size: 0.9em;
+    font-family: var(--font-family-primary);
+}
 
-    .commande-details{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        color: var(--font-color);
-    }
-    
-    td, th{
-        text-align: center;
-        padding: 10px;
-        color: var(--font-color);
-        font-family: var(--font-family-primary);
-        font-size: 1.1em;
-    }
+#dt-search-0{
+    border: 2px solid #FFA85C;
+    border-radius: 50px;
+    margin: 10px;
+    text-align: center;
+}
 
-    .flex-row-between{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 30px;
-        padding: 20px;
-    }
+#dt-length-0{
+    border: 2px solid #FFA85C;
+    border-radius: 50px;
+    text-align: center;
+}
 
-    table.dataTable thead th, table.dataTable tbody td{
-        text-align: center;
-        padding: 10px;
-    }
-    
-    .dt-layout-row{
-        padding: 40px;
-        color: var(--font-color);
-        font-size: 0.9em;
-        font-family: var(--font-family-primary);
-    }
-    #commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
-        background: transparent;
-        color: var(--link-color);
-        font-size: 1.2em;
-        font-family: var(--link-family-primary);
-    }
-    #utilisateurTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
-        background: transparent;
-        color: var(--link-color);
-        font-size: 1.2em;
-        font-family: var(--link-family-primary)
-    }
-    #commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
-        border: none;
-        background: none;
-        padding: 5px;
-    }
-    #utilisateurTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
-        border: none;
-        background: none;
-        padding: 5px;
-    }
-    #commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-end > div{
-        font-family: var(--font-family-primary);
-        font-size: 1.2em;
-    }
+/* DataTable Admin */
+/* DataTable User List */
+#utilisateurTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
+    background: transparent;
+    color: var(--link-color);
+    font-size: 1.2em;
+    font-family: var(--link-family-primary)
+}
 
-    #dt-search-0{
-        border: 2px solid #FFA85C;
-        border-radius: 50px;
-        margin: 10px;
-        text-align: center;
-    }
-    #commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-start > div > label{
-        font-family: var(--font-family-primary);
-        font-size: 1.2em;
-    }
-    #dt-length-0{
-        border: 2px solid #FFA85C;
-        border-radius: 50px;
-        text-align: center;
-    }
-    
-    textarea{
-        width: 500px;
-        height: 250px;
-        border: #55211A 3px solid;
-        border-radius: 50px;
-        font-family: var(--font-family-primary);
-        font-size: 1.1em;
-    }
+#utilisateurTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
+    border: none;
+    background: none;
+    padding: 5px;
+}
 
-    input[type="file"]::file-selector-button {
-        width: auto;
-        background: transparent;
-        font-family: var(--link-family-primary);
-        font-size: 1.1em;
-        color: var(--link-color);
-        border: none;
-        padding-right: 10px;
-        cursor: pointer;
-    }
+/* DataTable Commandes */
+#commandesAdminTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
+    background: transparent;
+    color: var(--link-color);
+    font-size: 1.2em;
+    font-family: var(--link-family-primary);
+}
+#commandesAdminTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
+    border: none;
+    background: none;
+    padding: 5px;
+}
 
-    .profile-container select{
-        width: 200px;
-        text-align: center;
-        border: #55211A 3px solid;
-        border-radius: 50px;
-        padding: 5px;
-        font-family: var(--font-family-primary);
-        color: var(--font-color);
-    }
+#commandesAdminTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-end > div{
+    font-family: var(--font-family-primary);
+    font-size: 1.2em;
+}
+
+
+#commandesAdminTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-start > div > label{
+    font-family: var(--font-family-primary);
+    font-size: 1.2em;
+}
+/* Fin DataTables Admin */
+
+/* DataTable User */
+/* DataTable Commandes */
+#commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
+    background: transparent;
+    color: var(--link-color);
+    font-size: 1.2em;
+    font-family: var(--link-family-primary);
+}
+#commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
+    border: none;
+    background: none;
+    padding: 5px;
+}
+
+#commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-end > div{
+    font-family: var(--font-family-primary);
+    font-size: 1.2em;
+}
+
+
+#commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-start > div > label{
+    font-family: var(--font-family-primary);
+    font-size: 1.2em;
+}
+/* Fin DataTable User */
+/* Fin DataTables */
+
+/* Delete Product Form */
+.grid-delete-container{
+    display: grid;
+    grid-template-columns: repeat(4, 3fr);
+    gap: 50px;
+    padding: 20px;
+
     .checkbox-item{
         display: flex;
-        align-items: center;
-        justify-content: end;
+        align-items: start;
+        justify-content: end; 
+        
+        input[type="checkbox"]{
+            margin: 10px;
+        }
     }
-    .checkbox-item input[type="checkbox"]{
-        margin: 15px;
-    }
+}
+/* Fin Delete Product Form */
 
-    .grid-delete-container{
-        display: grid;
-        grid-template-columns: repeat(4, 3fr);
-        gap: 50px;
-        padding: 20px;
-    }
+
+
     

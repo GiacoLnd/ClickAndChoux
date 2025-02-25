@@ -10,6 +10,7 @@ use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +30,7 @@ class PanierController extends AbstractController
         SessionInterface $session,
         PanierRepository $panierRepository,
         ProduitRepository $produitRepository,
-        CommandeRepository $commandeRepository
+        CommandeRepository $commandeRepository,
     ): Response {
         $user = $this->getUser();
         $paniers = [];
@@ -90,7 +91,7 @@ class PanierController extends AbstractController
         if ($user) {
             // Utilisateur connecté : gestion via base de données
             $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-    
+            
             if ($commande) {
                 $panier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
     
@@ -158,14 +159,14 @@ class PanierController extends AbstractController
 
                 $em->flush();
 
-                $this->addFlash('success', 'Tous les produits ont été supprimés du panier (base de données).');
+                $this->addFlash('success', 'Tous les produits ont été supprimés du panier !');
             } else {
                 $this->addFlash('warning', 'Aucun panier trouvé.');
             }
         } else {
             // Utilisateur non connecté : gestion via session
             $session->remove('panier');
-            $this->addFlash('success', 'Tous les produits ont été supprimés du panier (session).');
+            $this->addFlash('success', 'Tous les produits ont été supprimés du panier !');
         }
 
         return $this->redirectToRoute('panier_afficher');

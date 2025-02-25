@@ -71,7 +71,6 @@ class AddProduitType extends AbstractType
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Ajouter le produit',
-                'attr' => ['class' => 'validate-button']
             ]);
     }
 

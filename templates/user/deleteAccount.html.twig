@@ -10,18 +10,14 @@
             {% endfor %}
         {% endfor %}
     </div>
-    <div class="profile-container">
-        <h2 class="details-title">Supprimer mon compte</h2>
-        <p>Attention, cette action est irréversible.</p>
-        <p>Veuillez confirmer votre mot de passe.</p>
+    <h2 class="page-title">Supprimer mon compte</h2>
+    <p>Attention, cette action est irréversible.</p>
+    <p>Veuillez confirmer votre mot de passe.</p>
         
-        {{ form_start(formDelete) }}
-            {{ form_row(formDelete.password) }}
-            <div class="flex-column-center">
-                {{ form_row(formDelete.submit) }}
-            </div>
-        {{ form_end(formDelete) }}
+    {{ form_start(formDelete) }}
+        {{ form_row(formDelete.password) }}
+        {{ form_row(formDelete.submit) }}
+    {{ form_end(formDelete) }}
 
-        <a href="{{ path('app_user_profil') }}" class="bubblegum-link">Retour à votre profil</a>
-    </div>
+    <a href="{{ path('app_user_profil') }}" class="bubblegum-link">Retour à votre profil</a>
 {% endblock %}
