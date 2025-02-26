@@ -10,7 +10,7 @@
     --font-size: 1.1em;
     --link-color: #FFA85C;
     --link-family-primary: "Bubblegum Sans", sans-serif;
-    --link-size: 1.3em;
+    --link-size: 1.1em;
     --footer-left-bg-primary: #FFA85C;
     --footer-left-bg-secondary: #FFC18B;
     --footer-right-bg: #4F1926;
@@ -43,6 +43,7 @@ textarea{
     border-radius: 50px;
     font-family: var(--font-family-primary);
     font-size: var(--font-size);
+    outline: none;
 
     &:focus{
         border: var(--link-color) solid 3px !important;
@@ -98,38 +99,46 @@ select{
 }
 
 .bubblegum-link{
-    text-decoration: none;
-    color: var(--link-color);
-    font-size: var(--link-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: var(--link-color);
     font-family: var(--link-family-primary);
-    padding: 25px;
+    font-size: var(--link-size);
+    color: white;
+    padding: 7px;
     margin: 10px;
-    background:transparent;
     border: none;
-    transition: transform 0.3s ease;
+    border-radius: 50px;
+    transition: background-color 0.3s linear;
     
     &:hover{
-        text-decoration: underline;
-        transform: scale(1.1)
+        box-shadow: inset 0 0 0 3px var(--link-color);
+        background-color: transparent;
+        color: var(--link-color);
     }
 }
 
 .delete-link{
-    text-decoration: none !important;
-    background:transparent !important;
-    border: none !important;
-    border-radius: 50px ;
-    color: red !important;
-    font-size: 1.1em !important;
-    font-family: var(--link-family-primary) !important;
-    padding: 10px !important;
-    transition: transform 0.3s ease;
-    
+    font-family: var(--link-family-primary);
+    font-size: 0.9em;
+    color: red;
+    background-color: transparent;
+    padding: 0 10px 0 10px;
+    margin: 10px;
+    border: none;
+    border-radius: 50px;
+    transition: transform 0.2s linear;
+
     &:hover{
-        text-decoration: underline !important;
-        transform: scale(1.1)
-    } 
-} 
+        text-decoration: underline;
+    }
+}
+
+.hover-rotate:hover{
+    transform: rotate(30deg) scale(1.07);
+}
 
 /* Flexbox communs*/ 
 .flex-column-center{
@@ -322,7 +331,7 @@ body{
                     margin-left: 15px;
                     font-family: var(--font-family-primary);
                     color: var(--font-color);
-                    font-size: 1.1em;
+                    font-size: var(--font-size);
                     font-weight: 700;
 
                     a{
@@ -425,13 +434,18 @@ body{
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
-            margin: 25px;
-            
+            padding: 20px;
+            margin: 20px;
+            transition: transform 0.3s ease-in;
+
+            &:hover{
+                transform: scale(1.05);
+            }
             a{
                 .catalog-image{
                     width: 190px;
                     height: 190px;
+                    margin: 10px;
                     border-radius: 50px;
                     object-fit: cover;
                     border: var(--font-color) solid 1px;
@@ -476,6 +490,15 @@ body{
         height: 250px;
         border-radius: 50px;
         object-fit: cover;
+        border: var(--font-color) solid 1px;
+        transition: transform 0.2s ease-out;
+        transform-origin: right center;
+        cursor: pointer;
+
+        .zoom{
+            transform: scale(1.7);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
     }
 
     .list-details{
@@ -484,7 +507,7 @@ body{
         gap: 10px;
         padding: 10px;
         margin-left: 15px;
-        font-size: 1.1em;
+        font-size: var(--font-size);
         font-weight: 500;
 
         .details-description{
@@ -509,7 +532,10 @@ body{
         }
 
         #quantity-container {
-
+            display: flex;
+            align-items: baseline;
+            justify-content: start;
+            
             .quantity{
                 border: 2px solid var(--font-color);
                 border-radius: 50px;
@@ -518,19 +544,7 @@ body{
                 width: 15%;
                 color: var(--font-color);
                 font-family: var(--font-family-primary);
-                height: 40px;
-            }
-
-            .validate-button{
-                background-color: var(--link-color);
-                color: white;
-                border: none;
-                cursor: pointer;
-                border-radius: 50px;
-                font-family: var(--link-family-primary);
-                font-size: 1.2em;
-                padding: 15px;
-                height: 30px;
+                height: auto;
             }
         }
     }
@@ -547,7 +561,7 @@ body{
     text-align: center;
     font-family: var(--font-family-primary);
     color: var(--font-color);
-    font-size: 1.1em;
+    font-size: var(--font-size);
     padding: 10px;
 }
 
@@ -557,6 +571,7 @@ body{
     margin-bottom: 20px;
     border: 2px solid var(--font-color);
     border-radius: 50px;
+    outline: none;
     
     &:focus{
         border: var(--link-color) solid 3px !important;
@@ -572,17 +587,7 @@ body{
     border: none;
        border-radius: 0;
 }
-.flex-column-center button[type="submit"] {
-    background-color: var(--link-color);
-    font-family: var(--link-family-primary);
-    font-size: var(--link-size);
-    color: white;
-    padding-right: 25px;
-    padding-left: 25px;
-    margin: 10px;
-    border: none;
-    border-radius: 50px;
-}
+
 .remember-me {
     display: flex;
     align-items: center;
@@ -619,14 +624,6 @@ body{
                 border-radius: 50%;
             }
         }
-    }
-    button{
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        color: var(--link-color);
-        font-size: var(--link-size);
-        padding: 10px;
     }
 }
 /* Fin Panier */

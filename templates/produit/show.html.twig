@@ -15,7 +15,7 @@
         </div>
         <div class="details-container">
             <div class="details-image">
-                <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image">
+                <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image">
             </div>
             <div class="list-details">
                 <div class="details-description">
@@ -27,12 +27,12 @@
                 <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
 
                 <h2>Ajouter au panier</h2>
-                {{ form_start(form, {'attr': {'id': 'quantity-form'}}) }}
+                {{ form_start(form) }}
                 <div id="quantity-container">
-                        {{ form_widget(form.quantity) }}
-                        {{ form_widget(form.ajouter) }}
+                    {{ form_widget(form.quantity) }}
+                    {{ form_widget(form.ajouter) }}
+                    {{ form_end(form) }}
                 </div>
-            {{ form_end(form) }}
             </div>
         </div>
     </section>

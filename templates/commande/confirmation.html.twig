@@ -28,14 +28,18 @@
         <h3>Montant total : {{ commande.montantTotal|number_format(2, ',', ' ') }} €</h3>
 
         <h2 class="page-title">Adresse de livraison</h2>
+        <div class="flex-column-center">
         {{ form_start(form) }}
-        <div class="livraison-container">
             {{ form_row(form.adresseLivraison) }}
             {{ form_row(form.codePostalLivraison) }}
             {{ form_row(form.villeLivraison) }}
-            <button type="submit">Valider la commande</button>
-        </div>
+            <div class="flex-column-center">
+                <button type="submit" class="bubblegum-link">
+                    Valider la commande
+                </button>
+            </div>
         {{ form_end(form) }}
+        </div>
     </section>
 {% endblock %}
  

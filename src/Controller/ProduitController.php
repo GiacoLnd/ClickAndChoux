@@ -104,7 +104,7 @@ class ProduitController extends AbstractController
             ->add('ajouter', SubmitType::class, [
                 'label' => 'Ajouter au panier',
                 'attr' => [
-                    'class' => 'add-to-cart-button', 
+                    'class' => 'bubblegum-link', 
                 ],
             ])
             ->getForm();

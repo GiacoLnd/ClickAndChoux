@@ -262,6 +262,11 @@ $(document).ready(function() {
     });
 });
 
+// Script to zoom images in detail produit 
+
+document.getElementById("image").addEventListener("click", function() {
+    this.classList.toggle("zoom");
+})
 
 
 

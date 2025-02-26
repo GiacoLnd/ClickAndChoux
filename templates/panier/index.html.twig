@@ -24,7 +24,7 @@
                             {{ (item.produit.nomProduit) }} 
 
                             <!-- Diminution -->
-                            <button data-id="{{ item.produit.id }}">
+                            <button data-id="{{ item.produit.id }}" class="bubblegum-link">
                                 <i class="fa-solid fa-minus"></i>
                             </button>
                             
@@ -32,7 +32,7 @@
                             <span id="quantity-{{ item.produit.id }}">{{ item.quantity }}</span>
                             
                             <!-- Augmentation -->
-                            <button data-id="{{ item.produit.id }}">
+                            <button data-id="{{ item.produit.id }}" class="bubblegum-link">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                                 
@@ -40,7 +40,7 @@
                             <span id="line-total-{{ item.produit.id }}"> {{ (item.produit.getTTC * item.quantity)|number_format(2, '.', '')  }} </span> €
 
                             <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                                <button type="submit">Supprimer</button>
+                                <button type="submit" class="delete-link hover-rotate"><i class="fa-solid fa-trash"></i></button>
                             </form>
                         </div>
                     </div>
@@ -48,11 +48,15 @@
                 <!-- Montant total -->
             <h3 id="montant-total">Total : {{ montantTotal|number_format(2, ',', ' ') }} €</h3>
                     
-            <form action="{{ path('commande_valider') }}" method="post">
-                <input type="submit" value="Valider le panier" class="bubblegum-link">
+            <form action="{{ path('commande_valider') }}" method="post" class="flex-column-center">
+                <button type="submit" class="bubblegum-link">
+                    Valider le panier
+                </button>
             </form>
             <form action="{{ path('panier_clear') }}" method="post">
-                <input type="submit" value="Vider le panier" class="delete-link">
+                <button type="submit" class="delete-link">
+                    Supprimer le panier
+                </button>
             </form>
         {% endif %}
     </section>

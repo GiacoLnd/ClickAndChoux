@@ -61,9 +61,13 @@
         </div>
 
         <div class="flex-column-center">
-            {{ form_row(form.save) }}
+            <button type="submit" class="bubblegum-link">
+                Ajouter le produit
+            </button>
             {{ form_end(form) }}
         </div>
-        <a class="bubblegum-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
+        <div class="flex-column-center">
+            <a class="bubblegum-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
+        </div>
     </section>
 {% endblock %}

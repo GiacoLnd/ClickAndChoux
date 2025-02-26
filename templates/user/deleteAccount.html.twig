@@ -17,7 +17,10 @@
             
         {{ form_start(formDelete) }}
             {{ form_row(formDelete.password) }}
-            {{ form_row(formDelete.submit) }}
+
+            <button type="submit" class="delete-link hover-rotate">
+                <i class="fa-solid fa-trash"></i>
+            </button>
         {{ form_end(formDelete) }}
 
         <a href="{{ path('app_user_profil') }}" class="bubblegum-link">Retour à votre profil</a>

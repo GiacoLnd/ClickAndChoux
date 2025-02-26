@@ -68,9 +68,6 @@ class AddProduitType extends AbstractType
                 'label' => 'Catégorie',
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => ['class' => 'flex-column-center']
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Ajouter le produit',
             ]);
     }
 

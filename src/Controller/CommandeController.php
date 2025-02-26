@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Commande;
-use App\Form\CommandeType;
+use App\Form\LivraisonType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,7 +100,7 @@ final class CommandeController extends AbstractController
         $commande->setHistorique(['produits' => $historiqueProduits]);
 
         // Création du formulaire d'adresse de livraison
-        $form = $this->createForm(CommandeType::class, $commande);
+        $form = $this->createForm(LivraisonType::class, $commande);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {

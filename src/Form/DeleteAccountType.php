@@ -21,11 +21,7 @@ class DeleteAccountType extends AbstractType
                     'placeholder' => 'Confirmez votre mot de passe',
                     'style' => 'text-align: center;',
                     'class' => 'form-control',],
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Supprimer mon compte',
-                'attr' => [ 'class' => 'delete-link' ],
-            ]);
+                ]);
     }
 
     public function configureOptions(SymfonyOptionsResolver $resolver)

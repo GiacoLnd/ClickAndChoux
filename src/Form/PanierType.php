@@ -25,10 +25,6 @@ class PanierType extends AbstractType
         ->add('quantity', IntegerType::class, [
             'label' => 'Quantité',
             'attr' => ['min' => 1],
-        ])
-        ->add('ajouter', SubmitType::class, [
-            'label' => 'Ajouter au panier',
-            'attr' => ['class' => 'validate-button',]
         ]);
     }
 

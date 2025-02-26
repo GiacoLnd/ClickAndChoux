@@ -37,10 +37,10 @@
             <label for="_remember_me">Remember me</label>
             <input type="checkbox" name="_remember_me" id="_remember_me">
         </div>
-            
-        <button type="submit">Connexion</button>
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-            
+        <div class="flex-column-center">
+            <button type="submit" class="bubblegum-link">Connexion</button>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        </div>   
         <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a> !</p>     
     </form>
 </section>
