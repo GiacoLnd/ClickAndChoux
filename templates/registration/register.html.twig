@@ -6,7 +6,7 @@
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
-    <div class="flex-column-center">
+    <section id="register">
         <h1 class="page-title">Inscrivez-vous</h1>
 
         {{ form_errors(registrationForm) }}
@@ -15,17 +15,17 @@
             <div class="flex-column-center">
                 <div class="flex-column-center">
                     {{ form_label(registrationForm.nickName, 'Pseudo :') }}
-                    {{ form_widget(registrationForm.nickName, { 'attr': {'class': 'form-control text-center'} }) }}
+                    {{ form_widget(registrationForm.nickName) }}
                     {{ form_errors(registrationForm.nickName) }}
                 </div>
                 <div class="flex-column-center">
                     {{ form_label(registrationForm.email, 'Email :') }}
-                    {{ form_widget(registrationForm.email, { 'attr': {'class': 'form-control text-center'} }) }}
+                    {{ form_widget(registrationForm.email) }}
                     {{ form_errors(registrationForm.email) }}
                 </div>
                 
                 <div class="flex-column-center">
-                    {{ form_widget(registrationForm.plainPassword, { 'attr': {'class': 'form-control text-center'} }) }}
+                    {{ form_widget(registrationForm.plainPassword) }}
                     {{ form_errors(registrationForm.plainPassword) }}
                 </div>
                 
@@ -37,8 +37,8 @@
                 </div>
                 
 
-            <button type="submit" class="validate-button">S'inscrire</button>
+            <button type="submit">S'inscrire</button>
             </div>
         {{ form_end(registrationForm) }}
-    </div>
+    </section>
 {% endblock %}

@@ -3,15 +3,16 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
-    <div class="text-center">
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
+    <section id="profile">
+        <div class="text-center">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </div>
+        </div>
         <h2 class="page-title">Profil</h2>
             <p>Email : {{ user.email }}</p>
         <div class="flex-row-center">
@@ -23,5 +24,6 @@
             <a href="{{ path('favoris_page') }}" class="bubblegum-link">Mes Favoris</a>
         </div>
         <a href="{{ path('app_profile_delete') }}" class="delete-link">Supprimer mon compte</a>
+    </section>
 {% endblock %}
  

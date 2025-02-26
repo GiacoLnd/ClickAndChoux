@@ -3,36 +3,38 @@
 {% block title %}{{ produit.nomProduit }} - Détails{% endblock %}
 
 {% block body %}
-    <div class="text-center">
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
+    <section id="product-details">
+        <div class="text-center">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </div>
-<div class="details-container">
-    <div class="details-image">
-        <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image">
-    </div>
-    <div class="list-details">
-        <div class="details-description">
-            <h2 class="details-title">{{ produit.nomProduit }}</h2>
-            <p>{{ produit.description }}</p>
         </div>
-        
-        <p class="details-allergene">Allergènes : {{ produit.allergene }}</p>
-        <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
+        <div class="details-container">
+            <div class="details-image">
+                <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image">
+            </div>
+            <div class="list-details">
+                <div class="details-description">
+                    <h2 class="details-title">{{ produit.nomProduit }}</h2>
+                    <p>{{ produit.description }}</p>
+                </div>
+                
+                <p class="details-allergene">Allergènes : {{ produit.allergene }}</p>
+                <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
 
-        <h2>Ajouter au panier</h2>
-        {{ form_start(form, {'attr': {'id': 'quantity-form'}}) }}
-        <div id="quantity-container">
-                {{ form_widget(form.quantity) }}
-                {{ form_widget(form.ajouter) }}
+                <h2>Ajouter au panier</h2>
+                {{ form_start(form, {'attr': {'id': 'quantity-form'}}) }}
+                <div id="quantity-container">
+                        {{ form_widget(form.quantity) }}
+                        {{ form_widget(form.ajouter) }}
+                </div>
+            {{ form_end(form) }}
+            </div>
         </div>
-    {{ form_end(form) }}
-    </div>
-</div>
+    </section>
 {% endblock %}
  

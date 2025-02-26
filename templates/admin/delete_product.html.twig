@@ -3,6 +3,7 @@
 {% block title %}Ajouter un Produit{% endblock %}
 
 {% block body %}
+    <section id="admin-delete-product">
     <h2 class="page-title">Supprimer un ou plusieurs Produit(s)</h2>
         
     {% for message in app.flashes('success') %}
@@ -26,4 +27,5 @@
             {{ form_end(form) }}
             <a class="bubblegum-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
         </div>
+    </section>
 {% endblock %}

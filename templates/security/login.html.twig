@@ -3,6 +3,7 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+<section id="login">
     <div class="text-center">
         {% for label, messages in app.flashes %}
             {% for message in messages %}
@@ -22,33 +23,25 @@
                 You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
             </div>
         {% endif %}
-        <div class="flex-column-center">
-            <h1 class="page-title">Connectez-vous</h1>
+        <h1 class="page-title">Connectez-vous</h1>
             
-            <label for="username" class="security-text">Email :</label>
+        <label for="username" class="security-text">Email :</label>
             
-            <input type="email" value="{{ last_username }}" name="_username" id="username" class="flex-column-center" autocomplete="email" required autofocus >
+        <input type="email" value="{{ last_username }}" name="_username" id="username" class="flex-column-center" autocomplete="email" required autofocus >
             
-            <label for="password" class="security-text">Mot de passe :</label>
+        <label for="password" class="security-text">Mot de passe :</label>
             
-            <input type="password" name="_password" id="password" class="flex-column-center" autocomplete="current-password" required>
+        <input type="password" name="_password" id="password" class="flex-column-center" autocomplete="current-password" required>
             
-            <div class="remember-me">
-                <label for="_remember_me">Remember me</label>
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-            </div>
-            
-            <button class="btn btn-lg btn-primary" type="submit">
-                Connexion
-            </button>
-            <input type="hidden" name="_csrf_token"
-            value="{{ csrf_token('authenticate') }}">
-
-            
-            <p >Pas encore de compte ? <a href="{{ path('app_register') }}" class="text-link">Inscrivez-vous</a> !</p>     
+        <div class="remember-me">
+            <label for="_remember_me">Remember me</label>
+            <input type="checkbox" name="_remember_me" id="_remember_me">
         </div>
-        
-
-
+            
+        <button type="submit">Connexion</button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            
+        <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a> !</p>     
     </form>
+</section>
 {% endblock %}

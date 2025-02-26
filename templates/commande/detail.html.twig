@@ -3,24 +3,24 @@
 {% block title %}Détail de la commande{% endblock %}
 
 {% block body %}
+    <section id="order-details">
         <h2 class="page-title">Détail de la commande</h2>
         <p><strong>Référence :</strong> {{ commande.reference }}</p>
         <p><strong>Date :</strong> {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
         <p><strong>Statut :</strong> {{ commande.statut }}</p>
         <h3 class="page-title">Total : {{ commande.montantTotal }}€</h3>
-    
-    
-    <h2 class="page-title pt-4">Produits commandés</h2>
-    <div class="commande-list">
-        {% for panier in commande.paniers %}
-        <div class="commande-product">
-            <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
-            <h3>{{ panier.produit.nomProduit }}</h3>
-            <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
-            <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
+
+        <h2 class="page-title pt-4">Produits commandés</h2>
+        <div class="commande-list">
+            {% for panier in commande.paniers %}
+            <div class="commande-product">
+                <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
+                <h3>{{ panier.produit.nomProduit }}</h3>
+                <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
+                <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
 
         {% if is_granted('ROLE_ADMIN') %}
             <div class="flex-row-center">
@@ -30,5 +30,5 @@
         {% else %}
             <a class="bubblegum-link" href="{{ path('app_user_commandes') }}">Retour aux commandes</a>
         {% endif %}
-
+    </section>
 {% endblock %}

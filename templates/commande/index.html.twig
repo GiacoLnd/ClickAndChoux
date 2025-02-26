@@ -3,6 +3,7 @@
 {% block title %}Commande Confirmée{% endblock %}
 
 {% block body %}
+    <section id="order-confirmed">
         <h2 class="page-title">Commande Validée</h1>
         <p>Félicitation, votre commande a été validée !</p>
         <p>Vous pouvez retrouver votre commande <a href="{{ path('commande_detail', { id: commande.id }) }}">ici</a>.</p>
@@ -10,16 +11,17 @@
         <p>Date : {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
         <h3 class="page-title">Total : {{ commande.montantTotal }}€</h3>
         
-    <h2 class="page-title">Détails de la commande :</h2>
-    <div class="commande-list">
-        {% for panier in commande.paniers %}
-            <div class="commande-product">
-                <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
-                <h3>{{ panier.produit.nomProduit }}</h3>
-                <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
-                <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
-            </div>
-        {% endfor %}
-    </div>
-    <a href="{{ path('app_user_profil') }}" class="bubblegum-link">Voir mes commandes</a>
+        <h2 class="page-title">Détails de la commande :</h2>
+        <div class="commande-list">
+            {% for panier in commande.paniers %}
+                <div class="commande-product">
+                    <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
+                    <h3>{{ panier.produit.nomProduit }}</h3>
+                    <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
+                    <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{{ path('app_user_profil') }}" class="bubblegum-link">Voir mes commandes</a>
+    </section>
 {% endblock %}
