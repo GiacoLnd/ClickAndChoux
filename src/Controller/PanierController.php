@@ -112,9 +112,9 @@ class PanierController extends AbstractController
                     $commande->setHistorique($historiqueCommande);
     
                     $em->flush();
-                    $this->addFlash('success', 'Produit supprimé du panier et de l’historique.');
+                    $this->addFlash('success', 'Produit supprimé du panier');
                 } else {
-                    $this->addFlash('warning', 'Produit non trouvé dans le panier.');
+                    $this->addFlash('warning', 'Produit non trouvé dans le panier');
                 }
             }
         } else {
@@ -124,9 +124,9 @@ class PanierController extends AbstractController
             if (isset($cart[$produit->getId()])) {
                 unset($cart[$produit->getId()]);
                 $session->set('panier', $cart);
-                $this->addFlash('success', 'Produit supprimé du panier (session).');
+                $this->addFlash('success', 'Produit supprimé du panier');
             } else {
-                $this->addFlash('warning', 'Produit non trouvé dans le panier.');
+                $this->addFlash('warning', 'Produit non trouvé dans le panier');
             }
         }
     

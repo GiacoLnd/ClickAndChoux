@@ -23,13 +23,12 @@
     
         <div>
             <form method="GET" action="{{ path('salty_produit') }}" class="searchbar">
-                <input type="text" name="query" placeholder="Rechercher un produit..." value="{{ query }}" class="search-input">
-                <div class="search-button-container">
-                    <button type="submit" class="search-button">Rechercher</button>
-                    {% if query %}
-                        <a class="search-button" href="{{ path('salty_produit') }}">Réinitialiser</a>
-                    {% endif %}
-                </div>
+                <input type="text" name="query" placeholder="Rechercher un produit..." value="{{ query }}" class="search-input" id="search-input">
+                <ul>
+                    {% for result in results %}
+                        <li>{{ result.name }}</li>
+                    {% endfor %}
+                </ul>
             </form>
         </div>
         <div class="choux-grid-container">

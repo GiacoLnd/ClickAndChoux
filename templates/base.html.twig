@@ -36,10 +36,10 @@
             
                     
                     <div class="burger-user">
-                        <a href="{{ path('panier_afficher') }}" class="position-relative">
+                        <a href="{{ path('panier_afficher') }}">
                             <i class="fa-solid fa-shopping-cart"></i>
                             {% if quantity > 0 %}
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge" id="navbar-cart-quantity">
+                                <span class="cart-badge" id="navbar-cart-quantity">
                                     {{ quantity }}
                                 </span>
                             {% endif %}

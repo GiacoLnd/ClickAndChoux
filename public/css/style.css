@@ -8,12 +8,13 @@
     --font-color: #55211A;
     --font-family-primary: "Open sans", sans-serif;
     --font-size: 1.1em;
-    --link-color: #FFA85C;
+    --link-color: #4F1926;
+    --link-gradient: linear-gradient(42deg, rgba(33,7,13,1) 3%, rgba(130,40,62,1) 89%);
     --link-family-primary: "Bubblegum Sans", sans-serif;
     --link-size: 1.1em;
     --footer-left-bg-primary: #FFA85C;
     --footer-left-bg-secondary: #FFC18B;
-    --footer-right-bg: #4F1926;
+    --footer-right-bg: linear-gradient(42deg, rgba(33,7,13,1) 3%, rgba(130,40,62,1) 89%);
     --navbar-bg-primary: #FCC5D2;
     --navbar-bg-secondary: #FFFFFF;
 }
@@ -103,7 +104,7 @@ select{
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: var(--link-color);
+    background-image: var(--link-gradient);
     font-family: var(--link-family-primary);
     font-size: var(--link-size);
     color: white;
@@ -111,11 +112,11 @@ select{
     margin: 10px;
     border: none;
     border-radius: 50px;
-    transition: background-color 0.3s linear;
+    transition: all 0.3s linear;
     
     &:hover{
         box-shadow: inset 0 0 0 3px var(--link-color);
-        background-color: transparent;
+        background-image: none;
         color: var(--link-color);
     }
 }
@@ -212,6 +213,18 @@ body{
             
             i{
                 color:var(--font-color);
+                position: relative;
+
+                .cart-badge{
+                    position: absolute;
+                    top: -30px;
+                    right: 10px;
+                    color: white;
+                    background-color: var(--link-color);
+                    padding: 10px;
+                    width: 25px;
+                    height: 25px;
+                }
             }
         
             .burger {
@@ -232,19 +245,7 @@ body{
         }
 
         /* Badge de quantité sur cart icon */
-        .cart-badge{
-            background-color: var(--link-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            font-weight: bold;
-            width: 25px;
-            height: 25px;
-            box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-        }
-
-        
+     
         .navbar-list{
             list-style-type: none;
             padding: 5px;
@@ -488,6 +489,7 @@ body{
     .details-image{
         width: 250px;
         height: 250px;
+        border: 2px solid var(--font-color);
         border-radius: 50px;
         object-fit: cover;
         border: var(--font-color) solid 1px;
@@ -622,6 +624,12 @@ body{
                 width: 75px;
                 height: 75px;
                 border-radius: 50%;
+                border: solid 2px var(--font-color);
+            }
+
+            .bubblegum-link{
+                width: 30px;
+                height: 30px;
             }
         }
     }

@@ -24,7 +24,7 @@
                             {{ (item.produit.nomProduit) }} 
 
                             <!-- Diminution -->
-                            <button data-id="{{ item.produit.id }}" class="bubblegum-link">
+                            <button data-id="{{ item.produit.id }}" class="bubblegum-link decrease-btn">
                                 <i class="fa-solid fa-minus"></i>
                             </button>
                             
@@ -32,7 +32,7 @@
                             <span id="quantity-{{ item.produit.id }}">{{ item.quantity }}</span>
                             
                             <!-- Augmentation -->
-                            <button data-id="{{ item.produit.id }}" class="bubblegum-link">
+                            <button data-id="{{ item.produit.id }}" class="bubblegum-link increase-btn">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                                 

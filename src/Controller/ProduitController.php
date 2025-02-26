@@ -7,6 +7,7 @@ use App\Entity\Produit;
 use App\Entity\Commande;
 use App\Form\PanierType;
 use App\Controller\PanierController;
+use App\Entity\Categorie;
 use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
@@ -38,18 +39,19 @@ class ProduitController extends AbstractController
         Request $request
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
-        $query = $request->query->get('query', '');  // Récupère la valeur du paramètre query dans l'URL
-    
-         // Si la valeur du paramètre query n'est pas vide, effectue une recherche
+        $query = $request->query->get('query', '');  // Get query value from URL
+        
+        $results = $produitRepository->findBySearchQuery($query, $categorie);
+        // When query is not empty, perform search
         if ($query) {
             $produits = $produitRepository->findBySearchQuery($query, $categorie);
-        } else { // Sinon, affiche tous les produits de la catégorie Salé
+        } else { // Else display all products of the Sweet category
             $produits = $produitRepository->findBy(['categorie' => $categorie]);
         }
     
         return $this->render('produit/salty.html.twig', [
             'produits' => $produits,
-            'query' => $query, 
+            'results' => $results, 
         ]);
     }
 
@@ -62,7 +64,8 @@ class ProduitController extends AbstractController
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
         $query = $request->query->get('query', '');  // Get query value from URL
-    
+        
+        $results = $produitRepository->findBySearchQuery($query, $categorie);
         // When query is not empty, perform search
         if ($query) {
             $produits = $produitRepository->findBySearchQuery($query, $categorie);
@@ -72,7 +75,7 @@ class ProduitController extends AbstractController
     
         return $this->render('produit/sweety.html.twig', [
             'produits' => $produits,
-            'query' => $query, 
+            'results' => $results, 
         ]);
     }
 
