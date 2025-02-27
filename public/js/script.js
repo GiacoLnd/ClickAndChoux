@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const burgerButton = document.getElementById('burger-button');
     const burgerIcon = document.getElementById('burger-icon');
     const navbarList = document.getElementById('navbar-list');
-
+    
     burgerButton.addEventListener('click', () => {
         navbarList.classList.toggle('active');
         if (navbarList.classList.contains('active')) {
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Vérifie si l'URL actuelle correspond à un catalogue
     if (!urlsCatalogues.includes(window.location.pathname)) {
+        console.log("AJAX bloqué : URL non autorisée.");
         return;
     }
 
@@ -195,19 +196,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// JQUERY AJAX for catalog searchbar
-$(document).ready(function(){
-    $('#search-input').on('input', function() {
-        var searchQuery = $(this).val();
-
-        if(searchQuery.length < 0) {
-            $.ajax({
-                url
-            })
-        }
-    })
-}) 
-
 // Datatables scripts 
 
 // User orders list dataTables
@@ -274,20 +262,6 @@ $(document).ready(function() {
     });
 });
 
-// Script to zoom images in detail produit 
-
-
-
-document.getElementById("image").addEventListener("click", function() {
-    this.classList.toggle("zoom");
-})
-
-
-const image = document.getElementById("image")
-
-document.getElementById("text-image").addEventListener("click", function() {
-    image.classList.toggle("zoom")
-})
 
 
 

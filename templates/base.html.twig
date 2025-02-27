@@ -33,13 +33,19 @@
                         </a>
                         <a href="{{ path('app_home') }}" class="navbar-title">Click&Choux</a>
                     </div>
-            
+                    
+                    <ul class="navbar-list" id="navbar-list">
+                        <li><a href="{{ path('salty_produit') }}" class="menu-item">Les Salés</a></li>
+                        <li><a href="{{ path('sweety_produit') }}" class="menu-item">Les Sucrés</a></li>
+                        <li><a href="/" class="menu-item">Contactez-nous</a></li>
+                        <li><a href="/" class="menu-item">F.A.Q</a></li>
+                    </ul>
                     
                     <div class="burger-user">
-                        <a href="{{ path('panier_afficher') }}">
+                        <a href="{{ path('panier_afficher') }}" class="position-relative">
                             <i class="fa-solid fa-shopping-cart"></i>
                             {% if quantity > 0 %}
-                                <span class="cart-badge" id="navbar-cart-quantity">
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge" id="navbar-cart-quantity">
                                     {{ quantity }}
                                 </span>
                             {% endif %}
@@ -87,13 +93,6 @@
                             <i class="fa-solid fa-bars" id="burger-icon"></i>
                         </button>
                     </div>
-
-                    <ul class="navbar-list" id="navbar-list">
-                        <li><a href="{{ path('salty_produit') }}" class="menu-item">Les Salés</a></li>
-                        <li><a href="{{ path('sweety_produit') }}" class="menu-item">Les Sucrés</a></li>
-                        <li><a href="/" class="menu-item">Contactez-nous</a></li>
-                        <li><a href="/" class="menu-item">F.A.Q</a></li>
-                    </ul>
                 </div>
             </nav>
         </header>
