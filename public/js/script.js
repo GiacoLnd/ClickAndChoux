@@ -263,17 +263,189 @@ $(document).ready(function() {
 });
 
 
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('search-input');
+    const produitsList = document.getElementById('produits-list');
+
+    searchInput.addEventListener('input', function() {
+        const searchQuery = searchInput.value.trim();  // Récupère la valeur de la barre de recherche
+
+        console.log("Recherche:", searchQuery); // Log de la valeur envoyée à chaque frappe
+
+        // Si la recherche n'est pas vide
+        if (searchQuery.length > 0) {
+            fetch('/produit/salty/ajax?query=' + encodeURIComponent(searchQuery), {
+                method: 'GET'
+            })
+            .then(response => response.json())  // Traite la réponse comme un JSON
+            .then(data => {
+                console.log("Réponse reçue:", data);  // Log de la réponse reçue du serveur
+
+                produitsList.innerHTML = '';  // Réinitialiser la liste existante
+
+                // Ajouter chaque produit à la liste de manière sécurisée
+                data.produits.forEach(produit => {
+                    const li = document.createElement('li');
+
+                    const a = document.createElement('a');
+                    a.setAttribute('href', '/produit/' + produit.id);
+
+                    const img = document.createElement('img');
+                    img.setAttribute('src', '/img/' + produit.image);
+                    img.setAttribute('alt', produit.nomProduit);
+                    img.classList.add('catalog-image');
+                    a.appendChild(img);
+
+                    const h2 = document.createElement('h2');
+                    h2.textContent = produit.nomProduit;
+
+                    const p = document.createElement('p');
+                    p.textContent = produit.getTTC + '€';
+
+                    li.appendChild(a);
+                    li.appendChild(h2);
+                    li.appendChild(p);
+
+                    produitsList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des produits:', error);
+                produitsList.innerHTML = '<p class="error-message">Une erreur est survenue. Veuillez réessayer.</p>';
+            });
+        } else {
+            // Si la recherche est vide, on récupère tous les produits
+            fetch('/produit/salty/ajax', {
+                method: 'GET'
+            })
+            .then(response => response.json())  // Traite la réponse comme un JSON
+            .then(data => {
+                produitsList.innerHTML = '';  // Réinitialiser la liste existante
+
+                // Ajouter chaque produit à la liste de manière sécurisée
+                data.produits.forEach(produit => {
+                    const li = document.createElement('li');
+
+                    const a = document.createElement('a');
+                    a.setAttribute('href', '/produit/' + produit.id);
+
+                    const img = document.createElement('img');
+                    img.setAttribute('src', '/img/' + produit.image);
+                    img.setAttribute('alt', produit.nomProduit);
+                    img.classList.add('catalog-image');
+                    a.appendChild(img);
+
+                    const h2 = document.createElement('h2');
+                    h2.textContent = produit.nomProduit;
+
+                    const p = document.createElement('p');
+                    p.textContent = produit.getTTC + '€';
+
+                    li.appendChild(a);
+                    li.appendChild(h2);
+                    li.appendChild(p);
+
+                    produitsList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des produits:', error);
+                produitsList.innerHTML = '<p class="error-message">Une erreur est survenue. Veuillez réessayer.</p>';
+            });
+        }
+    });
+});
 
 
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('search-input');
+    const produitsList = document.getElementById('produits-list');
+    const categoryType = document.body.getAttribute('data-category'); // Ajoute un attribut pour connaître la catégorie
 
+    searchInput.addEventListener('input', function() {
+        const searchQuery = searchInput.value.trim();  // Récupère la valeur de la barre de recherche
 
+        console.log("Recherche:", searchQuery); // Log de la valeur envoyée à chaque frappe
 
+        let url = '';
+        if (categoryType === 'salty') {
+            url = '/produit/salty/ajax?query=' + encodeURIComponent(searchQuery);
+        } else if (categoryType === 'sweety') {
+            url = '/produit/sweety/ajax?query=' + encodeURIComponent(searchQuery);
+        }
 
+        // Si la recherche n'est pas vide
+        if (searchQuery.length > 0) {
+            fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())  // Traite la réponse comme un JSON
+            .then(data => {
+                console.log("Réponse reçue:", data);  // Log de la réponse reçue du serveur
 
+                produitsList.innerHTML = '';  // Réinitialiser la liste existante
 
+                // Ajouter chaque produit à la liste de manière sécurisée
+                data.produits.forEach(produit => {
+                    const li = document.createElement('li');
 
+                    const a = document.createElement('a');
+                    a.setAttribute('href', '/produit/' + produit.id);
 
+                    const img = document.createElement('img');
+                    img.setAttribute('src', '/img/' + produit.image);
+                    img.setAttribute('alt', produit.nomProduit);
+                    img.classList.add('catalog-image');
+                    a.appendChild(img);
 
+                    const h2 = document.createElement('h2');
+                    h2.textContent = produit.nomProduit;
 
+                    const p = document.createElement('p');
+                    p.textContent = produit.getTTC + '€';
 
+                    li.appendChild(a);
+                    li.appendChild(h2);
+                    li.appendChild(p);
 
+                    produitsList.appendChild(li);
+                });
+            })
+        } else {
+            // Si la recherche est vide, on récupère tous les produits
+            fetch(url, {
+                method: 'GET'
+            })
+            .then(response => response.json())  // Traite la réponse comme un JSON
+            .then(data => {
+                produitsList.innerHTML = '';  // Réinitialiser la liste existante
+
+                // Ajouter chaque produit à la liste de manière sécurisée
+                data.produits.forEach(produit => {
+                    const li = document.createElement('li');
+
+                    const a = document.createElement('a');
+                    a.setAttribute('href', '/produit/' + produit.id);
+
+                    const img = document.createElement('img');
+                    img.setAttribute('src', '/img/' + produit.image);
+                    img.setAttribute('alt', produit.nomProduit);
+                    img.classList.add('catalog-image');
+                    a.appendChild(img);
+
+                    const h2 = document.createElement('h2');
+                    h2.textContent = produit.nomProduit;
+
+                    const p = document.createElement('p');
+                    p.textContent = produit.getTTC + '€';
+
+                    li.appendChild(a);
+                    li.appendChild(h2);
+                    li.appendChild(p);
+
+                    produitsList.appendChild(li);
+                });
+            })
+        }
+    });
+});

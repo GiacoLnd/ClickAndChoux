@@ -6,8 +6,8 @@ use App\Entity\Panier;
 use App\Entity\Produit;
 use App\Entity\Commande;
 use App\Form\PanierType;
-use App\Controller\PanierController;
 use App\Entity\Categorie;
+use App\Controller\PanierController;
 use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -39,21 +40,45 @@ class ProduitController extends AbstractController
         Request $request
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
-        $query = $request->query->get('query', '');  // Get query value from URL
-        
-        $results = $produitRepository->findBySearchQuery($query, $categorie);
-        // When query is not empty, perform search
-        if ($query) {
-            $produits = $produitRepository->findBySearchQuery($query, $categorie);
-        } else { // Else display all products of the Sweet category
-            $produits = $produitRepository->findBy(['categorie' => $categorie]);
-        }
+
+        $query = $request->query->get('query', '');
+        $produits = $produitRepository->findBy(['categorie' => $categorie]);
     
         return $this->render('produit/salty.html.twig', [
             'produits' => $produits,
-            'results' => $results, 
+            'query' => $query,
         ]);
     }
+
+
+    #[Route('/produit/salty/ajax', name: 'ajax_salty_produit', methods: ['GET'])]
+    public function ajaxSaltySearch(
+        ProduitRepository $produitRepository,
+        CategorieRepository $categorieRepository,
+        Request $request
+    ): JsonResponse {
+        // On récupère le paramètre 'query' de la requête
+        $query = $request->query->get('query', '');
+        $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
+
+        // Effectuer la recherche sur les produits
+        $results = $produitRepository->findBySearchQuery($query, $categorie);
+
+        // Préparer les données des produits
+        $produitsData = [];
+        foreach ($results as $produit) {
+            $produitsData[] = [
+                'id' => $produit->getId(),
+                'nomProduit' => $produit->getNomProduit(),
+                'image' => $produit->getImage(),
+                'getTTC' => $produit->getTTC(),
+            ];
+        }
+
+        // Retourner les résultats sous forme de JSON
+        return new JsonResponse(['produits' => $produitsData]);
+    }
+
 
     // Fonction affichant les produits sucrés
     #[Route('/produit/sweety', name: 'sweety_produit')]
@@ -63,22 +88,53 @@ class ProduitController extends AbstractController
         Request $request
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
-        $query = $request->query->get('query', '');  // Get query value from URL
+        $query = $request->query->get('query', '');
         
-        $results = $produitRepository->findBySearchQuery($query, $categorie);
-        // When query is not empty, perform search
-        if ($query) {
-            $produits = $produitRepository->findBySearchQuery($query, $categorie);
-        } else { // Else display all products of the Sweet category
-            $produits = $produitRepository->findBy(['categorie' => $categorie]);
+        if ($request->isXmlHttpRequest()) {
+            $results = $produitRepository->findBySearchQuery($query, $categorie);
+        
+            // Renvoie les résultats sous forme JSON pour remplacer la liste de produits
+            return $this->json([
+                'produits' => $results,
+            ]);
         }
+
+        $produits = $produitRepository->findBy(['categorie' => $categorie]);
+
     
         return $this->render('produit/sweety.html.twig', [
             'produits' => $produits,
-            'results' => $results, 
+            'query' => $query, 
         ]);
     }
 
+    #[Route('/produit/sweety/ajax', name: 'ajax_sweety_produit', methods: ['GET'])]
+    public function ajaxSweetySearch(
+        ProduitRepository $produitRepository,
+        CategorieRepository $categorieRepository,
+        Request $request
+    ): JsonResponse {
+        // On récupère le paramètre 'query' de la requête
+        $query = $request->query->get('query', '');
+        $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
+
+        // Effectuer la recherche sur les produits
+        $results = $produitRepository->findBySearchQuery($query, $categorie);
+
+        // Préparer les données des produits
+        $produitsData = [];
+        foreach ($results as $produit) {
+            $produitsData[] = [
+                'id' => $produit->getId(),
+                'nomProduit' => $produit->getNomProduit(),
+                'image' => $produit->getImage(),
+                'getTTC' => $produit->getTTC(),
+            ];
+        }
+
+        // Retourner les résultats sous forme de JSON
+        return new JsonResponse(['produits' => $produitsData]);
+    }
 
     // Fonction d'affichage des détails produit
     // Attention : cette fonction gère l'ajout au panier avec une adaptation de la quantité via un input number

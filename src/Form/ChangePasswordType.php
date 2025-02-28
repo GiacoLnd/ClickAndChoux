@@ -61,7 +61,7 @@ class ChangePasswordType extends AbstractType
 
             ->add('save', SubmitType::class, [
                 'label' => 'Changer le mot de passe',
-                'attr' => ['class' => 'validate-button']
+                'attr' => ['class' => 'bubblegum-link']
             ]);
     }
 

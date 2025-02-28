@@ -27,7 +27,7 @@ class EditProfileType extends AbstractType
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Mettre à jour',
-                'attr' => ['class' => 'validate-button']
+                'attr' => ['class' => 'bubblegum-link']
             ]);
         ;
     }
