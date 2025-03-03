@@ -26,8 +26,7 @@
                 
                 <p class="details-allergene">Allergènes : {{ produit.allergene }}</p>
                 <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
-
-                <h2>Ajouter au panier</h2>
+                
                 {{ form_start(form) }}
                 <div id="quantity-container">
                     {{ form_widget(form.quantity) }}
