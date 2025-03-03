@@ -35,6 +35,7 @@ p{
 textarea{
     width: 500px;
     height: 250px;
+    padding: 15px;
     border: var(--font-color) 2px solid;
     border-radius: 50px;
     font-family: var(--font-family-primary);
@@ -97,7 +98,7 @@ select{
     font-size: var(--link-size);
     color: white;
     padding: 7px;
-    margin: 10px;
+    margin: 30px;
     border: none;
     border-radius: 50px;
     transition: background-color 0.3s linear;
@@ -133,7 +134,6 @@ select{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
 }
 .flex-row-center {
     display: flex;
@@ -163,7 +163,6 @@ body{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px;
         text-decoration: none;
         background: linear-gradient(to bottom, var(--navbar-bg-primary), var(--navbar-bg-secondary) );
         
@@ -221,7 +220,7 @@ body{
             gap: 20px;
             font-size: 20px;
             padding: 5px;
-            margin: 5px;
+            margin: 15px;
 
             i{
                 color:var(--font-color);
@@ -382,6 +381,7 @@ body{
     padding: 10px;
     margin-bottom: 20px;
     .search-input {
+        width: 100%;
         padding: 10px;
         margin: 10px;
         border: 3px solid var(--font-color);
@@ -390,25 +390,12 @@ body{
         text-align: center;
         font-size: 1.2em;
     }
-    .search-button-container{
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        
-        .search-button {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            color: var(--link-color);
-            font-family: var(--font-family-primary);
-            cursor: pointer;
-        }
-    }
 }
 .choux-grid-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 25px;
     
     .choux-grid {
         display: grid;
@@ -416,6 +403,7 @@ body{
         gap: 40px;
         list-style: none; 
         padding: 20px;
+        margin: 25px;
         
         li {
             text-align: center;
@@ -555,6 +543,7 @@ body{
     border: 2px solid var(--font-color);
     border-radius: 50px;
     outline: none;
+    text-align: center;
     
     &:focus{
         border: var(--link-color) solid 3px !important;
@@ -596,6 +585,13 @@ body{
             gap: 20px;
             align-items: center;
             justify-content: center;
+            
+            .product-gestion{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
             
             .cart-image{
                 width: 75px;
@@ -669,62 +665,19 @@ table.dataTable thead th, table.dataTable tbody td{
     text-align: center;
 }
 /* DataTable Admin */
-/* DataTable User List */
-#utilisateurTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
+#table_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
     background: transparent;
     color: var(--link-color);
     font-size: 1.2em;
     font-family: var(--link-family-primary)
 }
-#utilisateurTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
+#table_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
     border: none;
     background: none;
     padding: 5px;
 }
-/* DataTable Commandes */
-#commandesAdminTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
-    background: transparent;
-    color: var(--link-color);
-    font-size: 1.2em;
-    font-family: var(--link-family-primary);
-}
-#commandesAdminTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
-    border: none;
-    background: none;
-    padding: 5px;
-}
-#commandesAdminTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-end > div{
-    font-family: var(--font-family-primary);
-    font-size: 1.2em;
-}
-#commandesAdminTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-start > div > label{
-    font-family: var(--font-family-primary);
-    font-size: 1.2em;
-}
-/* Fin DataTables Admin */
-/* DataTable User */
-/* DataTable Commandes */
-#commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
-    background: transparent;
-    color: var(--link-color);
-    font-size: 1.2em;
-    font-family: var(--link-family-primary);
-}
-#commandesTable_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
-    border: none;
-    background: none;
-    padding: 5px;
-}
-#commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-end > div{
-    font-family: var(--font-family-primary);
-    font-size: 1.2em;
-}
-#commandesTable_wrapper > div:nth-child(1) > div.dt-layout-cell.dt-layout-start > div > label{
-    font-family: var(--font-family-primary);
-    font-size: 1.2em;
-}
-/* Fin DataTable User */
 /* Fin DataTables */
+
 /* Delete Product Form */
 .grid-delete-container{
     display: grid;

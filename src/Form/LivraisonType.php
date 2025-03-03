@@ -23,7 +23,6 @@ class LivraisonType extends AbstractType
                 ],
                 'attr' => [
                     'class' => 'flex-column-center',
-                    'autocomplete' => 'email',
                 ],
             ])
             ->add('codePostalLivraison', TextType::class, [
@@ -39,7 +38,6 @@ class LivraisonType extends AbstractType
                 ],
                 'attr' => [
                     'class' => 'flex-column-center',
-                    'autocomplete' => 'email',
                 ],
             ])
             ->add('villeLivraison', TextType::class, [
@@ -51,7 +49,6 @@ class LivraisonType extends AbstractType
                 ],
                 'attr' => [
                     'class' => 'flex-column-center',
-                    'autocomplete' => 'email',
                 ],
             ]);
     }

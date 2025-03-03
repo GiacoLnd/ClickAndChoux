@@ -8,9 +8,11 @@
 }
 
 @media screen and (max-width: 1350px) {
-    #navbar-container {
-        width: 100vw;
-        position: absolute fixed;
+    #wrapper {
+        #navbar-container {
+            width: 100vw;
+            position: absolute fixed;
+        }
     }
     .burger {
         display: block !important;
@@ -52,6 +54,39 @@
         align-items: start;
         justify-content: start;
     }
+
+    .choux-grid-container {
+        .choux-grid {
+            grid-template-columns: repeat(3, 1fr);
+            padding: 15px;
+        }
+    }
+    .flex-column-center input[type="text"], .flex-column-center input[type="number"], .flex-column-center input[type="email"], .flex-column-center input[type="password"] {
+        width: 100%;
+        padding: 10px;
+    }
+    select{
+        width: 100%;
+    }
+    textarea{
+        width: 100%;
+    }
+    input[type="file"]{
+        width: 100%;
+    }
+    .dt-container{
+        width: 100%;
+    }
+    div.dt-container div.dt-layout-row {
+        align-items: center;
+        width: 800px;
+    }
+    .dt-paging paging_numbers{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
 }
 @media screen and (max-width: 834px) {
     .burger {
@@ -78,7 +113,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                margin-top: 10px;
+                margin-top: 20px;
                 padding-top: 10px;
                 height:auto;
                 
@@ -110,6 +145,117 @@
             }
         }
     }
+    .choux-grid-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin:5px;
+        
+        .choux-grid {
+            gap: 10px;
+            grid-template-columns: repeat(2, auto);
+            padding: 10px; 
+
+            li {
+                text-align: center;
+                background: transparent;
+                width: 190px;
+                height: 190px;
+                a{
+                    .catalog-image{
+                        width: 150px;
+                        height: 150px;
+                    }
+                } 
+    }
+    .details-container {
+        .details-image {
+            transform-origin: left center;
+            .zoom{
+                transform: scale(1.8);
+            }
+        }
+    }
+    #table_wrapper{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .dt-search{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        .dt-input{
+            width: 500px;
+            text-align: center;
+        }
+    }
+    .dt-container{
+        width: 100%;
+        overflow-x: auto;
+    }
+    div.dt-container div.dt-layout-row {
+        width: 450px;
+    }
+
+    .dt-paging paging_numbers{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .flex-row-center{
+        margin: 15px;
+    }
+    .cart-content {
+        & .cart-product {
+            .cart-item {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                
+                .product-gestion{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+    }
+
+    .searchbar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 20px;
+        input {
+            width: 350px !important;
+            padding: 10px;
+            margin: 10px;
+            border: 3px solid var(--font-color);
+            border-radius: 30px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+    }
+    .catalog{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        
+        .catalog-description{
+            text-align: center;
+            width: 75%;
+        }
+
+    }
 }
 
 @media screen and (max-width: 440px) {
@@ -132,5 +278,139 @@
     .navbar-list.active {
         display: flex;
         flex-direction: column;
+    }
+    #wrapper {
+        & footer {
+            .footer-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-top: 20px;
+                padding-top: 10px;
+                height:auto;
+                
+                .footer-left {
+                    display: flex;
+                    flex-direction: column;
+                    width: auto;
+                    justify-content: center;
+                    
+                    .footer-logo{
+                        display: flex;
+                        flex-direction: column;
+                        flex-wrap:wrap;
+                    }
+                    & .inner-footer {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        
+                        .footer-adress {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 15px;
+                            padding: 5px;
+                            padding-left: 2rem;
+                        }
+                        .footer-social {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            gap: 15px;
+                            padding: 10px;
+                        }
+                    }
+                }
+                .footer-right {
+
+                    ul{
+                        display: flex;
+                        justify-content: start; 
+                        align-items: center;   
+                    }
+                }
+            }
+        }
+    }
+    .choux-grid-container {
+        .choux-grid {
+            grid-template-columns: repeat(1, auto);
+            gap: 40px;
+        }
+    }
+    .details-container {
+        flex-direction: column;
+        text-align: center;
+        .details-image {
+            transform-origin: bottom center;
+            .zoom{
+                transform: scale(1.25);
+            }
+        }
+
+        & .list-details {
+            #quantity-container {
+                justify-content: center;
+            }
+            .details-allergene {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #quantity-container{
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                input{
+                    width: 100%;
+                    padding: 0;
+                }
+            }
+        }
+    }
+    .cart-content {
+        & .cart-product {
+            .cart-item {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                
+                .product-gestion{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+    }
+
+    .flex-row-center{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    div.dt-container div.dt-layout-row {
+        align-items: center;
+        width: 320px;
+    }
+    .dt-search{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .dt-input{
+            width: 200px;
+            text-align: center;
+        }
+    }
+
+    .grid-delete-container{
+        grid-template-columns: repeat(2, 1fr);
+        text-align: center;
     }
 }

@@ -200,13 +200,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // User orders list dataTables
 $(document).ready(function() {
-    var table = $('#commandesTable').DataTable({
+    var table = $('#table').DataTable({
+        responsive: true,
+        scrollX: true,
         "paging": true,       // Active la pagination
         "searching": true,    // Active la recherche
         "ordering": true,  
         "order": [[2, "desc"]], // Trie par date (colonne 2) en ordre décroissant
         "info": false,         // Désactive les informations sur le nombre d'éléments
-        "pagingType": "numbers", // Désactive 
+        "scrollY": "500px",
+        "pagingType": "numbers", // Donne uniquement les numéros de pages
         "lengthChange": false,
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
@@ -214,55 +217,22 @@ $(document).ready(function() {
     });
 });
 
-// Admin orders list dataTables
-$(document).ready(function() {
-    var table = $('#commandesAdminTable').DataTable({
-        "paging": true,       // Active la pagination
-        "searching": true,    // Active la recherche
-        "ordering": true,  
-        "order": [[2, "desc"]], // Trie par date (colonne 2) en ordre décroissant
-        "info": false,         // Désactive les informations sur le nombre d'éléments
-        "pagingType": "numbers", // Désactive 
-        "lengthChange": false,
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
-        },
-    });
-});
+// Script to zoom images in detail produit 
 
-// Datatable script for user list
-$(document).ready(function() {
-    var table = $('#utilisateurTable').DataTable({
-        "paging": true,       // Active la pagination
-        "searching": true,    // Active la recherche
-        "ordering": true,  
-        "info": false,         // Désactive les informations sur le nombre d'éléments
-        "pagingType": "numbers",
-        "lengthChange": false,
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
-        },
-    });
-});
+document.getElementById("image").addEventListener("click", function() {
+    this.classList.toggle("zoom");
+})
 
 
+const image = document.getElementById("image")
 
-// Admin add product dataTables
+document.getElementById("text-image").addEventListener("click", function() {
+    image.classList.toggle("zoom")
+})
 
-$(document).ready(function() {
-    $('#produitsTable').DataTable({
-        "paging": true,
-        "searching": true,
-        "ordering": true,
-        "order": [[1, "asc"]],
-        "lengthChange": false,
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
-        }
-    });
-});
+// AJAX for live search bar in catalog
 
-
+// Salé
 document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById('search-input');
     const produitsList = document.getElementById('produits-list');
@@ -356,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-
+// Sucré
 document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById('search-input');
     const produitsList = document.getElementById('produits-list');

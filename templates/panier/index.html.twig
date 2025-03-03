@@ -3,7 +3,7 @@
 {% block title %}Votre Panier{% endblock %}
 
 {% block body %}
-    <section id="cart">
+    <section id="cart" class="text-center">
         {% for message in app.flashes('error') %}
             <div class="alert alert-danger">{{ message }}</div>
         {% endfor %}
@@ -20,28 +20,31 @@
                 {% for item in paniers %}
                     <div class="cart-product">
                         <div class="cart-item" data-price="{{ item.produit.getTTC }}">
-                            <a href="{{ path('produit_detail', {'id': item.produit.id}) }}"><img src="/img/{{ item.produit.image }}" alt="{{ item.produit.nomProduit }}" class="cart-image"></a>
-                            {{ (item.produit.nomProduit) }} 
-
-                            <!-- Diminution -->
-                            <button data-id="{{ item.produit.id }}" class="bubblegum-link decrease-btn">
-                                <i class="fa-solid fa-minus"></i>
-                            </button>
-                            
-                            <!-- Quantité Dynamique-->
-                            <span id="quantity-{{ item.produit.id }}">{{ item.quantity }}</span>
-                            
-                            <!-- Augmentation -->
-                            <button data-id="{{ item.produit.id }}" class="bubblegum-link increase-btn">
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
+                            <div class="product-identification">
+                                <a href="{{ path('produit_detail', {'id': item.produit.id}) }}"><img src="/img/{{ item.produit.image }}" alt="{{ item.produit.nomProduit }}" class="cart-image"></a>
+                                {{ (item.produit.nomProduit) }} 
+                            </div>
+                            <div class="product-gestion">
+                                <!-- Diminution -->
+                                <button data-id="{{ item.produit.id }}" class="bubblegum-link decrease-btn">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
                                 
-                            <!-- Prix total unitaire -->
-                            <span id="line-total-{{ item.produit.id }}"> {{ (item.produit.getTTC * item.quantity)|number_format(2, '.', '')  }} </span> €
+                                <!-- Quantité Dynamique-->
+                                <span id="quantity-{{ item.produit.id }}">{{ item.quantity }}</span>
+                                
+                                <!-- Augmentation -->
+                                <button data-id="{{ item.produit.id }}" class="bubblegum-link increase-btn">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                                    
+                                <!-- Prix total unitaire -->
+                                <span id="line-total-{{ item.produit.id }}"> {{ (item.produit.getTTC * item.quantity)|number_format(2, '.', '')  }} </span> €
 
-                            <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                                <button type="submit" class="delete-link hover-rotate"><i class="fa-solid fa-trash"></i></button>
-                            </form>
+                                <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
+                                    <button type="submit" class="delete-link hover-rotate"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
