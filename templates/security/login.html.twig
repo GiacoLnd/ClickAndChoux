@@ -42,6 +42,7 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         </div>   
         <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a> !</p>     
+        <p>Mot de passe oublié ? <a href="{{ path('app_forgot_password_request') }}">Réinitialisez votre mot de passe</a> !</p>     
     </form>
 </section>
 {% endblock %}

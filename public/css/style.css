@@ -20,6 +20,9 @@
 }
 /* Style commun */ 
 /* Polices communes */
+li{
+    list-style-type: none;
+}
 a{
     text-decoration: none;
     color: var(--link-color);
@@ -85,7 +88,8 @@ select{
     font-family: var(--link-family-primary);
     color: var(--font-color);
     font-size: 1.8em;
-    padding: 25px;
+    padding: 20px;
+    margin: 25px;
 }
 .bubblegum-link{
     display: flex;
