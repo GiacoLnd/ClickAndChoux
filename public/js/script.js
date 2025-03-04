@@ -18,67 +18,138 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Script AJAX for fav 
-document.addEventListener('DOMContentLoaded', function () {
-    // Liste des URLs où l'AJAX est autorisé
-    const urlsCatalogues = [
+// AJAX for live search bar in catalog
+// Salé
+document.addEventListener("DOMContentLoaded", function() {
+    const urlSalty = [
         '/produit/salty',
-        '/produit/sweety',
-        '/favoris/page',
     ];
 
-    // Vérifie si l'URL actuelle correspond à un catalogue
-    if (!urlsCatalogues.includes(window.location.pathname)) {
-        console.log("AJAX bloqué : URL non autorisée.");
+    if (!urlSalty.includes(window.location.pathname)) {
         return;
     }
 
-    console.log("AJAX activé : Page catalogue détectée.");
+    const searchInput = document.getElementById('search-input');
+    const produitsList = document.getElementById('produits-list');
 
-    fetch('/favoris/liste', { credentials: 'include' }) 
-        .then(response => response.json())
-        .then(data => {
-            if (data.favoris) {
-                document.querySelectorAll('.favori-btn').forEach(button => {
-                    const produitId = button.dataset.id;
-                    if (data.favoris.includes(parseInt(produitId))) {
-                        button.classList.add('favori-active');
-                    }
-                });
-            }
-        });
+    searchInput.addEventListener('input', function() {
+        const searchQuery = searchInput.value.trim();
 
-    // Gérer l'ajout et la suppression des favoris
-    document.querySelectorAll('.favori-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const produitId = this.dataset.id;
-            const isFavori = this.classList.contains('favori-active');
-            const url = isFavori ? `/favoris/supprimer/${produitId}` : `/favoris/ajouter/${produitId}`;
-            const method = isFavori ? 'DELETE' : 'POST';
+        if (searchQuery.length > 0) {
+            fetch('/produit/salty/ajax?query=' + encodeURIComponent(searchQuery), {
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.text())
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
 
-            fetch(url, {
-                method: method,
-                credentials: 'include',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+                    produitsList.innerHTML = '';
+
+                    data.produits.forEach(produit => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.setAttribute('href', '/produit/' + produit.id);
+
+                        const img = document.createElement('img');
+                        img.setAttribute('src', '/img/' + produit.image);
+                        img.setAttribute('alt', produit.nomProduit);
+                        img.classList.add('catalog-image');
+                        a.appendChild(img);
+
+                        const h2 = document.createElement('h2');
+                        h2.textContent = produit.nomProduit;
+
+                        const p = document.createElement('p');
+                        p.textContent = produit.getTTC + '€';
+
+                        li.appendChild(a);
+                        li.appendChild(h2);
+                        li.appendChild(p);
+
+                        produitsList.appendChild(li);
+                    });
+                } catch (error) {
+                    console.error('Erreur lors du parsing JSON:', error);
                 }
             })
-            .then(response => response.json())
-            .then(data => { 
-                if (data.message.includes('ajouté')) {
-                    this.classList.add('favori-active');
-                } else if (data.message.includes('retiré')) {
-                    this.classList.remove('favori-active');
-
-                    const productElement = this.closest('.favori-item');  // Trouve l'élément parent : .favori-item
-                    if (productElement) {
-                        productElement.remove();  // Retirer l'élément du DOM 
-                    }
-                }
+            .catch(error => {
+                console.error('Erreur AJAX:', error);
             });
-        });
+        } else {
+            window.location.href = '/produit/salty';  // Rediriger vers la page sans perdre la position
+        }
     });
 });
+
+
+// Sucré
+document.addEventListener("DOMContentLoaded", function() {
+    // Liste des URLs où l'AJAX est autorisé
+    const urlsSweety = [
+        '/produit/sweety',
+    ];
+    
+    // Vérifie si l'URL actuelle correspond à un catalogue
+    if (!urlsSweety.includes(window.location.pathname)) {
+        return;
+    }
+
+    const searchInput = document.getElementById('search-bar');
+    const produitsList = document.getElementById('produits-list');
+
+    searchInput.addEventListener('input', function() {
+        const searchQuery = searchInput.value.trim();
+
+        if (searchQuery.length > 0) {
+            fetch('/produit/sweety/ajax?query=' + encodeURIComponent(searchQuery), {
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => response.text())
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
+
+                    produitsList.innerHTML = '';
+
+                    data.produits.forEach(produit => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.setAttribute('href', '/produit/' + produit.id);
+
+                        const img = document.createElement('img');
+                        img.setAttribute('src', '/img/' + produit.image);
+                        img.setAttribute('alt', produit.nomProduit);
+                        img.classList.add('catalog-image');
+                        a.appendChild(img);
+
+                        const h2 = document.createElement('h2');
+                        h2.textContent = produit.nomProduit;
+
+                        const p = document.createElement('p');
+                        p.textContent = produit.getTTC + '€';
+
+                        li.appendChild(a);
+                        li.appendChild(h2);
+                        li.appendChild(p);
+
+                        produitsList.appendChild(li);
+                    });
+                } catch (error) {
+                    console.error('Erreur lors du parsing JSON:', error);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur AJAX:', error);
+            });
+        } else {
+            window.location.href = '/produit/sweety';  // Rediriger vers la page sans perdre la position
+        }
+    });
+});
+
 
 // Script AJAX for cart quantity
 document.addEventListener('DOMContentLoaded', function () {
@@ -219,203 +290,82 @@ $(document).ready(function() {
 
 // Script to zoom images in detail produit 
 
-document.getElementById("image").addEventListener("click", function() {
-    this.classList.toggle("zoom");
-})
+// Vérifiez si l'URL correspond à /produit/{id}
+if (window.location.pathname.match(/^\/produit\/\d+$/)) { // Conditionne l'activation de cette fonction à la page de détail d'un produit avec son id via une regex : recherche produit et un ou plusieurs chiffres - \/ marque le / 
+    const image = document.getElementById("image");
 
+    // Écouter le clic sur l'image
+    image.addEventListener("click", function() {
+        this.classList.toggle("zoom");
+    });
 
-const image = document.getElementById("image")
+    const textImage = document.getElementById("text-image");
 
-document.getElementById("text-image").addEventListener("click", function() {
-    image.classList.toggle("zoom")
-})
+    // Écouter le clic sur le texte de l'image
+    textImage.addEventListener("click", function() {
+        image.classList.toggle("zoom");
+    });
+}
 
-// AJAX for live search bar in catalog
+// Script AJAX for fav 
+// WARNING : Let this function at the bottom of the js sheet code FTM, problem TO FIX with logged and non-logged user when fetching JSON response
+document.addEventListener('DOMContentLoaded', function () {
+    // Liste des URLs où l'AJAX est autorisé
+    const urlsCatalogues = [
+        '/produit/salty',
+        '/produit/sweety',
+        '/favoris/page',
+    ];
 
-// Salé
-document.addEventListener("DOMContentLoaded", function() {
-    const searchInput = document.getElementById('search-input');
-    const produitsList = document.getElementById('produits-list');
+    // Vérifie si l'URL actuelle correspond à un catalogue
+    if (!urlsCatalogues.includes(window.location.pathname)) {
+        console.log("AJAX bloqué : URL non autorisée.");
+        return;
+    }
 
-    searchInput.addEventListener('input', function() {
-        const searchQuery = searchInput.value.trim();  // Récupère la valeur de la barre de recherche
-
-        console.log("Recherche:", searchQuery); // Log de la valeur envoyée à chaque frappe
-
-        // Si la recherche n'est pas vide
-        if (searchQuery.length > 0) {
-            fetch('/produit/salty/ajax?query=' + encodeURIComponent(searchQuery), {
-                method: 'GET'
-            })
-            .then(response => response.json())  // Traite la réponse comme un JSON
-            .then(data => {
-                console.log("Réponse reçue:", data);  // Log de la réponse reçue du serveur
-
-                produitsList.innerHTML = '';  // Réinitialiser la liste existante
-
-                // Ajouter chaque produit à la liste de manière sécurisée
-                data.produits.forEach(produit => {
-                    const li = document.createElement('li');
-
-                    const a = document.createElement('a');
-                    a.setAttribute('href', '/produit/' + produit.id);
-
-                    const img = document.createElement('img');
-                    img.setAttribute('src', '/img/' + produit.image);
-                    img.setAttribute('alt', produit.nomProduit);
-                    img.classList.add('catalog-image');
-                    a.appendChild(img);
-
-                    const h2 = document.createElement('h2');
-                    h2.textContent = produit.nomProduit;
-
-                    const p = document.createElement('p');
-                    p.textContent = produit.getTTC + '€';
-
-                    li.appendChild(a);
-                    li.appendChild(h2);
-                    li.appendChild(p);
-
-                    produitsList.appendChild(li);
+    fetch('/favoris/liste', { credentials: 'include' }) 
+        .then(response => response.json())
+        .then(data => {
+            if (data.favoris) {
+                document.querySelectorAll('.favori-btn').forEach(button => {
+                    const produitId = button.dataset.id;
+                    if (data.favoris.includes(parseInt(produitId))) {
+                        button.classList.add('favori-active');
+                    }
                 });
+            }
+        });
+
+    // Gérer l'ajout et la suppression des favoris
+    document.querySelectorAll('.favori-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const produitId = this.dataset.id;
+            const isFavori = this.classList.contains('favori-active');
+            const url = isFavori ? `/favoris/supprimer/${produitId}` : `/favoris/ajouter/${produitId}`;
+            const method = isFavori ? 'DELETE' : 'POST';
+
+            fetch(url, {
+                method: method,
+                credentials: 'include',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des produits:', error);
-                produitsList.innerHTML = '<p class="error-message">Une erreur est survenue. Veuillez réessayer.</p>';
+            .then(response => response.json())
+            .then(data => { 
+                if (data.message.includes('ajouté')) {
+                    this.classList.add('favori-active');
+                } else if (data.message.includes('retiré')) {
+                    this.classList.remove('favori-active');
+
+                    const productElement = this.closest('.favori-item');  // Trouve l'élément parent : .favori-item
+                    if (productElement) {
+                        productElement.remove();  // Retirer l'élément du DOM 
+                    }
+                }
             });
-        } else {
-            // Si la recherche est vide, on récupère tous les produits
-            fetch('/produit/salty/ajax', {
-                method: 'GET'
-            })
-            .then(response => response.json())  // Traite la réponse comme un JSON
-            .then(data => {
-                produitsList.innerHTML = '';  // Réinitialiser la liste existante
-
-                // Ajouter chaque produit à la liste de manière sécurisée
-                data.produits.forEach(produit => {
-                    const li = document.createElement('li');
-
-                    const a = document.createElement('a');
-                    a.setAttribute('href', '/produit/' + produit.id);
-
-                    const img = document.createElement('img');
-                    img.setAttribute('src', '/img/' + produit.image);
-                    img.setAttribute('alt', produit.nomProduit);
-                    img.classList.add('catalog-image');
-                    a.appendChild(img);
-
-                    const h2 = document.createElement('h2');
-                    h2.textContent = produit.nomProduit;
-
-                    const p = document.createElement('p');
-                    p.textContent = produit.getTTC + '€';
-
-                    li.appendChild(a);
-                    li.appendChild(h2);
-                    li.appendChild(p);
-
-                    produitsList.appendChild(li);
-                });
-            })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des produits:', error);
-                produitsList.innerHTML = '<p class="error-message">Une erreur est survenue. Veuillez réessayer.</p>';
-            });
-        }
+        });
     });
 });
 
-// Sucré
-document.addEventListener("DOMContentLoaded", function() {
-    const searchInput = document.getElementById('search-input');
-    const produitsList = document.getElementById('produits-list');
-    const categoryType = document.body.getAttribute('data-category'); // Ajoute un attribut pour connaître la catégorie
 
-    searchInput.addEventListener('input', function() {
-        const searchQuery = searchInput.value.trim();  // Récupère la valeur de la barre de recherche
-
-        console.log("Recherche:", searchQuery); // Log de la valeur envoyée à chaque frappe
-
-        let url = '';
-        if (categoryType === 'salty') {
-            url = '/produit/salty/ajax?query=' + encodeURIComponent(searchQuery);
-        } else if (categoryType === 'sweety') {
-            url = '/produit/sweety/ajax?query=' + encodeURIComponent(searchQuery);
-        }
-
-        // Si la recherche n'est pas vide
-        if (searchQuery.length > 0) {
-            fetch(url, {
-                method: 'GET'
-            })
-            .then(response => response.json())  // Traite la réponse comme un JSON
-            .then(data => {
-                console.log("Réponse reçue:", data);  // Log de la réponse reçue du serveur
-
-                produitsList.innerHTML = '';  // Réinitialiser la liste existante
-
-                // Ajouter chaque produit à la liste de manière sécurisée
-                data.produits.forEach(produit => {
-                    const li = document.createElement('li');
-
-                    const a = document.createElement('a');
-                    a.setAttribute('href', '/produit/' + produit.id);
-
-                    const img = document.createElement('img');
-                    img.setAttribute('src', '/img/' + produit.image);
-                    img.setAttribute('alt', produit.nomProduit);
-                    img.classList.add('catalog-image');
-                    a.appendChild(img);
-
-                    const h2 = document.createElement('h2');
-                    h2.textContent = produit.nomProduit;
-
-                    const p = document.createElement('p');
-                    p.textContent = produit.getTTC + '€';
-
-                    li.appendChild(a);
-                    li.appendChild(h2);
-                    li.appendChild(p);
-
-                    produitsList.appendChild(li);
-                });
-            })
-        } else {
-            // Si la recherche est vide, on récupère tous les produits
-            fetch(url, {
-                method: 'GET'
-            })
-            .then(response => response.json())  // Traite la réponse comme un JSON
-            .then(data => {
-                produitsList.innerHTML = '';  // Réinitialiser la liste existante
-
-                // Ajouter chaque produit à la liste de manière sécurisée
-                data.produits.forEach(produit => {
-                    const li = document.createElement('li');
-
-                    const a = document.createElement('a');
-                    a.setAttribute('href', '/produit/' + produit.id);
-
-                    const img = document.createElement('img');
-                    img.setAttribute('src', '/img/' + produit.image);
-                    img.setAttribute('alt', produit.nomProduit);
-                    img.classList.add('catalog-image');
-                    a.appendChild(img);
-
-                    const h2 = document.createElement('h2');
-                    h2.textContent = produit.nomProduit;
-
-                    const p = document.createElement('p');
-                    p.textContent = produit.getTTC + '€';
-
-                    li.appendChild(a);
-                    li.appendChild(h2);
-                    li.appendChild(p);
-
-                    produitsList.appendChild(li);
-                });
-            })
-        }
-    });
-});

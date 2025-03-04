@@ -23,11 +23,11 @@
                     En cas d’allergie, merci de consulter notre page <a href="/">dédiée</a>.
                 </p>
             </div>
+            
             <div>
-                <form method="GET" action="{{ path('salty_produit') }}" class="searchbar">
-                    <input type="text" name="query" placeholder="Rechercher un produit..." value="{{ query }}" class="search-input" id="search-input">
-                </form>
+                <input type="text" id="search-input" class="search-input" placeholder="Rechercher un produit..." value="{{ query }}">
             </div>
+            
 
             <div class="choux-grid-container">
                 <!-- Zone des produits qui sera mise à jour dynamiquement -->
