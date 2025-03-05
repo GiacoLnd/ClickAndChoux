@@ -216,7 +216,7 @@ class ProduitController extends AbstractController
                         'nomProduit' => $produit->getNomProduit(),
                         'prixHt' => $produit->getPrixHt(),
                         'TVA' => $produit->getTVA(),
-                        'prixTTC' => $produit->getPrixHt() * (1 + $produit->getTVA() / 100),
+                        'prixTTC' => round($produit->getPrixHt() * (1 + $produit->getTVA() / 100), 2),
                         'description' => $produit->getDescription(),
                         'allergene' => $produit->getAllergene(),
                         'image' => $produit->getImage(),

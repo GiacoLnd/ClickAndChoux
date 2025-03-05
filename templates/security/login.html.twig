@@ -24,23 +24,24 @@
             </div>
         {% endif %}
         <h1 class="page-title">Connectez-vous</h1>
-            
-        <label for="username" class="security-text">Email :</label>
-            
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="flex-column-center" autocomplete="email" required autofocus >
-            
-        <label for="password" class="security-text">Mot de passe :</label>
-            
-        <input type="password" name="_password" id="password" class="flex-column-center" autocomplete="current-password" required>
-            
-        <div class="remember-me">
-            <label for="_remember_me">Remember me</label>
-            <input type="checkbox" name="_remember_me" id="_remember_me">
-        </div>
         <div class="flex-column-center">
-            <button type="submit" class="bubblegum-link">Connexion</button>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        </div>   
+            <label for="username" class="security-text">Email :</label>
+                
+            <input type="email" value="{{ last_username }}" name="_username" id="username" class="flex-column-center" autocomplete="email" required autofocus >
+                
+            <label for="password" class="security-text">Mot de passe :</label>
+                
+            <input type="password" name="_password" id="password" class="flex-column-center" autocomplete="current-password" required>
+                
+            <div class="remember-me">
+                <label for="_remember_me">Remember me</label>
+                <input type="checkbox" name="_remember_me" id="_remember_me">
+            </div>
+            <div class="flex-column-center">
+                <button type="submit" class="bubblegum-link">Connexion</button>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            </div>   
+        </div>
         <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a> !</p>     
         <p>Mot de passe oublié ? <a href="{{ path('app_forgot_password_request') }}">Réinitialisez votre mot de passe</a> !</p>     
     </form>

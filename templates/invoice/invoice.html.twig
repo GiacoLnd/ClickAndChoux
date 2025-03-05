@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Facture - Click&Choux</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        h1 { font-size: 24px; margin-bottom: 10px; color: #55211A;}
+        .header, h2 { text-align: center; margin-bottom: 20px; }
+        .logo { width: 150px; height: 150px; }
+        .info { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table, th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .total { text-align: center; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header">
+            <img src="data:image/png;base64,{{ logoBase64 }}" class="logo"> <!-- data:image/png;base64, : Ressort le logo encodé en système d'encodage base64-->
+            <h1>Click&Choux</h1>
+            <p>Facture acquittée n° {{ commande.reference }} - {{ commande.dateCommande|date('d/m/Y') }}</p>
+        </div>
+    </div>
+
+    <div class="info">
+        <strong>Client :</strong> {{ commande.user.nickName }}<br>
+        <strong>Email :</strong> {{ commande.user.email }}
+    </div>
+
+    <h2>Détails de la commande</h2>
+
+    {% if commande.historique is not empty %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom du produit</th>
+                    <th>Quantité</th>
+                    <th>Prix unitaire HT</th>
+                    <th>TVA</th>
+                    <th>Prix unitaire TTC</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produit in historique.produits %}
+                <tr>
+                    <td>{{ produit.nomProduit }}</td>
+                    <td>{{ produit.quantite }}</td> 
+                    <td>{{ produit.prixHt|number_format(2, ',', ' ') }} €</td>
+                    <td>{{ produit.TVA }}%</td>
+                    <td>{{ produit.prixTTC|number_format(2, ',', ' ') }} €</td>
+                    <td>{{ (produit.prixTTC * produit.quantite)|round(2) }} €</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucun produit trouvé.</p>
+    {% endif %}
+
+    <div class="total">
+        <p><strong>Montant total :</strong> {{ commande.montantTotal|number_format(2, ',', ' ') }} €</p>
+    </div>
+</body>
+</html>

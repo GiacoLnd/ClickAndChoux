@@ -91,7 +91,7 @@ final class CommandeController extends AbstractController
                 'nomProduit' => $produit->getNomProduit(),
                 'prixHt' => $produit->getPrixHt(),
                 'TVA' => $produit->getTVA(),
-                'prixTTC' => $produit->getPrixHt() * (1 + $produit->getTVA() / 100),
+                'prixTTC' => round($produit->getPrixHt() * (1 + $produit->getTVA() / 100), 2),
                 'image' => $produit->getImage(),
                 'categorie' => $produit->getCategorie()->getNomCategorie(),
                 'quantite' => $panier->getQuantity(),
