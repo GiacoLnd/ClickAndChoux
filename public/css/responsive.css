@@ -7,7 +7,7 @@
     --link-size: 1.3em;
 }
 
-@media screen and (max-width: 1350px) {
+@media screen and (max-width: 1024px) {
     #wrapper {
         #navbar-container {
             width: 100vw;

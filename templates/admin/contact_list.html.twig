@@ -1,0 +1,36 @@
+{# templates/admin/contact_list.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaires de Contact{% endblock %}
+
+{% block body %}
+    <section id="contact-list">
+        <h2>Contact client</h2>
+        
+        <table id="table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Date du contact</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contactForm in contactForms %}
+                    <tr>
+                        <td>{{ contactForm.email }}</td>
+                        <td>{{ contactForm.telephone }}</td>
+                        <td>{{ contactForm.dateContact|date('d/m/Y H:i') }}</td>
+                        <td><a href="{{ path('admin_contact_details', { id: contactForm.id }) }}" class="bubblegum-link">Voir</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">Aucune soumission de formulaire</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a class="bubblegum-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
+    </section>
+{% endblock %}

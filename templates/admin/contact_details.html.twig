@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail du contact{% endblock %}
+
+{% block body %}
+    <section id="contact-details">
+        <h2 class="page-title">Détail du contact client</h2>
+        <p><strong>email de contact :</strong> {{ contact.email }}</p>
+        <p><strong>téléphone de contact :</strong> {{ contact.telephone }}</p>
+        <p><strong>Date du contact : </strong> {{ contact.dateContact|date('d/m/Y H:i') }}</p>
+
+        <h3 class="page-title">Message :</h3>
+        <p>{{ contact.message }}</p>
+        <a href="{{ path('admin_contact_list') }}" class="bubblegum-link">Retour à la liste des contacts</a>
+    </section>
+{% endblock %}

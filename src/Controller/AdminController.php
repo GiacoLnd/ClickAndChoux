@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Contact;
 use App\Entity\Produit;
 use App\Entity\Commande;
 use App\Form\AddProduitType;
@@ -11,6 +12,7 @@ use App\Form\DeleteProduitType;
 use Doctrine\ORM\EntityManager;
 use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
+use App\Repository\ContactRepository;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -121,6 +123,8 @@ final class AdminController extends AbstractController
             'formPassword' => $formPassword->createView(),
         ]);
     }
+
+    // Function to add a product
     #[Route('/admin/produit/ajouter', name: 'add_product')]
     public function ajouterProduit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
@@ -161,6 +165,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    // Function to remove one or multiple products 
     #[Route('/admin/produit/supprimer', name: 'delete_product')]
     public function deleteProduit(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -187,4 +192,26 @@ final class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    // Function to display contact list
+    #[Route('/contact/liste', name:'contact_list')]
+    public function contactList(ContactRepository $contactRepository): Response
+    {
+        $contactForms = $contactRepository->findAll();
+
+        return $this->render('admin/contact_list.html.twig', [
+            'contactForms'=> $contactForms,
+        ]);
+    }
+
+    // Function to display contact list
+    #[Route('/contact/{id}', name: 'contact_details', methods: ['GET'])]
+    public function contactDetails(Contact $contact): Response
+    {
+
+        return $this->render('admin/contact_details.html.twig', [
+            'contact'=> $contact,
+        ]);
+    }
+
 }
