@@ -4,42 +4,37 @@
 
 {% block body %}
     <section id="order-validation" class="text-center">
-        <div class="text-center">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+        <h2 class="page-title">Votre commande</h2>
+
+        <div class="commande-list">
+            {% for panier in commande.paniers %}
+                <div class="commande-product">
+                    <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}">
+                        <img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image">
+                    </a>
+                    <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><h3>{{ panier.produit.nomProduit }}</h3></a>
+                    <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
+                    <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
+                </div>
             {% endfor %}
         </div>
-        <h2 class="page-title">Votre commande</h2>
-            <div class="commande-list">
-                {% for panier in commande.paniers %}
-                    <div class="commande-product">
-                        <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
-                        <h3>{{ panier.produit.nomProduit }}</h3>
-                        <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
-                        <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
-                    </div>
-                {% endfor %}
-            </div>
-        
+
         <h3>Montant total : {{ commande.montantTotal|number_format(2, ',', ' ') }} €</h3>
+        
+        <h3>Date de livraison estimée : {{ delivery_date }}</h3>
 
         <h2 class="page-title">Adresse de livraison</h2>
         <div class="flex-column-center">
-        {{ form_start(form) }}
-            {{ form_row(form.adresseLivraison) }}
-            {{ form_row(form.codePostalLivraison) }}
-            {{ form_row(form.villeLivraison) }}
-            <div class="flex-column-center">
-                <button type="submit" class="bubblegum-link">
-                    Valider la commande
-                </button>
-            </div>
-        {{ form_end(form) }}
+            {{ form_start(form) }}
+                {{ form_row(form.adresseLivraison) }}
+                {{ form_row(form.codePostalLivraison) }}
+                {{ form_row(form.villeLivraison) }}
+                <div class="flex-column-center">
+                    <button type="submit" class="bubblegum-link">
+                        Valider la commande
+                    </button>
+                </div>
+            {{ form_end(form) }}
         </div>
     </section>
 {% endblock %}
- 

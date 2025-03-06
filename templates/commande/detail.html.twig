@@ -7,6 +7,7 @@
         <h2 class="page-title">Détail de la commande</h2>
         <p><strong>Référence :</strong> {{ commande.reference }}</p>
         <p><strong>Date :</strong> {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
+        <p><strong>Date de livraison : </strong> {{ commande.dateLivraison|date('d/m/Y') }}</p>
         <p><strong>Statut :</strong> {{ commande.statut }}</p>
         <h3 class="page-title">Total : {{ commande.montantTotal }}€</h3>
 
@@ -15,7 +16,7 @@
             {% for panier in commande.paniers %}
             <div class="commande-product">
                 <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
-                <h3>{{ panier.produit.nomProduit }}</h3>
+                <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><h3>{{ panier.produit.nomProduit }}</h3></a>
                 <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
                 <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
             </div>

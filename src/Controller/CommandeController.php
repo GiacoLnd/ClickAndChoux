@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Commande;
 use App\Form\LivraisonType;
+use App\Service\DeliveryTimeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,20 +44,20 @@ final class CommandeController extends AbstractController
 
 
     #[Route('/commande/confirmer', name: 'commande_confirmer')]
-    public function confirmerCommande(Request $request, EntityManagerInterface $entityManager, Security $security): Response
+    public function confirmerCommande(Request $request, EntityManagerInterface $entityManager, Security $security, DeliveryTimeService $deliveryTimeService): Response
     {
         $user = $this->getUser();
-    
+
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
-    
+
         // Récupère la commande "panier"
         $commande = $entityManager->getRepository(Commande::class)->findOneBy([
             'user' => $user,
             'statut' => 'panier'
         ]);
-        
+
         if (!$security->isGranted('ROLE_ADMIN') && $commande->getUser() !== $user) {
             throw $this->createAccessDeniedException("Accès non-autorisé");
         }
@@ -65,23 +66,23 @@ final class CommandeController extends AbstractController
             $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('panier_afficher');
         }
-    
+
         // Génération d'une référence unique si elle n'existe pas
         if (!$commande->getReference()) {
             do {
                 $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
             } while ($entityManager->getRepository(Commande::class)->findOneBy(['reference' => $reference]));
-    
+
             $commande->setReference($reference);
         }
-    
+
         // Calcul du montant total
         $total = 0.0;
         foreach ($commande->getPaniers() as $panier) {
             $total += $panier->getProduit()->getTTC() * $panier->getQuantity();
         }
         $commande->setMontantTotal($total);
-        
+
         // Gestion de l'historique JSON final
         $historiqueProduits = [];
         foreach ($commande->getPaniers() as $panier) {
@@ -102,20 +103,30 @@ final class CommandeController extends AbstractController
         // Création du formulaire d'adresse de livraison
         $form = $this->createForm(LivraisonType::class, $commande);
         $form->handleRequest($request);
-    
+
+        // Calcul du délai de livraison avec date exacte
+        $orderTime = $commande->getDateCommande()->format('H:i');  // Heure de la commande
+        $orderDate = (new \DateTime())->format('Y-m-d');  // Date de la commande
+        $isHoliday = $deliveryTimeService->isHoliday($orderDate);  // Vérifier si c'est un jour férié
+        $deliveryDate = $deliveryTimeService->calculateDeliveryDate($orderTime, $isHoliday);  // Calculer la date de livraison
+
+        // Traitement du formulaire d'adresse de livraison
         if ($form->isSubmitted() && $form->isValid()) {
             $commande->setStatut('confirmée');
             $commande->setDateCommande(new \DateTime());
-    
+            $commande->setDateLivraison($deliveryDate);
+
             $entityManager->flush();
             $this->addFlash('success', 'Commande confirmée avec succès !');
-    
+            
             return $this->redirectToRoute('commande_confirmation', ['id' => $commande->getId()]);
         }
-    
+        
+        // Rendre la page de confirmation avec la date de livraison
         return $this->render('commande/confirmation.html.twig', [
             'commande' => $commande,
             'form' => $form->createView(),
+            'delivery_date' => $deliveryDate->format('d/m/Y'),  // Passer la date de livraison au format souhaité
         ]);
     }
     

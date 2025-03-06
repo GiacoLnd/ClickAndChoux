@@ -9,6 +9,7 @@
         <p>Vous pouvez retrouver votre commande <a href="{{ path('commande_detail', { id: commande.id }) }}">ici</a>.</p>
         <p>Référence de votre commande : {{ commande.reference }} </p>
         <p>Date : {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
+        <p>Date de livraison estimée : {{ commande.dateLivraison|date('d/m/Y') }}</p>
         <h3 class="page-title">Total : {{ commande.montantTotal }}€</h3>
         
         <h2 class="page-title">Détails de la commande :</h2>
@@ -16,7 +17,7 @@
             {% for panier in commande.paniers %}
                 <div class="commande-product">
                     <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
-                    <h3>{{ panier.produit.nomProduit }}</h3>
+                    <a href="{{ path('produit_detail', {'id': panier.produit.id}) }}"><h3>{{ panier.produit.nomProduit }}</h3></a>
                     <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
                     <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
                 </div>
