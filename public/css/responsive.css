@@ -12,6 +12,7 @@
         #navbar-container {
             width: 100vw;
             position: absolute fixed;
+            flex-wrap: wrap;
         }
     }
     .burger-user {
@@ -121,10 +122,16 @@
     .burger {
         font-size: 28px;
     }
+    .burger-user {
+        margin-right: 0;
+    }
     #navbar-container{
         flex-direction: column;
         justify-content: center;
         padding: 5px;
+    }
+    .navbar-list{
+        margin-right: 0;
     }
     .navbar-title {
         font-size: 1.8em;
@@ -320,10 +327,18 @@
         height: 80px;
     }
     .navbar-list {
-        width: 100%;
-        top: 100%;
-        left: 0;
-        padding: 10px;
+
+    }
+    #wrapper {
+        & #navbar-container {
+            .navbar-list {
+                width: 100%;
+                top: 100%;
+                left: 0;
+                padding: 10px;
+                margin: 0;
+            }
+        }
     }
     .navbar-list.active {
         display: flex;
