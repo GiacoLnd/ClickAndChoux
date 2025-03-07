@@ -6,7 +6,9 @@ use App\Entity\Panier;
 use App\Entity\Produit;
 use App\Entity\Commande;
 use App\Form\PanierType;
+use App\Entity\Allergene;
 use App\Entity\Categorie;
+use App\Form\AllergenType;
 use App\Controller\PanierController;
 use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
@@ -85,11 +87,18 @@ class ProduitController extends AbstractController
     public function chouxSucres(
         ProduitRepository $produitRepository,
         CategorieRepository $categorieRepository,
-        Request $request
+        Request $request,
+        EntityManagerInterface $em,
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
         $query = $request->query->get('query', '');
         
+        $form = $this->createForm(AllergenType::class, null, [
+            'allergenes' => $em->getRepository(Allergene::class)->findAll(),
+        ]);
+        $form->handleRequest($request);
+
+
         if ($request->isXmlHttpRequest()) {
             $results = $produitRepository->findBySearchQuery($query, $categorie);
         
@@ -105,7 +114,43 @@ class ProduitController extends AbstractController
         return $this->render('produit/sweety.html.twig', [
             'produits' => $produits,
             'query' => $query, 
+            'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/produit/sweety/filter', name: 'sweety_produit_filter', methods: ['GET'])]
+    public function filterProduits(
+        ProduitRepository $produitRepository,
+        CategorieRepository $categorieRepository,
+        Request $request
+    ): JsonResponse {
+        $allergenesIds = $request->query->get('allergenes', ''); 
+        if ($allergenesIds) {
+            $allergenesIds = explode(',', $allergenesIds);
+        } else {
+            $allergenesIds = [];
+        }
+
+        $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
+
+        if (!$categorie) {
+            return new JsonResponse(['error' => 'Catégorie "Sucré" introuvable'], 400);
+        }
+
+        $produits = $produitRepository->findByExcludedAllergens($allergenesIds, $categorie);
+
+        $produitsData = [];
+        foreach ($produits as $produit) {
+            $produitsData[] = [
+                'id' => $produit->getId(),
+                'nomProduit' => $produit->getNomProduit(),
+                'image' => $produit->getImage(),
+                'getTTC' => $produit->getTTC(),
+            ];
+        }
+
+
+        return new JsonResponse(['produits' => $produitsData]);
     }
 
     #[Route('/produit/sweety/ajax', name: 'ajax_sweety_produit', methods: ['GET'])]
@@ -193,12 +238,12 @@ class ProduitController extends AbstractController
                         } while ($commandeRepository->findOneBy(['reference' => $reference]));
         
                         $commande->setReference($reference);
-                        $commande->setHistorique([]); // Initialiser l'historique
+                        $commande->setHistorique([]); // Initialisation de l'historique
                         $em->persist($commande);
                         $em->flush();
                     }
         
-                    // Vérification si ce produit est déjà dans le panier pour cette commande
+                    // Vérification si produit est déjà dans le panier pour cette commande
                     $existingPanier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
         
                     if ($existingPanier) {
@@ -210,7 +255,7 @@ class ProduitController extends AbstractController
                         $em->persist($panier);
                     }
         
-                    // Création de l'historique du produit en JSON
+                    // Récupération des infos pour l'historique
                     $historiqueProduit = [
                         'id' => $produit->getId(),
                         'nomProduit' => $produit->getNomProduit(),
@@ -224,12 +269,12 @@ class ProduitController extends AbstractController
                         'quantite' => $quantity
                     ];
         
-                    // Ajout du produit à l'historique de la commande
+                    // Ajout produit dans l'historique de la commande
                     $historiqueCommande = $commande->getHistorique();
                     $historiqueCommande['produits'][] = $historiqueProduit;
                     $commande->setHistorique($historiqueCommande);
         
-                    // Mise à jour du montant total de la commande
+                    // Mise à jour montant total
                     $montantTotal = 0;
                     foreach ($commande->getPaniers() as $p) {
                         $montantTotal += $p->getTotalTTC();
@@ -238,14 +283,14 @@ class ProduitController extends AbstractController
         
                     $em->flush();
                 } else {
-                    // Utilisateur non connecté, gestion du panier via la session
+                    // Si user non connecté -> Session
                     $cart = $session->get('panier', []);
     
                     if (isset($cart[$produit->getId()])) {
-                        // Si le produit est déjà dans le panier, mise à jour de la quantité
+                        // Mise à jour de la quantité si panier
                         $cart[$produit->getId()] += $quantity;
                     } else {
-                        // Si le produit n'est pas dans le panier, ajout de la quantité
+                        // Ajout de la quantité si pas dans panier
                         $cart[$produit->getId()] = $quantity;
                     }
     

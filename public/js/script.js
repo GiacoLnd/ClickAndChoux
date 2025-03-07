@@ -150,6 +150,15 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+//AJAX alergen filter 
+//sweety
+
+
+
+// TODO 
+
+
+
 
 // Script AJAX for cart quantity
 document.addEventListener('DOMContentLoaded', function () {

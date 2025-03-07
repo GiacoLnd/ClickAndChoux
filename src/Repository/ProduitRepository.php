@@ -54,4 +54,18 @@ class ProduitRepository extends ServiceEntityRepository
         
         return $qb->getQuery()->getResult();
     }
+    public function findByExcludedAllergens(array $allergenesIds, $categorie)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->leftJoin('p.allergenes', 'a')
+            ->leftJoin('p.categorie', 'c')
+            ->andWhere('a.id NOT IN (:allergenesIds)') 
+            ->setParameter('allergenesIds', $allergenesIds)
+            ->andWhere('c.id = :categorieId') 
+            ->setParameter('categorieId', $categorie->getId())
+            ->groupBy('p.id');
+    
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
 }

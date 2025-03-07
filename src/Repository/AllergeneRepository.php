@@ -40,4 +40,7 @@ class AllergeneRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+
 }
