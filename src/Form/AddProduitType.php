@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Produit;
 use App\Entity\Categorie;
+use App\Entity\Allergene;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -37,15 +38,11 @@ class AddProduitType extends AbstractType
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => ['class' => 'flex-column-center'],
             ])
-            ->add('allergene', TextType::class, [
-                'label' => 'Allergènes',
-                'label_attr' => ['class' => 'security-text'],
-                'attr' => ['class' => 'flex-column-center'],
-            ])
             ->add('TVA', NumberType::class, [
                 'label' => 'TVA (%)',
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => ['class' => 'flex-column-center'],
+                'data' => '5.5'
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image du produit',
@@ -68,6 +65,18 @@ class AddProduitType extends AbstractType
                 'label' => 'Catégorie',
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => ['class' => 'flex-column-center']
+            ])
+
+            ->add('allergenes', EntityType::class, [
+                'class' => Allergene::class,
+                'choice_label' => 'nomAllergene',  
+                'label' => 'Sélectionner les allergènes',
+                'label_attr' => ['class' => 'security-text'],
+                'multiple' => true,
+                'expanded' => false,
+                'attr' => [
+                    'class' => 'flex-column-center',
+                    ]
             ]);
     }
 

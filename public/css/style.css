@@ -72,9 +72,9 @@ input[type="file"]::file-selector-button {
     }
 }
 select{
-    width: auto;
+    width: 100%;
     border: var(--font-color) 2px solid;
-    border-radius: 50px;
+    border-radius: 10px;
     padding: 5px;
     
     &:focus{
@@ -145,6 +145,7 @@ select{
     flex-direction: row;
     justify-content:center;
     align-items: center;
+    flex-wrap: wrap;
     gap: 30px;
     padding: 10px;
 }

@@ -313,6 +313,9 @@
         }
 
     }
+    .hidden-text{
+        display: none;
+    }
 }
 
 @media screen and (max-width: 450px) {

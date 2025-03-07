@@ -103,13 +103,6 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                     new NotCompromisedPassword(), // Vérifie dans haveibeenpwnd si le mot de passe en question est détécté dans une data breach
-                    new PasswordStrength(([
-                        'minScore' => PasswordStrength::STRENGTH_MEDIUM,  // Evite les suites logiques 
-                        // contrainte calculant l'entropie (imprevisibilité) du mot de passe - calcul :
-                        // $pool = $lower + $upper + $digit + $symbol + $control + $other;
-                        // $entropy = $chars * log($pool, 2) + ($length - $chars) * log($chars, 2);
-                        'message' =>    'Votre mot de passe doit être plus complexe.'
-                    ])),
                     new Regex([
                         'pattern' =>    '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&,;-_])[A-Za-z\d@$!%*?&,;-_]{12,}$/', //.* 0 ou plusieurs caractères sauf retour à la ligne peut importe le placement dans le password -  [a-z] au moins 1 minuscule - [A-Z] au moins 1 majuscule - \d au moins un chiffre - [@$!%*?&,;-_] au moins un symbole parmis ceux proposés - {12,} au moins 12 caractères
                         'message' =>    'Votre mot de passe doit contenir au moins 12 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',

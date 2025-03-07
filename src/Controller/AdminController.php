@@ -162,6 +162,7 @@ final class AdminController extends AbstractController
 
         return $this->render('admin/add_product.html.twig', [
             'form' => $form->createView(),
+            'produit' => $produit,
         ]);
     }
 

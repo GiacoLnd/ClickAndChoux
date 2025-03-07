@@ -13,54 +13,40 @@
             <div class="alert alert-danger">{{ message }}</div>
         {% endfor %}
 
-            {{ form_start(form) }}
-
-        <div class="flex-row-center">
-            <div class="flex-column-center">
-                <label>{{ form_label(form.nomProduit) }}</label>
-                {{ form_widget(form.nomProduit) }}
-                {{ form_errors(form.nomProduit) }}
-            </div>
-            <div class="flex-column-center">
-                <label>{{ form_label(form.prixHt) }}</label>
-                {{ form_widget(form.prixHt) }}
-                {{ form_errors(form.prixHt) }}
-            </div>
-        </div>
-
-        <div class="flex-row-center">
-            <div class="flex-column-center">
-                <label>{{ form_label(form.allergene) }}</label>
-                {{ form_widget(form.allergene) }}
-                {{ form_errors(form.allergene) }}
-            </div>
-            <div class="flex-column-center">
-                <label>{{ form_label(form.TVA) }}</label>
-                {{ form_widget(form.TVA) }}
-                {{ form_errors(form.TVA) }}
-            </div>
-        </div>
-
-        <div class="flex-row-center">
-            <div class="flex-column-center">
-                <label>{{ form_label(form.categorie) }}</label>
-                {{ form_widget(form.categorie) }}
-                {{ form_errors(form.categorie) }}
-            </div>
-            <div class="flex-column-center">
-                <label>{{ form_label(form.image) }}</label>
-                {{ form_widget(form.image)}}
-                {{ form_errors(form.image) }}
-            </div>
-        </div>
-
-        <div class="flex-column-center mb-3">
-            <label>{{ form_label(form.description) }}</label>
-            {{ form_widget(form.description) }}
-            {{ form_errors(form.description) }}
-        </div>
-
+        {{ form_start(form) }}
         <div class="flex-column-center">
+            <div class="flex-row-center">
+                <div class="flex-column-center">
+                    <label>{{ form_label(form.nomProduit) }}</label>
+                    {{ form_widget(form.nomProduit) }}
+                    {{ form_errors(form.nomProduit) }}
+
+                    <label>{{ form_label(form.prixHt) }}</label>
+                    {{ form_widget(form.prixHt) }}
+                    {{ form_errors(form.prixHt) }}
+
+                    <label>{{ form_label(form.TVA) }}</label>
+                    {{ form_widget(form.TVA) }}
+                    {{ form_errors(form.TVA) }}
+
+                    <label>{{ form_label(form.image) }}</label>
+                    {{ form_widget(form.image)}}
+                    {{ form_errors(form.image) }}
+                </div>
+                <div class="flex-column-center">
+                    <label>{{ form_label(form.description) }}</label>
+                    {{ form_widget(form.description) }}
+                    {{ form_errors(form.description) }}
+
+                    <label>{{ form_label(form.categorie) }}</label>
+                    {{ form_widget(form.categorie) }}
+                    {{ form_errors(form.categorie) }}
+                </div>
+            </div>
+            <label>{{ form_label(form.allergenes) }}</label>
+            <p class="hidden-text fs-6">Gardez la touche CTRL (CMD sur mac) enfoncée pour sélectionner plusieurs allergènes</p>
+            {{ form_widget(form.allergenes) }}
+            {{ form_errors(form.allergenes) }}
             <button type="submit" class="bubblegum-link">
                 Ajouter le produit
             </button>

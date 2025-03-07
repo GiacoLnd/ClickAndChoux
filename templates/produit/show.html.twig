@@ -24,7 +24,11 @@
                     <p>{{ produit.description }}</p>
                 </div>
                 
-                <p class="details-allergene">Allergènes : {{ produit.allergene }}</p>
+                {% for allergene in allergenes %}
+                    <li>{{ allergene.nomAllergene }}</li> {# Affichage du nom de chaque allergène #}
+                {% else %}
+                    <li>Aucun allergène associé.</li>
+                {% endfor %}
                 <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
                 
                 {{ form_start(form) }}

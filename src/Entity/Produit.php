@@ -25,9 +25,6 @@ class Produit
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $allergene = null;
-    
     #[ORM\Column]
     private ?float $TVA = null;
     #[ORM\ManyToOne(inversedBy: 'produits')]
@@ -49,11 +46,18 @@ class Produit
     #[ORM\OneToMany(targetEntity: Favoris::class, mappedBy: 'produit', orphanRemoval: true)]
     private Collection $favoris;
 
+    /**
+     * @var Collection<int, Allergene>
+     */
+    #[ORM\ManyToMany(targetEntity: Allergene::class, inversedBy: 'produits')]
+    private Collection $allergenes;
+
 
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
         $this->favoris = new ArrayCollection();
+        $this->allergenes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -93,18 +97,6 @@ class Produit
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getAllergene(): ?string
-    {
-        return $this->allergene;
-    }
-
-    public function setAllergene(string $allergene): static
-    {
-        $this->allergene = $allergene;
 
         return $this;
     }
@@ -212,5 +204,29 @@ class Produit
     public function __toString()
     {
         return $this->nomProduit ." ". $this->image;
+    }
+
+    /**
+     * @return Collection<int, Allergene>
+     */
+    public function getAllergenes(): Collection
+    {
+        return $this->allergenes;
+    }
+
+    public function addAllergene(Allergene $allergene): static
+    {
+        if (!$this->allergenes->contains($allergene)) {
+            $this->allergenes->add($allergene);
+        }
+
+        return $this;
+    }
+
+    public function removeAllergene(Allergene $allergene): static
+    {
+        $this->allergenes->removeElement($allergene);
+
+        return $this;
     }
 }
