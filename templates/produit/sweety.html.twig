@@ -27,13 +27,16 @@
                 </div>
 
 
-                <form id="allergen-form">
+                <div class="allergene-filter">
                     {{ form_start(form) }}
-                    <div class="allergene-filter">
-                        {{ form_row(form.allergenes) }}
-                    </div>
+                        {{ form_label(form.allergenes) }}
+                        {{ form_widget(form.allergenes) }}
+                        <div class="filter-button">
+                        {{ form_widget(form.filtrer, {'attr': {'class': 'bubblegum-link'}}) }}
+                        <a href="{{ path('sweety_produit') }}">Réinitialiser</a>
+                        </div>
                     {{ form_end(form) }}
-                </form>
+                </div>
 
                 
                 <div class="choux-grid-container">

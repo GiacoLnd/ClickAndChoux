@@ -72,4 +72,9 @@ class Allergene
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getNomAllergene();
+    }
 }

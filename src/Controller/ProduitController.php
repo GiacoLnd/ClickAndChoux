@@ -39,16 +39,46 @@ class ProduitController extends AbstractController
     public function chouxSales(
         ProduitRepository $produitRepository,
         CategorieRepository $categorieRepository,
-        Request $request
+        Request $request,
+        EntityManagerInterface $em
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
-
         $query = $request->query->get('query', '');
+        
+        $form = $this->createForm(AllergenType::class, null, [
+            'allergenes' => $em->getRepository(Allergene::class)->findAll(),
+        ]);
+        $form->handleRequest($request);
+        
+
         $produits = $produitRepository->findBy(['categorie' => $categorie]);
+        
+        // Si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $selectedAllergens = $data['allergenes'] ?? [];
+            
+            // Si des allergènes sont sélectionnés
+            if (!empty($selectedAllergens)) {
+                $selectedAllergenIds = [];
+                foreach ($selectedAllergens as $allergene) {
+                    $selectedAllergenIds[] = $allergene->getId();
+                }
+                
+                // Filtre les produits sans les allergènes sélectionnés
+                $produits = $produitRepository->findByExcludedAllergens($selectedAllergenIds, $categorie);
+            }
+        }
+        
+        // Gérer la recherche
+        if (!empty($query)) {
+            $produits = $produitRepository->findBySearchQuery($query, $categorie);
+        }
     
         return $this->render('produit/salty.html.twig', [
             'produits' => $produits,
             'query' => $query,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -59,14 +89,13 @@ class ProduitController extends AbstractController
         CategorieRepository $categorieRepository,
         Request $request
     ): JsonResponse {
-        // On récupère le paramètre 'query' de la requête
+        // Récupère le paramètre 'query' de la requête
         $query = $request->query->get('query', '');
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
 
-        // Effectuer la recherche sur les produits
         $results = $produitRepository->findBySearchQuery($query, $categorie);
 
-        // Préparer les données des produits
+        // Prépare les données des produits
         $produitsData = [];
         foreach ($results as $produit) {
             $produitsData[] = [
@@ -77,7 +106,7 @@ class ProduitController extends AbstractController
             ];
         }
 
-        // Retourner les résultats sous forme de JSON
+        // Retourne les résultats sous forme de JSON
         return new JsonResponse(['produits' => $produitsData]);
     }
 
@@ -97,60 +126,32 @@ class ProduitController extends AbstractController
             'allergenes' => $em->getRepository(Allergene::class)->findAll(),
         ]);
         $form->handleRequest($request);
-
-
-        if ($request->isXmlHttpRequest()) {
-            $results = $produitRepository->findBySearchQuery($query, $categorie);
         
-            // Renvoie les résultats sous forme JSON pour remplacer la liste de produits
-            return $this->json([
-                'produits' => $results,
-            ]);
+        $produits = $produitRepository->findBy(['categorie' => $categorie]);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $selectedAllergens = $data['allergenes'] ?? [];
+            
+            if (!empty($selectedAllergens)) {
+                $selectedAllergenIds = [];
+                foreach ($selectedAllergens as $allergene) {
+                    $selectedAllergenIds[] = $allergene->getId();
+                }
+                
+                $produits = $produitRepository->findByExcludedAllergens($selectedAllergenIds, $categorie);
+            }
+        }
+        
+        if (!empty($query)) {
+            $produits = $produitRepository->findBySearchQuery($query, $categorie);
         }
 
-        $produits = $produitRepository->findBy(['categorie' => $categorie]);
-
-    
         return $this->render('produit/sweety.html.twig', [
             'produits' => $produits,
             'query' => $query, 
             'form' => $form->createView(),
         ]);
-    }
-
-    #[Route('/produit/sweety/filter', name: 'sweety_produit_filter', methods: ['GET'])]
-    public function filterProduits(
-        ProduitRepository $produitRepository,
-        CategorieRepository $categorieRepository,
-        Request $request
-    ): JsonResponse {
-        $allergenesIds = $request->query->get('allergenes', ''); 
-        if ($allergenesIds) {
-            $allergenesIds = explode(',', $allergenesIds);
-        } else {
-            $allergenesIds = [];
-        }
-
-        $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
-
-        if (!$categorie) {
-            return new JsonResponse(['error' => 'Catégorie "Sucré" introuvable'], 400);
-        }
-
-        $produits = $produitRepository->findByExcludedAllergens($allergenesIds, $categorie);
-
-        $produitsData = [];
-        foreach ($produits as $produit) {
-            $produitsData[] = [
-                'id' => $produit->getId(),
-                'nomProduit' => $produit->getNomProduit(),
-                'image' => $produit->getImage(),
-                'getTTC' => $produit->getTTC(),
-            ];
-        }
-
-
-        return new JsonResponse(['produits' => $produitsData]);
     }
 
     #[Route('/produit/sweety/ajax', name: 'ajax_sweety_produit', methods: ['GET'])]
@@ -159,14 +160,14 @@ class ProduitController extends AbstractController
         CategorieRepository $categorieRepository,
         Request $request
     ): JsonResponse {
-        // On récupère le paramètre 'query' de la requête
+        // Récupère le paramètre 'query' de la requête
         $query = $request->query->get('query', '');
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
 
-        // Effectuer la recherche sur les produits
+        // Effectue la recherche sur les produits
         $results = $produitRepository->findBySearchQuery($query, $categorie);
 
-        // Préparer les données des produits
+        // Prépare les données des produits
         $produitsData = [];
         foreach ($results as $produit) {
             $produitsData[] = [
@@ -177,7 +178,7 @@ class ProduitController extends AbstractController
             ];
         }
 
-        // Retourner les résultats sous forme de JSON
+        // Retourne les résultats sous forme de JSON
         return new JsonResponse(['produits' => $produitsData]);
     }
 

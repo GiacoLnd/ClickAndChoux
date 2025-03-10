@@ -45,31 +45,40 @@ document.addEventListener("DOMContentLoaded", function() {
                 try {
                     const data = JSON.parse(text);
 
-                    produitsList.innerHTML = '';
+                    produitsList.innerHTML = '';  // Vide la liste des produits
 
-                    data.produits.forEach(produit => {
-                        const li = document.createElement('li');
-                        const a = document.createElement('a');
-                        a.setAttribute('href', '/produit/' + produit.id);
+                    // Si aucun produit n'est trouvé
+                    if (data.produits.length === 0) {
+                        const noProductMessage = document.createElement('p');
+                        noProductMessage.textContent = 'Aucun produit trouvé';
+                        noProductMessage.classList.add('grid-text');
+                        produitsList.appendChild(noProductMessage);
+                    } else {
+                        // Affiche les produits trouvés
+                        data.produits.forEach(produit => {
+                            const li = document.createElement('li');
+                            const a = document.createElement('a');
+                            a.setAttribute('href', '/produit/' + produit.id);
 
-                        const img = document.createElement('img');
-                        img.setAttribute('src', '/img/' + produit.image);
-                        img.setAttribute('alt', produit.nomProduit);
-                        img.classList.add('catalog-image');
-                        a.appendChild(img);
+                            const img = document.createElement('img');
+                            img.setAttribute('src', '/img/' + produit.image);
+                            img.setAttribute('alt', produit.nomProduit);
+                            img.classList.add('catalog-image');
+                            a.appendChild(img);
 
-                        const h2 = document.createElement('h2');
-                        h2.textContent = produit.nomProduit;
+                            const h2 = document.createElement('h2');
+                            h2.textContent = produit.nomProduit;
 
-                        const p = document.createElement('p');
-                        p.textContent = produit.getTTC + '€';
+                            const p = document.createElement('p');
+                            p.textContent = produit.getTTC + '€';
 
-                        li.appendChild(a);
-                        li.appendChild(h2);
-                        li.appendChild(p);
+                            li.appendChild(a);
+                            li.appendChild(h2);
+                            li.appendChild(p);
 
-                        produitsList.appendChild(li);
-                    });
+                            produitsList.appendChild(li);
+                        });
+                    }
                 } catch (error) {
                     console.error('Erreur lors du parsing JSON:', error);
                 }
@@ -78,10 +87,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Erreur AJAX:', error);
             });
         } else {
-            window.location.href = '/produit/salty';  // Rediriger vers la page sans perdre la position
+            // Si la recherche est vide, redirige vers la page principale sans filtres
+            window.location.href = '/produit/salty';
         }
     });
 });
+
 
 
 // Sucré
@@ -112,31 +123,40 @@ document.addEventListener("DOMContentLoaded", function() {
                 try {
                     const data = JSON.parse(text);
 
-                    produitsList.innerHTML = '';
+                    produitsList.innerHTML = '';  // Vide la liste existante
 
-                    data.produits.forEach(produit => {
-                        const li = document.createElement('li');
-                        const a = document.createElement('a');
-                        a.setAttribute('href', '/produit/' + produit.id);
+                    // Si aucun produit n'est trouvé
+                    if (data.produits.length === 0) {
+                        const noProductMessage = document.createElement('p');
+                        noProductMessage.textContent = 'Aucun produit trouvé';
+                        noProductMessage.classList.add('grid-text');
+                        produitsList.appendChild(noProductMessage);
+                    } else {
+                        // Affiche les produits trouvés
+                        data.produits.forEach(produit => {
+                            const li = document.createElement('li');
+                            const a = document.createElement('a');
+                            a.setAttribute('href', '/produit/' + produit.id);
 
-                        const img = document.createElement('img');
-                        img.setAttribute('src', '/img/' + produit.image);
-                        img.setAttribute('alt', produit.nomProduit);
-                        img.classList.add('catalog-image');
-                        a.appendChild(img);
+                            const img = document.createElement('img');
+                            img.setAttribute('src', '/img/' + produit.image);
+                            img.setAttribute('alt', produit.nomProduit);
+                            img.classList.add('catalog-image');
+                            a.appendChild(img);
 
-                        const h2 = document.createElement('h2');
-                        h2.textContent = produit.nomProduit;
+                            const h2 = document.createElement('h2');
+                            h2.textContent = produit.nomProduit;
 
-                        const p = document.createElement('p');
-                        p.textContent = produit.getTTC + '€';
+                            const p = document.createElement('p');
+                            p.textContent = produit.getTTC + '€';
 
-                        li.appendChild(a);
-                        li.appendChild(h2);
-                        li.appendChild(p);
+                            li.appendChild(a);
+                            li.appendChild(h2);
+                            li.appendChild(p);
 
-                        produitsList.appendChild(li);
-                    });
+                            produitsList.appendChild(li);
+                        });
+                    }
                 } catch (error) {
                     console.error('Erreur lors du parsing JSON:', error);
                 }
@@ -145,17 +165,43 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Erreur AJAX:', error);
             });
         } else {
+            // Si la recherche est vide, redirige vers la page principale sans filtres
             window.location.href = '/produit/sweety';  // Rediriger vers la page sans perdre la position
         }
     });
 });
 
-//AJAX alergen filter 
+
+//Alergen filter 
 //sweety
+document.addEventListener('DOMContentLoaded', function() {
+    const searchBar = document.getElementById('search-bar');
+    const searchButton = document.getElementById('search-button');
+    
+    searchButton.addEventListener('click', function() {
+        const searchQuery = searchBar.value;
+        window.location.href = `/produit/sweety?query=${searchQuery}`;
+    });
+});
 
 
+// Sidepannel for catalog filter 
+var sidePanel = document.getElementById("sidePanel");
+var toggleFilterPanelBtn = document.getElementById("toggleFilterPanelBtn");
+var catalogContainer = document.querySelector(".catalog-container");
 
-// TODO 
+toggleFilterPanelBtn.onclick = function() {
+    if (sidePanel.classList.contains("open")) {
+        sidePanel.classList.remove("open");
+        catalogContainer.classList.remove("shifted");
+        toggleFilterPanelBtn.innerHTML = '<i class="fa-solid fa-angles-right"></i> Filtres'; // Flèche gauche et texte "Filtre"
+    } else {
+        sidePanel.classList.add("open");
+        catalogContainer.classList.add("shifted");
+        toggleFilterPanelBtn.innerHTML = '<i class="fa-solid fa-angles-left"></i> Fermer'; // Flèche droite et texte "Fermer"
+    }
+}
+
 
 
 

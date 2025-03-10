@@ -23,31 +23,59 @@
                     En cas d’allergie, merci de consulter notre page <a href="/">dédiée</a>.
                 </p>
             </div>
-            
+
+            <!-- Live Search Bar -->
             <div>
                 <input type="text" id="search-input" class="search-input" placeholder="Rechercher un produit..." value="{{ query }}">
             </div>
-            
 
-            <div class="choux-grid-container">
-                <!-- Zone des produits qui sera mise à jour dynamiquement -->
-                <ul class="choux-grid" id="produits-list">
-                    {% for produit in produits %}
+            <!-- Filter SidePanel -->
+            <button id="toggleFilterPanelBtn" class="side-panel-btn">
+                <i class="fa-solid fa-angles-right"></i> Filtres
+            </button>
+
+            <div class="catalog-container">
+                <div id="sidePanel" class="side-panel">
+                    <div class="allergene-filter">
+                        {{ form_start(form) }}
+                        
+                        {% for item in form.allergenes %}
+                            <div class="filter-item">
+                                {{ form_row(item) }}
+                            </div>
+                        {% endfor %}
+                        <div class="flex-column-center">
+                            {{ form_widget(form.filtrer) }}
+                        </div>
+                        <a href="{{ path('salty_produit') }}">Réinitialiser</a>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+
+            {% if produits is empty %}
+            <div class="align-self-center">
+                <p>Aucun produit proposé pour l'instant</p>
+            </div>
+            {% else %}
+                <div class="choux-grid-container">
+                    <ul class="choux-grid" id="produits-list">
+                        {% for produit in produits %}
                         <li>
                             <a href="{{ path('produit_detail', {'id': produit.id}) }}">
                                 <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image">
                             </a>
                             {% if app.user %}
-                                <button class="favori-btn" data-id="{{ produit.id }}"><i class="fa-solid fa-heart"></i></button>
+                            <button class="favori-btn" data-id="{{ produit.id }}"><i class="fa-solid fa-heart"></i></button>
                             {% endif %}
                             <a href="{{ path('produit_detail', {'id': produit.id}) }}">
                                 <h2>{{ produit.nomProduit }}</h2>
                             </a>
                             <p>{{ produit.getTTC }}€</p>
                         </li>
-                    {% endfor %}
-                </ul>
-            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </section>
 {% endblock %}

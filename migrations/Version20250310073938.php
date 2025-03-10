@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250307094849 extends AbstractMigration
+final class Version20250310073938 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,7 +24,7 @@ final class Version20250307094849 extends AbstractMigration
         $this->addSql('CREATE TABLE produit_allergene (produit_id INT NOT NULL, allergene_id INT NOT NULL, INDEX IDX_17B47409F347EFB (produit_id), INDEX IDX_17B474094646AB2 (allergene_id), PRIMARY KEY(produit_id, allergene_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE produit_allergene ADD CONSTRAINT FK_17B47409F347EFB FOREIGN KEY (produit_id) REFERENCES produit (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE produit_allergene ADD CONSTRAINT FK_17B474094646AB2 FOREIGN KEY (allergene_id) REFERENCES allergene (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE produit ADD allergene VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE produit DROP allergene');
     }
 
     public function down(Schema $schema): void
@@ -34,6 +34,6 @@ final class Version20250307094849 extends AbstractMigration
         $this->addSql('ALTER TABLE produit_allergene DROP FOREIGN KEY FK_17B474094646AB2');
         $this->addSql('DROP TABLE allergene');
         $this->addSql('DROP TABLE produit_allergene');
-        $this->addSql('ALTER TABLE produit DROP allergene');
+        $this->addSql('ALTER TABLE produit ADD allergene VARCHAR(255) NOT NULL');
     }
 }

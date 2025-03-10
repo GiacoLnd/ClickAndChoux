@@ -56,16 +56,23 @@ class ProduitRepository extends ServiceEntityRepository
     }
     public function findByExcludedAllergens(array $allergenesIds, $categorie)
     {
+        // Cette requête va trouver les produits qui ne contiennent PAS les allergènes sélectionnés
         $queryBuilder = $this->createQueryBuilder('p')
-            ->leftJoin('p.allergenes', 'a')
             ->leftJoin('p.categorie', 'c')
-            ->andWhere('a.id NOT IN (:allergenesIds)') 
-            ->setParameter('allergenesIds', $allergenesIds)
-            ->andWhere('c.id = :categorieId') 
-            ->setParameter('categorieId', $categorie->getId())
-            ->groupBy('p.id');
-    
+            ->andWhere('c.id = :categorieId')
+            ->setParameter('categorieId', $categorie->getId());
+        
+        if (!empty($allergenesIds)) {
+            // Exclure les produits qui ont AU MOINS UN des allergènes sélectionnés
+            $queryBuilder->andWhere('p.id NOT IN (
+                SELECT DISTINCT pa.id 
+                FROM App\Entity\Produit pa 
+                JOIN pa.allergenes a 
+                WHERE a.id IN (:allergenesIds)
+            )')
+            ->setParameter('allergenesIds', $allergenesIds);
+        }
+        
         return $queryBuilder->getQuery()->getResult();
     }
-    
 }
