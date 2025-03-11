@@ -12,8 +12,15 @@
         {% for message in app.flashes('danger') %}
             <div class="alert alert-danger">{{ message }}</div>
         {% endfor %}
-
-            {{ form_start(form) }}
+        
+        <p>
+            Vous êtes un particulier ou une entreprise et avez un évènement en préparation ?<br> 
+            Nous sommes là pour vous accompagner. <br>
+            Il vous suffit de remplir ce formulaire, nous prendrons contact avec vous
+            pour, par la suite, créer une douceur parfaitement adaptées à vos besoins et à vos envies.
+        </p>
+        
+        {{ form_start(form) }}
 
         <div class="flex-row-center">
             <div class="flex-column-center">
@@ -39,7 +46,7 @@
             <button type="submit" class="bubblegum-link">
                 Valider
             </button>
-            {{ form_end(form) }}
+        {{ form_end(form) }}
         </div>
         <div class="flex-column-center">
             <a class="bubblegum-link" href="{{ path('app_home') }}">Retour à la page d'accueil</a>

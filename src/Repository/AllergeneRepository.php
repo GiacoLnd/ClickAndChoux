@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Allergene;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Categorie;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Allergene>
@@ -41,6 +42,16 @@ class AllergeneRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-
+    // Récupère les allergènes par catégorie de produit
+    public function findAllergensByCategory(Categorie $categorie)
+{
+    return $this->createQueryBuilder('a')
+        ->join('a.produits', 'p') 
+        ->where('p.categorie = :categorie')  
+        ->setParameter('categorie', $categorie)
+        ->groupBy('a.id') 
+        ->getQuery()
+        ->getResult();
+}
 
 }

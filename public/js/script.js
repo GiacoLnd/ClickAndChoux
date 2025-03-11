@@ -173,16 +173,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 //Alergen filter 
-//sweety
-document.addEventListener('DOMContentLoaded', function() {
-    const searchBar = document.getElementById('search-bar');
-    const searchButton = document.getElementById('search-button');
+// //sweety
+// document.addEventListener('DOMContentLoaded', function() {
+//     const searchBar = document.getElementById('search-bar');
+//     const searchButton = document.getElementById('search-button');
     
-    searchButton.addEventListener('click', function() {
-        const searchQuery = searchBar.value;
-        window.location.href = `/produit/sweety?query=${searchQuery}`;
-    });
-});
+//     searchButton.addEventListener('click', function() {
+//         const searchQuery = searchBar.value;
+//         window.location.href = `/produit/sweety?query=${searchQuery}`;
+//     });
+// });
+
+// //salty
+// document.addEventListener('DOMContentLoaded', function() {
+//     const searchBar = document.getElementById('search-bar');
+//     const searchButton = document.getElementById('search-button');
+    
+//     searchButton.addEventListener('click', function() {
+//         const searchQuery = searchBar.value;
+//         window.location.href = `/produit/salty?query=${searchQuery}`;
+//     });
+// });
 
 
 // Sidepannel for catalog filter 
@@ -194,11 +205,11 @@ toggleFilterPanelBtn.onclick = function() {
     if (sidePanel.classList.contains("open")) {
         sidePanel.classList.remove("open");
         catalogContainer.classList.remove("shifted");
-        toggleFilterPanelBtn.innerHTML = '<i class="fa-solid fa-angles-right"></i> Filtres'; // Flèche gauche et texte "Filtre"
+        toggleFilterPanelBtn.innerHTML = '<i class="fa-solid fa-angles-right"></i> Filtres';
     } else {
         sidePanel.classList.add("open");
         catalogContainer.classList.add("shifted");
-        toggleFilterPanelBtn.innerHTML = '<i class="fa-solid fa-angles-left"></i> Fermer'; // Flèche droite et texte "Fermer"
+        toggleFilterPanelBtn.innerHTML = '<i class="fa-solid fa-angles-left"></i> Fermer';
     }
 }
 

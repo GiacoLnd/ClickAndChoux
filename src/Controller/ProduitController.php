@@ -10,6 +10,7 @@ use App\Entity\Allergene;
 use App\Entity\Categorie;
 use App\Form\AllergenType;
 use App\Controller\PanierController;
+use App\Repository\AllergeneRepository;
 use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
@@ -39,26 +40,27 @@ class ProduitController extends AbstractController
     public function chouxSales(
         ProduitRepository $produitRepository,
         CategorieRepository $categorieRepository,
+        AllergeneRepository $allergeneRepository,
         Request $request,
-        EntityManagerInterface $em
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
-        $query = $request->query->get('query', '');
+        $query = filter_var($request->query->get('query', ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // filtre les caractères spéciaux (balises et symboles utilisés par Techno) - Faille XSS
         
+        $allergenesDisponibles = $allergeneRepository->findAllergensByCategory($categorie); // Utilise la fonction de tri des allergènes par catégorie de produit
+
         $form = $this->createForm(AllergenType::class, null, [
-            'allergenes' => $em->getRepository(Allergene::class)->findAll(),
+            'allergenes' => $allergenesDisponibles, // Récupère les allergènes disponibles pour la catégorie
         ]);
         $form->handleRequest($request);
         
 
         $produits = $produitRepository->findBy(['categorie' => $categorie]);
-        
-        // Si le formulaire est soumis et valide
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $selectedAllergens = $data['allergenes'] ?? [];
             
-            // Si des allergènes sont sélectionnés
+            // Si allergènes sélectionnés
             if (!empty($selectedAllergens)) {
                 $selectedAllergenIds = [];
                 foreach ($selectedAllergens as $allergene) {
@@ -70,7 +72,6 @@ class ProduitController extends AbstractController
             }
         }
         
-        // Gérer la recherche
         if (!empty($query)) {
             $produits = $produitRepository->findBySearchQuery($query, $categorie);
         }
@@ -89,8 +90,7 @@ class ProduitController extends AbstractController
         CategorieRepository $categorieRepository,
         Request $request
     ): JsonResponse {
-        // Récupère le paramètre 'query' de la requête
-        $query = $request->query->get('query', '');
+        $query = filter_var($request->query->get('query', ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS); // filtre les caractères spéciaux (balises et symboles utilisés par Techno) - Faille XSS
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
 
         $results = $produitRepository->findBySearchQuery($query, $categorie);
@@ -98,11 +98,11 @@ class ProduitController extends AbstractController
         // Prépare les données des produits
         $produitsData = [];
         foreach ($results as $produit) {
-            $produitsData[] = [
-                'id' => $produit->getId(),
-                'nomProduit' => $produit->getNomProduit(),
-                'image' => $produit->getImage(),
-                'getTTC' => $produit->getTTC(),
+            $produitsData[] = [ // Filtre des sorties envoyées au JS pour AJAX - Faille XSS - Echappement des sorties
+                'id' => filter_var($produit->getId(), FILTER_SANITIZE_NUMBER_INT), // ressort uniquement un entier
+                'nomProduit' => htmlspecialchars($produit->getNomProduit(), ENT_QUOTES, 'UTF-8'), // utilisation de htmlspecialchars pour échapper les caractères spéciaux mais garder le nom du produit original (FILTER_SANITIZE_FULL_SPECIAL_CHARS échappant TOUT, aussi les ')
+                'image' => htmlspecialchars($produit->getImage()), // idem que nom du produit - nom de l'image échappé, image non affiché correctement
+                'getTTC' => filter_var($produit->getTTC(), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION), // ressort un float - autorise le .
             ];
         }
 
@@ -116,40 +116,45 @@ class ProduitController extends AbstractController
     public function chouxSucres(
         ProduitRepository $produitRepository,
         CategorieRepository $categorieRepository,
+        AllergeneRepository $allergeneRepository,
         Request $request,
-        EntityManagerInterface $em,
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
-        $query = $request->query->get('query', '');
+        $query = filter_var($request->query->get('query', ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // filtre les caractères spéciaux (balises et symboles utilisés par Techno) - Faille XSS
         
+        $allergenesDisponibles = $allergeneRepository->findAllergensByCategory($categorie); // Utilise la fonction de tri des allergènes par catégorie de produit
+
         $form = $this->createForm(AllergenType::class, null, [
-            'allergenes' => $em->getRepository(Allergene::class)->findAll(),
-        ]);
+            'allergenes' => $allergenesDisponibles, // Récupère les allergènes disponibles pour la catégorie
+        ]); 
         $form->handleRequest($request);
         
+
         $produits = $produitRepository->findBy(['categorie' => $categorie]);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $selectedAllergens = $data['allergenes'] ?? [];
             
+            // Si allergènes sélectionnés
             if (!empty($selectedAllergens)) {
-                $selectedAllergenIds = [];
-                foreach ($selectedAllergens as $allergene) {
-                    $selectedAllergenIds[] = $allergene->getId();
+                $selectedAllergenIds = []; // créé un tableau vide
+                foreach ($selectedAllergens as $allergene) { 
+                    $selectedAllergenIds[] = $allergene->getId(); // insère l'allergène via son id dans le tableau vide
                 }
                 
+                // Filtre les produits sans les allergènes sélectionnés
                 $produits = $produitRepository->findByExcludedAllergens($selectedAllergenIds, $categorie);
             }
-        }
-        
+        }            
+
         if (!empty($query)) {
             $produits = $produitRepository->findBySearchQuery($query, $categorie);
         }
-
+    
         return $this->render('produit/sweety.html.twig', [
             'produits' => $produits,
-            'query' => $query, 
+            'query' => $query,
             'form' => $form->createView(),
         ]);
     }
@@ -161,7 +166,7 @@ class ProduitController extends AbstractController
         Request $request
     ): JsonResponse {
         // Récupère le paramètre 'query' de la requête
-        $query = $request->query->get('query', '');
+        $query = filter_var($request->query->get('query', ''), FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // filtre les caractères spéciaux (balises et symboles utilisés par Techno) - Faille XSS - Echappement des entrées
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
 
         // Effectue la recherche sur les produits
@@ -170,11 +175,11 @@ class ProduitController extends AbstractController
         // Prépare les données des produits
         $produitsData = [];
         foreach ($results as $produit) {
-            $produitsData[] = [
-                'id' => $produit->getId(),
-                'nomProduit' => $produit->getNomProduit(),
-                'image' => $produit->getImage(),
-                'getTTC' => $produit->getTTC(),
+            $produitsData[] = [ // Filtre des sorties envoyées au JS pour AJAX - Faille XSS - Echappement des sorties
+                'id' => filter_var($produit->getId(), FILTER_SANITIZE_NUMBER_INT), // ressort uniquement un entier
+                'nomProduit' => htmlspecialchars($produit->getNomProduit(), ENT_QUOTES, 'UTF-8'), // utilisation de htmlspecialchars pour échapper les caractères spéciaux mais garder le nom du produit original (FILTER_SANITIZE_FULL_SPECIAL_CHARS échappant aussi les ')
+                'image' => htmlspecialchars($produit->getImage()), // idem que nom du produit - nom de l'image échappé, image non affiché correctement
+                'getTTC' => filter_var($produit->getTTC(), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION), // ressort un float - autorise le .
             ];
         }
 
