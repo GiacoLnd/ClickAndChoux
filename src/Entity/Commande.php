@@ -59,6 +59,12 @@ class Commande
     #[ORM\Column(nullable: true)]
     private ?array $historique = [];
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeSessionId = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $statutPaiement = "en attente de paiement";
+
   
 
 
@@ -243,6 +249,30 @@ class Commande
     public function setHistorique(?array $historique): static
     {
         $this->historique = $historique;
+
+        return $this;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): static
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
+
+    public function getStatutPaiement(): ?string
+    {
+        return $this->statutPaiement;
+    }
+
+    public function setStatutPaiement(string $statutPaiement): static
+    {
+        $this->statutPaiement = $statutPaiement;
 
         return $this;
     }

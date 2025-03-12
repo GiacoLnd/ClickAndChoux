@@ -44,91 +44,84 @@ final class CommandeController extends AbstractController
 
 
     #[Route('/commande/confirmer', name: 'commande_confirmer')]
-    public function confirmerCommande(Request $request, EntityManagerInterface $entityManager, Security $security, DeliveryTimeService $deliveryTimeService): Response
-    {
+    public function confirmerCommande(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        Security $security,
+        DeliveryTimeService $deliveryTimeService
+    ): Response {
         $user = $this->getUser();
-
+    
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
-
-        // Récupère la commande "panier"
+    
+        // Récupération commande
         $commande = $entityManager->getRepository(Commande::class)->findOneBy([
             'user' => $user,
             'statut' => 'panier'
         ]);
-
-        if (!$security->isGranted('ROLE_ADMIN') && $commande->getUser() !== $user) {
-            throw $this->createAccessDeniedException("Accès non-autorisé");
-        }
-
+    
         if (!$commande || $commande->getPaniers()->isEmpty()) {
             $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('panier_afficher');
         }
-
-        // Génération d'une référence unique si elle n'existe pas
+    
+        if (!$security->isGranted('ROLE_ADMIN') && $commande->getUser() !== $user) {
+            throw $this->createAccessDeniedException("Accès non autorisé");
+        }
+    
+        // Génération référence unique
         if (!$commande->getReference()) {
             do {
                 $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
             } while ($entityManager->getRepository(Commande::class)->findOneBy(['reference' => $reference]));
-
+    
             $commande->setReference($reference);
         }
-
-        // Calcul du montant total
+    
+        // Calcul du montant total avec frais de livraison (mis à jour immédiatement)
         $total = 0.0;
+        $deliveryFees = 300; // Stripe fonctionne en centimes - garde la même logique
         foreach ($commande->getPaniers() as $panier) {
-            $total += $panier->getProduit()->getTTC() * $panier->getQuantity();
+            $total += $panier->getProduit()->getTTC() * $panier->getQuantity() * 100; // Conversion en centimes
         }
-        $commande->setMontantTotal($total);
+        $total += $deliveryFees;
+        $commande->setMontantTotal($total / 100); // Stocké en euros
+    
+        // Calcul date livraison
+        $orderDate = (new \DateTime())->format('Y-m-d'); 
+        $isHoliday = $deliveryTimeService->isHoliday($orderDate);
+        $deliveryDate = $deliveryTimeService->calculateDeliveryDate($commande->getDateCommande()?->format('H:i') ?? '12:00', $isHoliday);
+        $commande->setDateLivraison($deliveryDate);
+    
+        // Flush immédiat pour date livraison et Montant total
+        $entityManager->flush();
+    
+        // Si l'utilisateur laisse finalement sa commande en attente et qu'il revient plus tard, le fait de revenir sur cette page mets automatiquement à jour la date de livraison
 
-        // Gestion de l'historique JSON final
-        $historiqueProduits = [];
-        foreach ($commande->getPaniers() as $panier) {
-            $produit = $panier->getProduit();
-            $historiqueProduits[] = [
-                'id' => $produit->getId(),
-                'nomProduit' => $produit->getNomProduit(),
-                'prixHt' => $produit->getPrixHt(),
-                'TVA' => $produit->getTVA(),
-                'prixTTC' => round($produit->getPrixHt() * (1 + $produit->getTVA() / 100), 2),
-                'image' => $produit->getImage(),
-                'categorie' => $produit->getCategorie()->getNomCategorie(),
-                'quantite' => $panier->getQuantity(),
-            ];
-        }
-        $commande->setHistorique(['produits' => $historiqueProduits]);
-
-        // Création du formulaire d'adresse de livraison
+        // Formulaire adresse de livraison
         $form = $this->createForm(LivraisonType::class, $commande);
         $form->handleRequest($request);
-
-        // Calcul du délai de livraison avec date exacte
-        $orderTime = $commande->getDateCommande()->format('H:i');  // Heure de la commande
-        $orderDate = (new \DateTime())->format('Y-m-d');  // Date de la commande
-        $isHoliday = $deliveryTimeService->isHoliday($orderDate);  // Vérifier si c'est un jour férié
-        $deliveryDate = $deliveryTimeService->calculateDeliveryDate($orderTime, $isHoliday);  // Calculer la date de livraison
-
-        // Traitement du formulaire d'adresse de livraison
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $commande->setStatut('confirmée');
-            $commande->setDateCommande(new \DateTime());
-            $commande->setDateLivraison($deliveryDate);
-
+            // Mise à jour statut commande
+            $commande->setStatut("en attente de paiement");
             $entityManager->flush();
-            $this->addFlash('success', 'Commande confirmée avec succès !');
-            
-            return $this->redirectToRoute('commande_confirmation', ['id' => $commande->getId()]);
+    
+            $this->addFlash('success', 'Adresse de livraison enregistrée. Vous allez être redirigé vers le paiement.');
+    
+            // Redirection paiement Stripe
+            return $this->redirectToRoute('payment_stripe', ['reference' => $commande->getReference()]);
         }
-        
-        // Rendre la page de confirmation avec la date de livraison
+
         return $this->render('commande/confirmation.html.twig', [
             'commande' => $commande,
             'form' => $form->createView(),
-            'delivery_date' => $deliveryDate->format('d/m/Y'),  // Passer la date de livraison au format souhaité
+            'delivery_date' => $deliveryDate->format('d/m/Y'),
         ]);
     }
+    
     
     #[Route('/commande/confirmation/{id}', name: 'commande_confirmation')]
     public function confirmationCommande(Commande $commande, Security $security): Response
