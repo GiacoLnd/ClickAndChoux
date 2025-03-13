@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Cocur\Slugify\Slugify;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+
 class Commande
 {
     #[ORM\Id]
@@ -65,12 +68,16 @@ class Commande
     #[ORM\Column(length: 50)]
     private ?string $statutPaiement = "en attente de paiement";
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
   
 
 
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
+        $this->dateCommande = new \DateTime();
     }
 
     public function getId(): ?int
@@ -277,5 +284,21 @@ class Commande
         return $this;
     }
 
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
 
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function generateSlug(){
+        if($this->reference) {
+            $this->slug = (new Slugify())->slugify($this->reference);
+        }
+    }
 }

@@ -12,23 +12,21 @@ class PostalCodeService
         $this->httpClient = $httpClient;
     }
 
+    // TODO : API code postaux data.gouv.fr
     public function getPostalCodes(string $query)
     {
         try {
-            // Appel à l'API des codes postaux de data.gouv.fr
             $response = $this->httpClient->request('GET', 'https://api-adresse.data.gouv.fr/search/', [
                 'query' => [
-                    'q' => $query, // La ville, commune, ou code postal
-                    'type' => 'municipality', // On peut aussi utiliser 'postcode' selon le besoin
+                    'q' => $query, 
+                    'type' => 'municipality', 
                 ],
             ]);
 
-            // Récupérer les données en tant que tableau
             $data = $response->toArray();
 
-            return $data['features']; // Retourne les résultats des communes
+            return $data['features'];
         } catch (\Exception $e) {
-            // Gérer les erreurs
             return ['error' => $e->getMessage()];
         }
     }

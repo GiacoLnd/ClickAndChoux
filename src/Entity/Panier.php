@@ -6,6 +6,7 @@ use App\Repository\PanierRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PanierRepository::class)]
+
 class Panier
 {
     #[ORM\Id]
@@ -21,7 +22,7 @@ class Panier
 
     #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'paniers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Commande $commande = null; // Correction : "commande" avec un "c" minuscule
+    private ?Commande $commande = null;
 
     public function getId(): ?int
     {

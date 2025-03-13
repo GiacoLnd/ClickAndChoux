@@ -123,7 +123,7 @@ final class CommandeController extends AbstractController
     }
     
     
-    #[Route('/commande/confirmation/{id}', name: 'commande_confirmation')]
+    #[Route('/commande/confirmation/{slug}', name: 'commande_confirmation')]
     public function confirmationCommande(Commande $commande, Security $security): Response
     {
         $user = $this->getUser();
@@ -137,7 +137,7 @@ final class CommandeController extends AbstractController
     }
 
 
-    #[Route('/commande/{id}', name: 'commande_detail', methods: ['GET'])]
+    #[Route('/commande/{slug}', name: 'commande_detail', methods: ['GET'])]
     public function detailCommande(Commande $commande, Security $security): Response
     {
         $user = $this->getUser();

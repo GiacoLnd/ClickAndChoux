@@ -52,7 +52,7 @@ class PaymentController extends AbstractController{
         $productStripe[] = [
             'price_data' => [
                 'currency' => 'eur',
-                'unit_amount' => 300, // Stripe fonctionne en centimes
+                'unit_amount' => 300, // Stripe fonctionne en centimes - 3€ de frais de livraison
                 'product_data' => [
                     'name' => 'Frais de livraison',
                 ]
@@ -111,7 +111,7 @@ class PaymentController extends AbstractController{
     
         $this->addFlash('success', 'Votre paiement a été validé !');
     
-        return $this->redirectToRoute('commande_confirmation', ['id' => $commande->getId()]);
+        return $this->redirectToRoute('commande_confirmation', ['slug' => $commande->getSlug()]);
     }
 
     #[Route('/commande/error/{reference}', name: 'payment_error')]
@@ -138,7 +138,7 @@ class PaymentController extends AbstractController{
 
         $this->addFlash('error', 'Le paiement a échoué. Veuillez réessayer.');
 
-        return $this->redirectToRoute('commande_confirmer', ['reference' => $commande->getReference()]);
+        return $this->redirectToRoute('commande_confirmer', ['slug' => $commande->getSlug()]);
     }
 }
 

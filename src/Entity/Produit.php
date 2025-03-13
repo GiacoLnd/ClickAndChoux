@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Cocur\Slugify\Slugify;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+
 class Produit
 {
     #[ORM\Id]
@@ -51,6 +54,9 @@ class Produit
      */
     #[ORM\ManyToMany(targetEntity: Allergene::class, inversedBy: 'produits')]
     private Collection $allergenes;
+
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
 
     public function __construct()
@@ -228,5 +234,23 @@ class Produit
         $this->allergenes->removeElement($allergene);
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function generateSlug(){
+        if($this->nomProduit) {
+            $this->slug = (new Slugify())->slugify($this->nomProduit);
+        }
     }
 }

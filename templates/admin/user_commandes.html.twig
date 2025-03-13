@@ -7,14 +7,20 @@
         <h2 class="page-title">Commande de {{ user.nickName }} :</h2>
         {% if commandes is empty %}
             <p>Aucune commande passée pour le moment.</p>
+            <div class="flex-column-center">
+                <a class="bubblegum-link" href="{{ path('admin_list_user') }}">Retour</a>
+            </div>
         {% else %}
             <table id="table">
                 <thead>
                     <tr>
                         <th>N° Commande</th>
-                        <th>Date</th>
+                        <th>Date de commande</th>
+                        <th>Date de paiement</th>
+                        <th>Date de livraison</th>
                         <th>Montant Total</th>
-                        <th>Statut</th>
+                        <th>Statut de la commande</th>
+                        <th>Statut du paiement</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -23,6 +29,8 @@
                         <tr>
                             <td>{{ commande.reference }}</td>
                             <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                            <td>{{ commande.datePaiement|date('d/m/Y H:i') }}</td>
+                            <td>{{ commande.dateLivraison|date('d/m/Y H:i') }}</td>
                             <td>{{ commande.montantTotal }}€</td>
                             <td>
                             {% if commande.statut == 'confirmée' %}
@@ -31,12 +39,19 @@
                                 <span class="badge bg-warning">{{ commande.statut }}</span>
                             {% endif %}
                             </td>
-                            <td><a href="{{ path('commande_detail', { id: commande.id }) }}" class="bubblegum-link">Voir</a></td>
+                            <td>
+                            {% if commande.statutPaiement == 'payé' %}
+                                <span class="badge bg-success">Payée</span>
+                            {% else %}
+                                <span class="badge bg-alert">{{ commande.statut }}</span>
+                            {% endif %}
+                            </td>
+                            <td><a href="{{ path('commande_detail', { 'slug': commande.slug }) }}" class="bubblegum-link">Voir</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <div class="d-flex justify-content-center align-items-center p-3">
+            <div class="flex-column-center">
                 <a class="bubblegum-link" href="{{ path('admin_list_user') }}">Retour</a>
             </div>
         {% endif %}

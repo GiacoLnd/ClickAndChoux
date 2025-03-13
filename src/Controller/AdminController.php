@@ -133,6 +133,10 @@ final class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($produit->getNomProduit()){
+                $produit->generateSlug();
+            }
+
             // Récupération de l'image transmise
             $imageFile = $form->get('image')->getData();
             // Gestion du nom du fichier

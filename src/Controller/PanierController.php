@@ -276,7 +276,7 @@ class PanierController extends AbstractController
         $user = $this->getUser();
     
         $response = [
-            'success'      => false,
+            'success'      => false, 
             'message'      => '',
             'newQuantity'  => 0,
             'newTotal'     => 0,

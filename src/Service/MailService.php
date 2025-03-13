@@ -33,7 +33,7 @@ class MailService
         $htmlContent = $this->twig->render('invoice/invoice_email.html.twig', [
             'user' => $commande->getUser(),
             'commande' => $commande,
-            'url_facture' => 'http://127.0.0.1:8000/facture/'.$commande->getId(),
+            'url_facture' => 'http://127.0.0.1:8000/facture/'.$commande->getSlug(),
             'logoBase64' => $logoBase64,
             'logoMimeType' => $logoMimeType
         ]);

@@ -189,7 +189,7 @@ class ProduitController extends AbstractController
 
     // Fonction d'affichage des détails produit
     // Attention : cette fonction gère l'ajout au panier avec une adaptation de la quantité via un input number
-    #[Route('/produit/{id}', name: 'produit_detail', methods: ['GET', 'POST'])]
+    #[Route('/produit/{slug}', name: 'produit_detail', methods: ['GET', 'POST'])]
     public function detailProduit(
         Produit $produit,
         Request $request,
@@ -234,7 +234,6 @@ class ProduitController extends AbstractController
                     if (!$commande) {
                         $commande = new Commande();
                         $commande->setStatut('panier');
-                        $commande->setDateCommande(new \DateTime());
                         $commande->setUser($user);
                         $commande->setMontantTotal(0.0);
         
@@ -245,6 +244,7 @@ class ProduitController extends AbstractController
         
                         $commande->setReference($reference);
                         $commande->setHistorique([]); // Initialisation de l'historique
+                        $commande->generateSlug();
                         $em->persist($commande);
                         $em->flush();
                     }

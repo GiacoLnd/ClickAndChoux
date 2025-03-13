@@ -65,9 +65,11 @@ class LoginListener implements EventSubscriberInterface
             // Génère une référence unique pour la commande
             do {
                 $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
-            } while ($this->entityManager->getRepository(Commande::class)->findOneBy(['reference' => $reference]));
+                } 
+            while ($this->entityManager->getRepository(Commande::class)->findOneBy(['reference' => $reference]));
 
             $nouvelleCommande->setReference($reference);
+            $nouvelleCommande->generateSlug();
 
             $this->entityManager->persist($nouvelleCommande);
 
@@ -89,6 +91,25 @@ class LoginListener implements EventSubscriberInterface
             }
 
             $nouvelleCommande->setMontantTotal($total);
+
+            $historiqueProduit = [
+                'id' => $produit->getId(),
+                'nomProduit' => $produit->getNomProduit(),
+                'prixHt' => $produit->getPrixHt(),
+                'TVA' => $produit->getTVA(),
+                'prixTTC' => round($produit->getPrixHt() * (1 + $produit->getTVA() / 100), 2),
+                'description' => $produit->getDescription(),
+                'allergene' => $produit->getAllergenes(),
+                'image' => $produit->getImage(),
+                'categorie' => $produit->getCategorie() ? $produit->getCategorie()->getNomCategorie() : "Non défini",
+                'quantite' => $quantity
+            ];
+
+            // Ajout produit dans l'historique de la commande
+            $historiqueCommande = $nouvelleCommande->getHistorique();
+            $historiqueCommande['produits'][] = $historiqueProduit;
+            $nouvelleCommande->setHistorique($historiqueCommande);
+
             $this->entityManager->flush();
 
             // Supprime le panier en session après transfert
