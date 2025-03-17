@@ -44,7 +44,7 @@ class AllergeneRepository extends ServiceEntityRepository
 
     // Récupère les allergènes par catégorie de produit
     public function findAllergensByCategory(Categorie $categorie)
-{
+    {
     return $this->createQueryBuilder('a')
         ->join('a.produits', 'p') 
         ->where('p.categorie = :categorie')  
@@ -52,6 +52,6 @@ class AllergeneRepository extends ServiceEntityRepository
         ->groupBy('a.id') 
         ->getQuery()
         ->getResult();
-}
+    }
 
 }

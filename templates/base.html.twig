@@ -78,7 +78,7 @@
                 </div>
                 <div id="navbar-container">
                     <div class="navbar-logo">
-                        <img src="{{ asset('img/logobis.png') }}" alt="ClickAndChoux" class="logo">
+                        <a href="{{ path('app_home') }}"><img src="{{ asset('img/logobis.png') }}" alt="ClickAndChoux" class="logo"></a>
                         <a href="{{ path('app_home') }}" class="navbar-title">Click&Choux</a>
                     </div>
                     <ul class="navbar-list" id="navbar-list">
@@ -103,7 +103,7 @@
             <div class="footer-top">
                 <div class="footer-logo">
                     <img src="{{ asset('img/logobis.png') }}" alt="ClickAndChoux" class="logo">
-                    <a href="{{ path('app_home') }}" class="footer-title">Click&Choux</a>
+                    <a href="{{ path('app_home') }}" class="navbar-title">Click&Choux</a>
                 </div>
                 <div class="footer-links">
                     <ul role="navigation" aria-labelledby="footer-links-heading">
@@ -125,13 +125,13 @@
                 <div class="footer-links">
                     <ul role="navigation">
                         <h3>Catalogues</h3>
-                        <li><a href="">Côté sucré</a></li>
-                        <li><a href="">Coté salé</a></li>
-                        <li><a href="">Demande de devis</a></li>
+                        <li><a href="{{ path('sweety_produit') }}">Choux sucrés</a></li>
+                        <li><a href="{{ path('salty_produit') }}">Choux salés</a></li>
+                        <li><a href="{{ path('app_contact') }}">Demande de devis</a></li>
                     </ul>
                 </div>
                 <div class="footer-scroll">
-                    <button class="scrollTopButton" aria-label="Scroll to top">
+                    <button class="scrollTopButton" id="retour-haut" aria-label="Scroll to top">
                         <i class="fa-solid fa-circle-arrow-up"></i>
                     </button>
                 </div>
@@ -139,7 +139,8 @@
             <hr class="footer-break">
             <div class="footer-bottom">
             <div class="footer-newsletter">
-                <input type="text" placeholder="Enter your email" aria-label="Enter your email" class="footer-input">
+                <p>Abonnez-vous pour recevoir toutes nos nouveautés en exclusivité </p>
+                <input type="text" placeholder="Entrez votre email" aria-label="Enter your email" class="footer-input">
                 <button type="submit" class="footer-button">
                     <i class="fa-solid fa-caret-right"></i>
                 </button>

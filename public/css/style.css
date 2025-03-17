@@ -16,7 +16,6 @@
     --footer-right-bg: #4F1926;
     --footer-right-bg: linear-gradient(42deg, rgba(33,7,13,1) 3%, rgba(130,40,62,1) 89%);
     --navbar-bg-primary: #FFFFFF;
-    --navbar-bg-secondary: #FFFFFF;
 }
 /* Style commun */ 
 /* Polices communes */
@@ -766,6 +765,7 @@ footer{
     .footer-top{
         display: flex;
         justify-content: space-around;
+        align-items: flex-start;
         padding: 20px;
         width: 100%;
 
@@ -775,10 +775,14 @@ footer{
             display: flex;
             flex-direction: column;
         }
-        a{
-            color: white;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 0.9em;
+        .footer-logo{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            a{
+                color: white;
+            }
         }
         
         p{
@@ -794,7 +798,12 @@ footer{
         .footer-links ul{
             display: flex;
             flex-direction: column;
-            align-items: start;
+            align-items: center;
+            
+            a{
+                font-family: "Open sans", sans-serif;
+                font-size: 0.9em;
+            }
 
         }
         .footer-scroll{
@@ -821,7 +830,14 @@ footer{
         justify-content: space-around;
         
         .footer-newsletter{
-
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 15px;
+            
+            p{
+                color: white;
+            }
             input{
                 border-radius: 5px;
                 position: relative;

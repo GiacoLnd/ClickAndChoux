@@ -453,4 +453,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Return top button
+const retourHaut = document.getElementById('retour-haut');
 
+retourHaut.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
