@@ -83,11 +83,14 @@
                     </div>
                     <ul class="navbar-list" id="navbar-list">
                         <li><a href="{{ path('salty_produit') }}" class="menu-item">Choux Salés</a></li>
-                        <li>|</li>
+                        <li class="vert-bar">|</li>
+                        <li class="horizontal-bar">-</li>
                         <li><a href="{{ path('sweety_produit') }}" class="menu-item">Choux Sucrés</a></li>
-                        <li>|</li>
+                        <li class="vert-bar">|</li>
+                        <li class="horizontal-bar">-</li>
                         <li><a href="{{ path('app_contact') }}" class="menu-item">Contactez-nous</a></li>
-                        <li>|</li>
+                        <li class="vert-bar">|</li>
+                        <li class="horizontal-bar">-</li>
                         <li><a href="/" class="menu-item">F.A.Q</a></li>
                     </ul>
                         <button class="burger" id="burger-button" aria-label="Menu">
@@ -101,13 +104,9 @@
         </main>
         <footer class="footer" role="contentinfo">
             <div class="footer-top">
-                <div class="footer-logo">
-                    <img src="{{ asset('img/logobis.png') }}" alt="ClickAndChoux" class="logo">
-                    <a href="{{ path('app_home') }}" class="navbar-title">Click&Choux</a>
-                </div>
                 <div class="footer-links">
                     <ul role="navigation" aria-labelledby="footer-links-heading">
-                        <h3>Informations légales</h3>
+                        <li class="fw-bold">Informations légales</li>
                         <li><a href="">Mentions légales</a></li>
                         <li><a href="">Conditions générales de vente</a></li>
                         <li><a href="">Politique de confidentialité</a></li>
@@ -115,7 +114,7 @@
                 </div>
                 <div class="footer-links">
                     <ul role="navigation">
-                        <h3>En savoir plus</h3>
+                        <li class="fw-bold">En savoir plus</li>
                         <li><a href="">F.A.Q.</a></li>
                         <li><a href="">Qui sommes-nous ?</a></li>
                         <li><a href="">Nos partenaires</a></li>
@@ -124,34 +123,28 @@
                 </div>
                 <div class="footer-links">
                     <ul role="navigation">
-                        <h3>Catalogues</h3>
+                        <li class="fw-bold">Catalogues</li>
                         <li><a href="{{ path('sweety_produit') }}">Choux sucrés</a></li>
                         <li><a href="{{ path('salty_produit') }}">Choux salés</a></li>
                         <li><a href="{{ path('app_contact') }}">Demande de devis</a></li>
                     </ul>
                 </div>
+            </div>
+            <hr class="footer-break"> <!-- hr : ligne horizontale -->
+            <div class="footer-bottom">
                 <div class="footer-scroll">
                     <button class="scrollTopButton" id="retour-haut" aria-label="Scroll to top">
                         <i class="fa-solid fa-circle-arrow-up"></i>
                     </button>
                 </div>
+                <div class="footer-social">
+                    <div class="social-icons" role="navigation" aria-labelledby="social-heading">
+                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
             </div>
-            <hr class="footer-break">
-            <div class="footer-bottom">
-            <div class="footer-newsletter">
-                <p>Abonnez-vous pour recevoir toutes nos nouveautés en exclusivité </p>
-                <input type="text" placeholder="Entrez votre email" aria-label="Enter your email" class="footer-input">
-                <button type="submit" class="footer-button">
-                    <i class="fa-solid fa-caret-right"></i>
-                </button>
-            </div>
-            <div class="social" role="navigation" aria-labelledby="social-heading">
-                <h3 id="social-heading" class="sr-only">Follow us on social media</h3>
-                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            </div>
-        </div>
         </footer>
         </div>
         

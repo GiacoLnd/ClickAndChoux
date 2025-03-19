@@ -35,15 +35,18 @@
     
     .navbar-list {
         list-style-type: none;
-        padding: 10px;
+        padding: 5px;
         display: none !important;
         background: transparent;
-        gap: 5px !important;
-        font-size: 1.3em !important;
-        margin-right: 50px;
         background: var(--link-color);
         position: relative;
 
+        .vert-bar{
+            display: none;
+        }
+        .horizontal-bar{
+            display: block !important;
+        }
 
         li{
             padding: 5px !important;
@@ -132,6 +135,7 @@
     }
     .navbar-list{
         margin-right: 0;
+
     }
     .navbar-title {
         font-size: 1.8em;
@@ -145,37 +149,22 @@
     }
     #wrapper {
         & footer {
-            .footer-container {
-                display: flex;
+            .footer-top{
                 flex-direction: column;
+                align-items: center;
                 justify-content: center;
-                margin-top: 20px;
-                padding-top: 10px;
-                height:auto;
-                
-                .footer-left {
-                    display: flex;
-                    flex-direction: row;
-                    width: auto;
-                    flex-wrap: wrap;
-                    justify-content: center;
+                gap: 20px;
 
-                    .footer-logo{
-                        flex-wrap:wrap;
-                    }
-                }
-                .footer-right {
-                    width: auto;
-                    color: white;
-                    background: var(--footer-right-bg);
+                .footer-links ul{
                     display: flex;
-                    font-size: 0.7em;
-                    padding: 10px;
-                    ul{
-                        display: flex;
-                        flex-wrap: wrap;
-                        justify-content: center; 
-                        align-items: center;   
+                    flex-direction: column;
+                    align-items: center;
+                    padding-left: 0;
+                    
+                    a{
+                        font-family: "Open sans", sans-serif;
+                        font-size: 0.9em;
+                        color: white;
                     }
                 }
             }
@@ -328,9 +317,6 @@
     .navbar-logo .logo {
         width: 80px;
         height: 80px;
-    }
-    .navbar-list {
-
     }
     #wrapper {
         & #navbar-container {
