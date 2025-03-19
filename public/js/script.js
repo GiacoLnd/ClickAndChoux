@@ -327,27 +327,27 @@ document.addEventListener('DOMContentLoaded', function () {
             '/produit/sweety',
         ];
         
-        // Vérifie si l'URL actuelle correspond à un catalogue
+        // Vérifie si URL correspond à un catalogue
         if (urlsCatalogs.includes(window.location.pathname)) {
-                var sidePanel = document.getElementById("sidePanel");
-                var toggleFilterPanelBtn = document.getElementById("toggleFilterPanelBtn");
-                var catalogContainer = document.querySelector(".catalog-container");
-
-                toggleFilterPanelBtn.onclick = function() {
-                    if (sidePanel.classList.contains("open")) {
-                        sidePanel.classList.remove("open");
-                        catalogContainer.classList.remove("shifted");
-                        toggleFilterPanelBtn.innerHTML = '<i class="fa-solid fa-angles-right"></i> Filtres';
-                    } else {
-                        sidePanel.classList.add("open");
-                        catalogContainer.classList.add("shifted");
-                        toggleFilterPanelBtn.innerHTML = '<i class="fa-solid fa-angles-left"></i> Fermer';
-                    }
+            var sidePanel = document.getElementById("sidePanel");
+            var toggleFilterPanelBtn = document.getElementById("toggleFilterPanelBtn");
+            var catalogContainer = document.querySelector(".catalog-container");
+    
+            // Ouvrir/Fermer le side panel
+            toggleFilterPanelBtn.onclick = function() {
+                sidePanel.classList.toggle("open");
+                catalogContainer.classList.toggle("shifted");
+            };
+    
+            // Ferme le side panel si clic en dehors
+            document.addEventListener("click", function(event) {
+                if (sidePanel.classList.contains("open") && !sidePanel.contains(event.target) && event.target !== toggleFilterPanelBtn) {
+                    sidePanel.classList.remove("open");
+                    catalogContainer.classList.remove("shifted");
                 }
-            }
-
+            });
         }
-    );
+    });
 
 // Sidepannel for catalog filter 
 

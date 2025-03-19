@@ -29,11 +29,6 @@
                 <input type="text" id="search-input" class="search-input" placeholder="Rechercher un produit..." value="{{ query }}">
             </div>
 
-            <!-- Filter SidePanel -->
-            <button id="toggleFilterPanelBtn" class="side-panel-btn">
-                <i class="fa-solid fa-angles-right"></i> Filtres
-            </button>
-
             <div class="catalog-container">
                 <div id="sidePanel" class="side-panel">
                     <div class="allergene-filter">
@@ -56,7 +51,13 @@
             <div class="align-self-center">
                 <p>Aucun produit proposé pour l'instant</p>
             </div>
-            {% else %}
+            {% else %} 
+            <div class="flex-column-center">          <!-- Filter SidePanel -->
+                <button id="toggleFilterPanelBtn" class="side-panel-btn">
+                    <i class="fa-solid fa-sliders"></i> Filtres
+                </button>
+            </div> 
+
                 <div class="choux-grid-container">
                     <ul class="choux-grid" id="produits-list">
                         {% for produit in produits %}
