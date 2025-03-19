@@ -75,20 +75,6 @@
             padding: 10px; 
             width: 100%;
             place-items: center;
-
-            li {
-                text-align: center;
-                background: transparent;
-                width: 160px;
-                height: 250px;
-                margin: 10px 0 20px 0;
-                a{
-                    .catalog-image{
-                        width: 150px;
-                        height: auto;
-                    }
-                } 
-            }
         }
     }
     .flex-column-center input[type="text"], .flex-column-center input[type="number"], .flex-column-center input[type="email"], .flex-column-center input[type="password"] {
@@ -183,19 +169,6 @@
             grid-template-columns: repeat(2, auto);
             padding: 10px; 
 
-            li {
-                text-align: center;
-                background: transparent;
-                width: 160px;
-                height: 250px;
-                margin: 10px 0 20px 0;
-                a{
-                    .catalog-image{
-                        width: 150px;
-                        height: auto;
-                    }
-                } 
-            }
         }
     }
     .details-container {
