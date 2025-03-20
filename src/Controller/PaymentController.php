@@ -6,15 +6,16 @@ use Stripe\Stripe;
 use App\Entity\Panier;
 use App\Entity\Produit;
 use App\Entity\Commande;
+use Cocur\Slugify\Slugify;
 use Stripe\Checkout\Session;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Cocur\Slugify\Slugify;
 
 class PaymentController extends AbstractController{
 
@@ -27,11 +28,11 @@ class PaymentController extends AbstractController{
         $this->generator = $generator;
     }
     #[Route('/create-session-stripe', name: 'payment_stripe')]
-    public function StripeCheckout(SessionInterface $session, UrlGeneratorInterface $generator): RedirectResponse
+    public function StripeCheckout(SessionInterface $session, UrlGeneratorInterface $generator, Request $request): RedirectResponse
     {
         // Récupère la commande en session
         $commandeSession = $session->get('commande');
-        dump($commandeSession);
+
         if (!$commandeSession) {
             $this->addFlash('error', 'Aucune commande trouvée.');
             return $this->redirectToRoute('panier_afficher');
@@ -106,14 +107,24 @@ class PaymentController extends AbstractController{
         $commande->setStatut("en cours");
         $commande->setMontantTotal($commandeSession['total']);
         $commande->setDateLivraison(new \DateTime($commandeSession['delivery_date']));
-        $commande->setAdresseLivraison($commandeSession['adresseLivraison']);
-        $commande->setCodePostalLivraison($commandeSession['codePostalLivraison']);
-        $commande->setVilleLivraison($commandeSession['villeLivraison']);
         $commande->setDatePaiement(new \DateTime());
-   
+    
         if (!empty($commandeSession['stripe_session_id'])) {
             $commande->setStripeSessionId($commandeSession['stripe_session_id']);
         }
+    
+        // Ajout des infos de livraison et de facturation
+        $commande->setNomLivraison($commandeSession['nomLivraison'] ?? '');
+        $commande->setPrenomLivraison($commandeSession['prenomLivraison'] ?? '');
+        $commande->setAdresseLivraison($commandeSession['adresseLivraison'] ?? '');
+        $commande->setCodePostalLivraison($commandeSession['codePostalLivraison'] ?? '');
+        $commande->setVilleLivraison($commandeSession['villeLivraison'] ?? '');
+    
+        $commande->setNomFacturation($commandeSession['nomFacturation'] ?? '');
+        $commande->setPrenomFacturation($commandeSession['prenomFacturation'] ?? '');
+        $commande->setAdresseFacturation($commandeSession['adresseFacturation'] ?? '');
+        $commande->setCodePostalFacturation($commandeSession['codePostalFacturation'] ?? '');
+        $commande->setVilleFacturation($commandeSession['villeFacturation'] ?? '');
     
         // Génération de la référence unique 
         do {
@@ -121,8 +132,8 @@ class PaymentController extends AbstractController{
         } while ($em->getRepository(Commande::class)->findOneBy(['reference' => $reference]));
     
         $commande->setReference($reference);
-
-        // Insertion du slug de la commandedans la base de données
+    
+        // Génération du slug pour la commande
         $slugify = new Slugify();
         $slug = $slugify->slugify($reference);
         $commande->setSlug($slug);
@@ -132,16 +143,27 @@ class PaymentController extends AbstractController{
             'reference' => $reference,
             'dateCommande' => (new \DateTime())->format('Y-m-d H:i:s'),
             'datePaiement' => (new \DateTime())->format('Y-m-d H:i:s'),
-            'montantTotal' => $commandeSession['total'],
+            'montantTotal' => round($commandeSession['total'], 2), // arrondi à deux décimales
             'statutPaiement' => "payé",
-            'adresseLivraison' => $commandeSession['adresseLivraison'],
-            'codePostalLivraison' => $commandeSession['codePostalLivraison'],
-            'villeLivraison' => $commandeSession['villeLivraison'],
+            'adresseLivraison' => [
+                'nom' => $commandeSession['nomLivraison'] ?? '',
+                'prenom' => $commandeSession['prenomLivraison'] ?? '',
+                'adresse' => $commandeSession['adresseLivraison'] ?? '',
+                'codePostal' => $commandeSession['codePostalLivraison'] ?? '',
+                'ville' => $commandeSession['villeLivraison'] ?? '',
+            ],
+            'adresseFacturation' => [
+                'nom' => $commandeSession['nomFacturation'] ?? '',
+                'prenom' => $commandeSession['prenomFacturation'] ?? '',
+                'adresse' => $commandeSession['adresseFacturation'] ?? '',
+                'codePostal' => $commandeSession['codePostalFacturation'] ?? '',
+                'ville' => $commandeSession['villeFacturation'] ?? '',
+            ],
             'dateLivraison' => $commandeSession['delivery_date'],
             'produits' => [],
         ];
-
-        // Ajout des produits commandés
+    
+        // Ajout des produits
         foreach ($commandeSession['cart'] as $item) {
             $produit = $em->getRepository(Produit::class)->find($item['id']);
             if ($produit) {
@@ -150,7 +172,7 @@ class PaymentController extends AbstractController{
                 $panier->setQuantity($item['quantite']);
                 $panier->setCommande($commande);
                 $em->persist($panier);
-
+    
                 // Ajout des produits dans l'historique JSON de la table Commande
                 $historiqueCommande['produits'][] = [
                     'id' => $produit->getId(),
@@ -163,14 +185,14 @@ class PaymentController extends AbstractController{
                 ];
             }
         }
-
+    
         $commande->setHistorique($historiqueCommande);
     
         // Enregistrement de la commande en base de données
         $em->persist($commande);
         $em->flush();
-    
-        // Suppression de la commande de la session
+
+        // Suppression des données en session
         $session->remove('commande');
         $session->remove('panier');
     
@@ -178,6 +200,8 @@ class PaymentController extends AbstractController{
     
         return $this->redirectToRoute('commande_confirmation', ['slug' => $reference]);
     }
+    
+    
     
 
     #[Route('/commande/error', name: 'payment_error')]

@@ -15,6 +15,7 @@
     --footer-left-bg-secondary: #FFC18B;
     --footer-right-bg: #894e3f;
     --navbar-bg-primary: #FFFFFF;
+    --price-color: #894e3f;
 }
 /* Style commun */ 
 /* Polices communes */
@@ -105,7 +106,7 @@ select{
     padding: 12px;
     margin: 30px;
     border: none;
-    border-radius: 50px;
+    border-radius: 10px;
     transition: background-color 0.3s linear;
     transition: all 0.3s linear;
 
@@ -728,6 +729,9 @@ body{
 .cart-content{
     font-size: 1.2em;
     font-family: var(--font-family-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
     
     .cart-product{
         display: flex;
@@ -747,6 +751,14 @@ body{
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
+
+                .product-identification{
+
+                    .line-total{
+                        color: var(--price-color);
+                        font-weight: bold;
+                    }
+                }
             }
             
             .cart-image{
@@ -798,6 +810,11 @@ body{
             margin-bottom: 10px; 
         }
     }
+}
+.commande-form{
+    display: flex;
+    justify-content: space-around;
+    width: 50vw;
 }
 /* Fin commande */
 /* DataTables */

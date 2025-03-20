@@ -22,21 +22,33 @@
                 {% endfor %}
             </div>
 
-            <p>Frais de livraisons : + {{ delivery_fees }}€</p>
+            <p>Frais de livraison : + {{ delivery_fees }}€</p>
             <h3>Montant total : {{ commande.total|number_format(2, ',', ' ') }} €</h3>
-            
-            <h3>Date de livraison estimée : {{ commande.delivery_date|date('d/m/Y') }}</h3>
+            <h3>Date de livraison estimée : {{ delivery_date }}</h3>
 
-            <h2 class="page-title">Adresse de livraison</h2>
             <div class="flex-column-center">
+                <h2 class="page-title">Adresse de livraison et facturation</h2>
                 {{ form_start(form) }}
-                    {{ form_row(form.adresseLivraison) }}
-                    {{ form_row(form.codePostalLivraison) }}
-                    {{ form_row(form.villeLivraison) }}
+                    <div class="commande-form">
+                        <div class="flex-column-center">
+                            <h3>Livraison</h3>
+                            {{ form_row(form.nomLivraison) }}
+                            {{ form_row(form.prenomLivraison) }}
+                            {{ form_row(form.adresseLivraison) }}
+                            {{ form_row(form.codePostalLivraison) }}
+                            {{ form_row(form.villeLivraison) }}
+                        </div>
+                        <div class="flex-column-center">
+                            <h3>Facturation</h3>
+                            {{ form_row(form.nomFacturation) }}
+                            {{ form_row(form.prenomFacturation) }}
+                            {{ form_row(form.adresseFacturation) }}
+                            {{ form_row(form.codePostalFacturation) }}
+                            {{ form_row(form.villeFacturation) }}
+                        </div>
+                    </div>
                     <div class="flex-column-center">
-                        <button type="submit" class="bubblegum-link">
-                            Valider la commande
-                        </button>
+                        {{ form_row(form.submit) }}
                     </div>
                 {{ form_end(form) }}
             </div>

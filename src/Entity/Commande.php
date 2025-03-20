@@ -71,6 +71,27 @@ class Commande
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nomLivraison = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $prenomLivraison = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nomFacturation = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $prenomFacturation = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $adresseFacturation = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $codePostalFacturation = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $villeFacturation = null;
+
   
 
 
@@ -300,5 +321,89 @@ class Commande
         if($this->reference) {
             $this->slug = (new Slugify())->slugify($this->reference);
         }
+    }
+
+    public function getNomLivraison(): ?string
+    {
+        return $this->nomLivraison;
+    }
+
+    public function setNomLivraison(?string $nomLivraison): static
+    {
+        $this->nomLivraison = $nomLivraison;
+
+        return $this;
+    }
+
+    public function getPrenomLivraison(): ?string
+    {
+        return $this->prenomLivraison;
+    }
+
+    public function setPrenomLivraison(?string $prenomLivraison): static
+    {
+        $this->prenomLivraison = $prenomLivraison;
+
+        return $this;
+    }
+
+    public function getNomFacturation(): ?string
+    {
+        return $this->nomFacturation;
+    }
+
+    public function setNomFacturation(?string $nomFacturation): static
+    {
+        $this->nomFacturation = $nomFacturation;
+
+        return $this;
+    }
+
+    public function getPrenomFacturation(): ?string
+    {
+        return $this->prenomFacturation;
+    }
+
+    public function setPrenomFacturation(?string $prenomFacturation): static
+    {
+        $this->prenomFacturation = $prenomFacturation;
+
+        return $this;
+    }
+
+    public function getAdresseFacturation(): ?string
+    {
+        return $this->adresseFacturation;
+    }
+
+    public function setAdresseFacturation(?string $adresseFacturation): static
+    {
+        $this->adresseFacturation = $adresseFacturation;
+
+        return $this;
+    }
+
+    public function getCodePostalFacturation(): ?string
+    {
+        return $this->codePostalFacturation;
+    }
+
+    public function setCodePostalFacturation(?string $codePostalFacturation): static
+    {
+        $this->codePostalFacturation = $codePostalFacturation;
+
+        return $this;
+    }
+
+    public function getVilleFacturation(): ?string
+    {
+        return $this->villeFacturation;
+    }
+
+    public function setVilleFacturation(?string $villeFacturation): static
+    {
+        $this->villeFacturation = $villeFacturation;
+
+        return $this;
     }
 }

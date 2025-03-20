@@ -21,13 +21,10 @@
                 {% for item in paniers %}
                     <div class="cart-product">
                         <div class="cart-item" data-price="{{ item.prixTTC }}">
-                            <div class="product-identification">
+                            <div class="product-gestion">
                                 <a href="{{ path('produit_detail', {'slug': item.slug}) }}">
                                     <img src="/img/{{ item.image ?? 'default.jpg' }}" alt="{{ item.nom }}" class="cart-image">
                                 </a>
-                                {{ item.nom }}
-                            </div>
-                            <div class="product-gestion">
                                 <!-- Diminution -->
                                 <button data-id="{{ item.id }}" class="bubblegum-link decrease-btn">
                                     <i class="fa-solid fa-minus"></i>
@@ -40,18 +37,17 @@
                                 <button data-id="{{ item.id }}" class="bubblegum-link increase-btn">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
-                                    
-                                <!-- Prix total unitaire -->
-                                <span id="line-total-{{ item.id }}"> 
-                                    {{ (item.prixTTC * item.quantite)|number_format(2, '.', '') }}
-                                </span> € TTC
-
                                 <!-- Suppression -->
                                 <form action="{{ path('panier_remove', { id: item.id }) }}" method="post" style="display: inline;">
                                     <button type="submit" class="delete-link hover-rotate">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
+                                <div class="product-identification">
+                                    {{ item.nom }} - <span id="line-total-{{ item.id }}" class="line-total"> 
+                                        {{ (item.prixTTC * item.quantite)|number_format(2, '.', '') }}
+                                    </span> € TTC
+                                </div>
                             </div>
                         </div>
                     </div>
