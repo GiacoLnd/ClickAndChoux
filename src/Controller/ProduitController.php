@@ -95,7 +95,6 @@ class ProduitController extends AbstractController
 
         $results = $produitRepository->findBySearchQuery($query, $categorie);
 
-        // Prépare les données des produits
         $produitsData = [];
         foreach ($results as $produit) {
             $produitsData[] = [ // Filtre des sorties envoyées au JS pour AJAX - Faille XSS - Echappement des sorties
@@ -106,7 +105,6 @@ class ProduitController extends AbstractController
             ];
         }
 
-        // Retourne les résultats sous forme de JSON
         return new JsonResponse(['produits' => $produitsData]);
     }
 
@@ -183,7 +181,6 @@ class ProduitController extends AbstractController
             ];
         }
 
-        // Retourne les résultats sous forme de JSON
         return new JsonResponse(['produits' => $produitsData]);
     }
 
@@ -193,134 +190,56 @@ class ProduitController extends AbstractController
     public function detailProduit(
         Produit $produit,
         Request $request,
-        SessionInterface $session,
-        EntityManagerInterface $em,
-        PanierRepository $panierRepository,
-        CommandeRepository $commandeRepository
+        SessionInterface $session
     ): Response {
         
-        $user = $this->getUser();
-
-        $panier = new Panier();
-        $form = $this->createFormBuilder($panier)
-            ->add('quantity', IntegerType::class, [
-                'label' => 'Quantité',
-                'attr' => [
-                    'min' => 1,
-                    'value' => 1,
-                    'class' => 'quantity',
-                ],
-            ])
-            ->add('ajouter', SubmitType::class, [
-                'label' => 'Ajouter au panier',
-                'attr' => [
-                    'class' => 'bubblegum-link', 
-                ],
-            ])
-            ->getForm();
-
+        $form = $this->createForm(PanierType::class);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $quantity = (int) $form->get('quantity')->getData();
-        
-            if ($quantity < 0) {
+    
+            if ($quantity < 1) {
                 $this->addFlash('danger', 'La quantité doit être supérieure à 0 !');
             } else {
-                if ($user) {
-                    // Vérification si une commande "panier" existe pour cet utilisateur
-                    $commande = $commandeRepository->findOneBy(['statut' => 'panier', 'user' => $user]);
-        
-                    if (!$commande) {
-                        $commande = new Commande();
-                        $commande->setStatut('panier');
-                        $commande->setUser($user);
-                        $commande->setMontantTotal(0.0);
-        
-                        // Génération de la référence unique
-                        do {
-                            $reference = 'CMD-' . strtoupper(bin2hex(random_bytes(4)));
-                        } while ($commandeRepository->findOneBy(['reference' => $reference]));
-        
-                        $commande->setReference($reference);
-                        $commande->setHistorique([]); // Initialisation de l'historique
-                        $commande->generateSlug();
-                        $em->persist($commande);
-                        $em->flush();
-                    }
-        
-                    // Vérification si produit est déjà dans le panier pour cette commande
-                    $existingPanier = $panierRepository->findOneBy(['produit' => $produit, 'commande' => $commande]);
-        
-                    if ($existingPanier) {
-                        $existingPanier->setQuantity($existingPanier->getQuantity() + $quantity);
-                    } else {
-                        $panier->setProduit($produit);
-                        $panier->setQuantity($quantity);
-                        $panier->setCommande($commande);
-                        $em->persist($panier);
-                    }
-        
-                    // Récupération des infos pour l'historique
-                    $historiqueProduit = [
+                // Récupération du panier en session
+                $cart = $session->get('panier', []);
+    
+                if (isset($cart[$produit->getId()])) {
+                    // Mise à jour quantité
+                    $cart[$produit->getId()]['quantite'] += $quantity;
+                } else {
+                    // Ajout du produit 
+                    $cart[$produit->getId()] = [
                         'id' => $produit->getId(),
-                        'nomProduit' => $produit->getNomProduit(),
+                        'nom' => $produit->getNomProduit(),
                         'prixHt' => $produit->getPrixHt(),
                         'TVA' => $produit->getTVA(),
-                        'prixTTC' => round($produit->getPrixHt() * (1 + $produit->getTVA() / 100), 2),
-                        'description' => $produit->getDescription(),
-                        'allergene' => $produit->getAllergenes(),
-                        'image' => $produit->getImage(),
-                        'categorie' => $produit->getCategorie() ? $produit->getCategorie()->getNomCategorie() : "Non défini",
+                        'prixTTC' => round($produit->getTTC(), 2),
+                        'categorie' => $produit->getCategorie(),
                         'quantite' => $quantity
                     ];
-        
-                    // Ajout produit dans l'historique de la commande
-                    $historiqueCommande = $commande->getHistorique();
-                    $historiqueCommande['produits'][] = $historiqueProduit;
-                    $commande->setHistorique($historiqueCommande);
-        
-                    // Mise à jour montant total
-                    $montantTotal = 0;
-                    foreach ($commande->getPaniers() as $p) {
-                        $montantTotal += $p->getTotalTTC();
-                    }
-                    $commande->setMontantTotal($montantTotal);
-        
-                    $em->flush();
-                } else {
-                    // Si user non connecté -> Session
-                    $cart = $session->get('panier', []);
-    
-                    if (isset($cart[$produit->getId()])) {
-                        // Mise à jour de la quantité si panier
-                        $cart[$produit->getId()] += $quantity;
-                    } else {
-                        // Ajout de la quantité si pas dans panier
-                        $cart[$produit->getId()] = $quantity;
-                    }
-    
-                    // Mise à jour de la session avec le panier modifié
-                    $session->set('panier', $cart);
-    
-                    $this->addFlash('success', 'Produit ajouté au panier !');
                 }
     
+                // Mise à jour de la session
+                $session->set('panier', $cart);
+    
+                $this->addFlash('success', 'Produit ajouté au panier !');
+    
                 // Redirection vers la page de catégorie
-                if ($produit->getCategorie()->getNomCategorie() === 'Sucré') {
+                if ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Sucré') {
                     return $this->redirectToRoute('sweety_produit');
-                } elseif ($produit->getCategorie()->getNomCategorie() === 'Salé') {
+                } elseif ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Salé') {
                     return $this->redirectToRoute('salty_produit');
                 }
             }
         }
-
-        $allergenes = $produit->getAllergenes();
-
+    
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
             'form' => $form->createView(),
-            'allergenes' => $allergenes,
+            'allergenes' => $produit->getAllergenes(),
         ]);
     }
+    
 }

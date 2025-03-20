@@ -59,7 +59,7 @@ class Commande
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $villeLivraison = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: "json", nullable: true)]
     private ?array $historique = [];
 
     #[ORM\Column(length: 255, nullable: true)]

@@ -7,7 +7,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Entity\Commande;
 
 class LivraisonType extends AbstractType
 {
@@ -56,7 +55,8 @@ class LivraisonType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Commande::class,
+            'data_class' => null,
+            'allow_extra_fields' => true,
         ]);
     }
 }

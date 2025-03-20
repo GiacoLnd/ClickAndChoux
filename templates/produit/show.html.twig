@@ -24,20 +24,20 @@
                     <p><span class="details-price">{{ produit.getTTC }}€</span> / la boite de six</p>
                     <p>{{ produit.description }}</p>
                 </div>
-                {{ form_start(form) }}
                 <div class="allergene-details">
                     <p>Liste des allergènes :</p>
                     {% for allergene in allergenes %}
-                    <li>{{ allergene.nomAllergene }}</li> {# Affichage du nom de chaque allergène #}
+                        <li>{{ allergene.nomAllergene }}</li>
                     {% else %}
-                    <li>Aucun allergène associé.</li>
+                        <li>Aucun allergène associé.</li>
                     {% endfor %}
                 </div>
+                {{ form_start(form) }}
                 <div id="quantity-container">
                     {{ form_widget(form.quantity) }}
-                    {{ form_widget(form.ajouter) }}
-                    {{ form_end(form) }}
+                    <button type="submit" class="bubblegum-link">Ajouter au panier</button>
                 </div>
+            {{ form_end(form) }}
             </div>
         </div>
     </section>

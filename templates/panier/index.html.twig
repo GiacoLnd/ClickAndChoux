@@ -13,42 +13,52 @@
         {% endfor %}
 
         <h1 class="page-title">Votre Panier</h1>
+        
         {% if paniers is empty %}
             <p class="catalog-description">Votre panier est vide.</p>
-        {% else %} 
+        {% else %}
             <div class="cart-content">
                 {% for item in paniers %}
                     <div class="cart-product">
-                        <div class="cart-item" data-price="{{ item.produit.getTTC }}">
+                        <div class="cart-item" data-price="{{ item.prixTTC }}">
                             <div class="product-identification">
-                                <a href="{{ path('produit_detail', {'slug': item.produit.slug}) }}"><img src="/img/{{ item.produit.image }}" alt="{{ item.produit.nomProduit }}" class="cart-image"></a>
-                                {{ (item.produit.nomProduit) }} 
+                                <a href="{{ path('produit_detail', {'slug': item.slug}) }}">
+                                    <img src="/img/{{ item.image ?? 'default.jpg' }}" alt="{{ item.nom }}" class="cart-image">
+                                </a>
+                                {{ item.nom }}
                             </div>
                             <div class="product-gestion">
                                 <!-- Diminution -->
-                                <button data-id="{{ item.produit.id }}" class="bubblegum-link decrease-btn" id="decrease-btn">
+                                <button data-id="{{ item.id }}" class="bubblegum-link decrease-btn">
                                     <i class="fa-solid fa-minus"></i>
                                 </button>
                                 
-                                <!-- Quantité Dynamique-->
-                                <span id="quantity-{{ item.produit.id }}">{{ item.quantity }}</span>
+                                <!-- Quantité Dynamique -->
+                                <span id="quantity-{{ item.id }}">{{ item.quantite }}</span>
                                 
                                 <!-- Augmentation -->
-                                <button data-id="{{ item.produit.id }}" class="bubblegum-link increase-btn" id="increase-btn">
+                                <button data-id="{{ item.id }}" class="bubblegum-link increase-btn">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                                     
                                 <!-- Prix total unitaire -->
-                                <span id="line-total-{{ item.produit.id }}"> {{ (item.produit.getTTC * item.quantity)|number_format(2, '.', '')  }} TTC</span> €
+                                <span id="line-total-{{ item.id }}"> 
+                                    {{ (item.prixTTC * item.quantite)|number_format(2, '.', '') }}
+                                </span> € TTC
 
-                                <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
-                                    <button type="submit" class="delete-link hover-rotate"><i class="fa-solid fa-trash"></i></button>
+                                <!-- Suppression -->
+                                <form action="{{ path('panier_remove', { id: item.id }) }}" method="post" style="display: inline;">
+                                    <button type="submit" class="delete-link hover-rotate">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-                <!-- Montant total -->
+            </div>
+
+            <!-- Montant total -->
             <h3 id="montant-total">Total : {{ montantTotal|number_format(2, ',', ' ') }} €</h3>
                     
             <form action="{{ path('commande_valider') }}" method="post" class="flex-column-center">
@@ -56,6 +66,7 @@
                     Valider le panier
                 </button>
             </form>
+
             <form action="{{ path('panier_clear') }}" method="post">
                 <button type="submit" class="delete-link">
                     Supprimer le panier
@@ -64,6 +75,3 @@
         {% endif %}
     </section>
 {% endblock %}
-
-
-

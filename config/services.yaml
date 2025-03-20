@@ -25,14 +25,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-        
-    App\EventListener\LoginListener:
-        arguments:
-            $router: '@router'
-            $requestStack: '@request_stack' # Injection correcte de la session via RequestStack
-            $entityManager: '@doctrine.orm.entity_manager'
-        tags:
-            - { name: kernel.event_subscriber }
 
     App\Service\PostalCodeService:
         arguments:

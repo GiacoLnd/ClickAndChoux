@@ -30,43 +30,25 @@ class NavbarListener
     #[AsEventListener(event: KernelEvents::CONTROLLER, priority: 100)]
     public function onKernelController(ControllerEvent $event): void
     {
-        // Retrieving the current token
-        $token = $this->tokenStorage->getToken();
-        
-        // Extracting User from Token, else null
-        $user = $token ? $token->getUser() : null;
-    
-        // Initializing quantity
+        // Initialisation de la quantité
         $quantity = 0;
-
-        // If user connected
-        if ($user) {
-            // Fetching last (sorted by id DESC) command of the user with status "panier" 
-            $commande = $this->entityManager->getRepository(Commande::class)
-                ->findOneBy(['user' => $user, 'statut' => 'panier'], ['id' => 'DESC']);
-            
-            // fetching product from commande
-            $panier = $commande ? $this->entityManager->getRepository(Panier::class)->findBy(['commande' => $commande]) : [];
-            $result = 0;
-            foreach($panier as $p){
-                $result += $p->getQuantity();
-            }
-            $quantity = $result;
-        }  else {
-            // If not connected, fetching product from session
-            $session = $this->requestStack->getSession();
+    
+        // Récupération de la session
+        $session = $this->requestStack->getSession();
+    
+        if ($session->has('panier')) {
             $panier = $session->get('panier', []);
     
-            $result = 0;
-            foreach($panier as $productId => $quantity) {
-                $result += $quantity;  // Accumulate the quantity of products in session
+            // Calcul de la quantité totale des produits en panier
+            foreach ($panier as $productId => $item) {
+                if (is_array($item) && isset($item['quantite'])) {
+                    $quantity += (int) $item['quantite']; // Préparation d'un int pour la valeur de $quantity
+                }
             }
-    
-            $quantity = $result;
         }
-        // Sharing Panier with all TWIG templates
+        
+        // Partage de la quantité avec tous les templates Twig
         $this->twig->addGlobal('quantity', $quantity);
     }
 }
-    
 
