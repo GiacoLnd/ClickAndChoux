@@ -320,6 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
+// Sidepannel for catalog filter 
     document.addEventListener('DOMContentLoaded', function() {
         // Vérifie si l'URL contient "/catalogue"
         const urlsCatalogs = [
@@ -348,9 +349,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
-
-// Sidepannel for catalog filter 
-
 
 
 // Datatables scripts 

@@ -39,7 +39,7 @@
                                 </button>
                                     
                                 <!-- Prix total unitaire -->
-                                <span id="line-total-{{ item.produit.id }}"> {{ (item.produit.getTTC * item.quantity)|number_format(2, '.', '')  }} </span> €
+                                <span id="line-total-{{ item.produit.id }}"> {{ (item.produit.getTTC * item.quantity)|number_format(2, '.', '')  }} TTC</span> €
 
                                 <form action="{{ path('panier_remove', { id: item.produit.id }) }}" method="post" style="display: inline;">
                                     <button type="submit" class="delete-link hover-rotate"><i class="fa-solid fa-trash"></i></button>

@@ -531,6 +531,8 @@ body{
                 flex-direction: column;
                 align-items: center;
                 overflow: hidden;
+                box-shadow: rgba(0, 0, 0, 0.16) 1px 1px 4px;
+                margin: 15px;
                 
 
                 a{
@@ -612,21 +614,19 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    padding: 10px;
+    padding: 15px;
     margin: 20px; 
-    text-align: start;
+    width: 100vw;
     
     .details-image{
-        width: 250px;
-        height: 250px;
-        border: 2px solid var(--font-color);
-        border-radius: 50px;
+        width: 30vw;
+        height: 50%;
+        border-radius: 10px;
         object-fit: cover;
-        border: var(--font-color) solid 1px;
         transition: transform 0.2s ease-out;
         transform-origin: right center;
         cursor: pointer;
+        margin-right: 3rem;
         .zoom{
             transform: scale(1.7);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -635,18 +635,21 @@ body{
     .list-details{
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        align-items: flex-start;
+        gap: 20px;
         padding: 10px;
         margin-left: 15px;
         font-size: var(--font-size);
         font-weight: 500;
         .details-description{
-            padding: 10px 0 0 0;
+            text-align: start;
             .details-title{
-                font-family: var(--link-family-primary);
                 color: var(--font-color);
-                font-size: 1.8em;
+                font-size: 1.5em;
             }
+        }
+        .allergene-details{
+            text-align: start;
         }
         .details-allergene{
             font-weight: 300;
@@ -655,9 +658,9 @@ body{
             padding: 10px 0 20px 0;
         }
         .details-price{
-            font-weight: 400;
             font-size: 1.3em;
-            padding: 15px 10px 10px 0;
+            color: var(--footer-right-bg);
+            font-weight: bold;
         }
         #quantity-container {
             display: flex;

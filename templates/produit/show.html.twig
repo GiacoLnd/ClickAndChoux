@@ -20,18 +20,19 @@
             </div>
             <div class="list-details">
                 <div class="details-description">
-                    <h2 class="details-title">{{ produit.nomProduit }}</h2>
+                    <p class="details-title">{{ produit.nomProduit }}</p>
+                    <p><span class="details-price">{{ produit.getTTC }}€</span> / la boite de six</p>
                     <p>{{ produit.description }}</p>
                 </div>
-                
-                {% for allergene in allergenes %}
-                    <li>{{ allergene.nomAllergene }}</li> {# Affichage du nom de chaque allergène #}
-                {% else %}
-                    <li>Aucun allergène associé.</li>
-                {% endfor %}
-                <p><span class="details-price">{{ produit.getTTC }}€</span>/ la boite de six</p>
-                
                 {{ form_start(form) }}
+                <div class="allergene-details">
+                    <p>Liste des allergènes :</p>
+                    {% for allergene in allergenes %}
+                    <li>{{ allergene.nomAllergene }}</li> {# Affichage du nom de chaque allergène #}
+                    {% else %}
+                    <li>Aucun allergène associé.</li>
+                    {% endfor %}
+                </div>
                 <div id="quantity-container">
                     {{ form_widget(form.quantity) }}
                     {{ form_widget(form.ajouter) }}

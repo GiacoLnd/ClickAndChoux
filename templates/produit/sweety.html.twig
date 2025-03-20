@@ -26,11 +26,6 @@
                 <div>
                     <input type="text" id="search-bar" class="search-input" placeholder="Rechercher un produit..." value="{{ query }}">
                 </div>
-
-                <!-- Filter SidePanel -->
-                <button id="toggleFilterPanelBtn" class="side-panel-btn">
-                    <i class="fa-solid fa-angles-right"></i> Filtres
-                </button>
       
                 <div class="catalog-container">
                     <div id="sidePanel" class="side-panel">
@@ -55,24 +50,33 @@
                     <p>Aucun produit proposé pour l'instant</p>
                 </div>
                 {% else %}
-                    <div class="choux-grid-container">
-                        <ul class="choux-grid" id="produits-list">
-                            {% for produit in produits %}
-                            <li>
-                                <a href="{{ path('produit_detail', {'slug': produit.slug}) }}">
-                                    <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image">
-                                </a>
+                <div class="flex-column-center">          <!-- Filter SidePanel -->
+                    <button id="toggleFilterPanelBtn" class="side-panel-btn">
+                        <i class="fa-solid fa-sliders"></i> Filtres
+                    </button>
+                </div> 
+                <div class="choux-grid-container">
+                    <ul class="choux-grid" id="produits-list">
+                        {% for produit in produits %}
+                        <li>
+                            <a href="{{ path('produit_detail', {'slug': produit.slug} ) }}">
+                                <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image">
+                            </a>
+                            <div class="title-price">
+                                <div class="details">
+                                    <a href="{{ path('produit_detail', {'slug': produit.slug}) }}">
+                                        <h2>{{ produit.nomProduit }}</h2>
+                                    </a>
+                                    <p class="price">{{ produit.getTTC|number_format(2, ',', ' ') }}€</p>
+                                </div>
                                 {% if app.user %}
-                                <button class="favori-btn" data-id="{{ produit.id }}"><i class="fa-solid fa-heart"></i></button>
+                                    <button class="favori-btn" data-id="{{ produit.id }}"><i class="fa-solid fa-heart"></i></button>
                                 {% endif %}
-                                <a href="{{ path('produit_detail', {'slug': produit.slug}) }}">
-                                    <h2>{{ produit.nomProduit }}</h2>
-                                </a>
-                                <p>{{ produit.getTTC }}€</p>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% endif %}
             </div>
         </section>
