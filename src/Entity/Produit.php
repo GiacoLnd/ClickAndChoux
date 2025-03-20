@@ -58,6 +58,9 @@ class Produit
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[ORM\Column]
+    private ?bool $is_active = null;
+
 
     public function __construct()
     {
@@ -252,5 +255,17 @@ class Produit
         if($this->nomProduit) {
             $this->slug = (new Slugify())->slugify($this->nomProduit);
         }
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->is_active;
+    }
+
+    public function setIsActive(bool $is_active): static
+    {
+        $this->is_active = $is_active;
+
+        return $this;
     }
 }
