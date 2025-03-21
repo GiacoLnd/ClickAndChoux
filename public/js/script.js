@@ -457,3 +457,47 @@ const retourHaut = document.getElementById('retour-haut');
 retourHaut.addEventListener('click', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+// Function handling new allergens integration in add product and update product
+document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.getElementById('add-allergen-button');
+    const allergenCollection = document.getElementById('form_newAllergenes'); // ID du form newAllergene
+    
+    const prototype = allergenCollection.dataset.prototype;
+
+    // Lorsqu'on clique sur le bouton d'ajout
+    addButton.addEventListener('click', function() {
+        const newItem = prototype.replace(/__name__/g, allergenCollection.children.length); // Modifie __name__ par index de chaque proto
+        const div = document.createElement('div');
+        div.innerHTML = newItem;
+        div.classList.add('flex-row-center')
+
+
+        // Ajout du bouton de suppression
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.classList.add('delete-allergen');
+        deleteButton.classList.add('bubblegum-link');
+        deleteButton.innerHTML = '<i class="fa-solid fa-minus"></i>';
+
+        // Evènement de suppression du proto
+        deleteButton.addEventListener('click', function() {
+            allergenCollection.removeChild(div);
+        });
+
+        // Bouton de suppression dans div
+        div.appendChild(deleteButton);
+
+        // Ajout du nouvel élément dans collection
+        allergenCollection.appendChild(div);
+    });
+
+    // Ecoute de l'évènement de click sur le bouton de suppression
+    allergenCollection.addEventListener('click', function(event) {
+        if (event.target && event.target.classList.contains('delete-allergen')) {
+            // Trouve l'élément à supprimer
+            const allergenItem = event.target.closest('.allergen-item');
+            allergenCollection.removeChild(allergenItem);
+        }
+    });
+});

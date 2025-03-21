@@ -14,14 +14,24 @@
             {% endfor %}
         </div>
         <div class="details-container">
-            <div class="details-image">
-                <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image">
-                <p style="font-size: 0.60em; text-align:center;" id="text-image">Cliquez pour agrandir <i class="fa-regular fa-square-caret-up"></i></p>
-            </div>
+            {% if produit.isActive == true %}
+                <div class="details-image">
+                    <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image">
+                    <p style="font-size: 0.60em; text-align:center;" id="text-image">Cliquez pour agrandir <i class="fa-regular fa-square-caret-up"></i></p>
+                </div>
+            {% else %}
+                <div class="details-image image-out-stock">
+                    <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image">
+                </div>
+            {% endif %}
             <div class="list-details">
                 <div class="details-description">
                     <p class="details-title">{{ produit.nomProduit }}</p>
-                    <p><span class="details-price">{{ produit.getTTC }}€</span> / la boite de six</p>
+                    {% if produit.isActive == true %}
+                        <p><span class="details-price">{{ produit.getTTC }}€</span> / la boite de six</p>
+                    {% else %}
+                        <p class="product-out-stock">Produit actuellement indisponible</p>
+                    {% endif %}
                     <p>{{ produit.description }}</p>
                 </div>
                 <div class="allergene-details">
@@ -32,12 +42,15 @@
                         <li>Aucun allergène associé.</li>
                     {% endfor %}
                 </div>
+                {% if produit.isActive == true %}
                 {{ form_start(form) }}
                 <div id="quantity-container">
                     {{ form_widget(form.quantity) }}
                     <button type="submit" class="bubblegum-link">Ajouter au panier</button>
                 </div>
             {{ form_end(form) }}
+                    {% else %}
+                {% endif %}
             </div>
         </div>
     </section>

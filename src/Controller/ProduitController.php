@@ -8,7 +8,7 @@ use App\Entity\Commande;
 use App\Form\PanierType;
 use App\Entity\Allergene;
 use App\Entity\Categorie;
-use App\Form\AllergenType;
+use App\Form\AllergenFilterType;
 use App\Controller\PanierController;
 use App\Repository\AllergeneRepository;
 use App\Repository\PanierRepository;
@@ -48,7 +48,7 @@ class ProduitController extends AbstractController
         
         $allergenesDisponibles = $allergeneRepository->findAllergensByCategory($categorie); // Utilise la fonction de tri des allergènes par catégorie de produit
 
-        $form = $this->createForm(AllergenType::class, null, [
+        $form = $this->createForm(AllergenFilterType::class, null, [
             'allergenes' => $allergenesDisponibles, // Récupère les allergènes disponibles pour la catégorie
         ]);
         $form->handleRequest($request);
@@ -122,7 +122,7 @@ class ProduitController extends AbstractController
         
         $allergenesDisponibles = $allergeneRepository->findAllergensByCategory($categorie); // Utilise la fonction de tri des allergènes par catégorie de produit
 
-        $form = $this->createForm(AllergenType::class, null, [
+        $form = $this->createForm(AllergenFilterType::class, null, [
             'allergenes' => $allergenesDisponibles, // Récupère les allergènes disponibles pour la catégorie
         ]); 
         $form->handleRequest($request);
@@ -195,42 +195,44 @@ class ProduitController extends AbstractController
         
         $form = $this->createForm(PanierType::class);
         $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $quantity = (int) $form->get('quantity')->getData();
-    
-            if ($quantity < 1) {
-                $this->addFlash('danger', 'La quantité doit être supérieure à 0 !');
-            } else {
-                // Récupération du panier en session
-                $cart = $session->get('panier', []);
-    
-                if (isset($cart[$produit->getId()])) {
-                    // Mise à jour quantité
-                    $cart[$produit->getId()]['quantite'] += $quantity;
+        
+        if($produit->isActive() == true) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $quantity = (int) $form->get('quantity')->getData();
+        
+                if ($quantity < 1) {
+                    $this->addFlash('danger', 'La quantité doit être supérieure à 0 !');
                 } else {
-                    // Ajout du produit 
-                    $cart[$produit->getId()] = [
-                        'id' => $produit->getId(),
-                        'nom' => $produit->getNomProduit(),
-                        'prixHt' => $produit->getPrixHt(),
-                        'TVA' => $produit->getTVA(),
-                        'prixTTC' => round($produit->getTTC(), 2),
-                        'categorie' => $produit->getCategorie(),
-                        'quantite' => $quantity
-                    ];
-                }
-    
-                // Mise à jour de la session
-                $session->set('panier', $cart);
-    
-                $this->addFlash('success', 'Produit ajouté au panier !');
-    
-                // Redirection vers la page de catégorie
-                if ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Sucré') {
-                    return $this->redirectToRoute('sweety_produit');
-                } elseif ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Salé') {
-                    return $this->redirectToRoute('salty_produit');
+                    // Récupération du panier en session
+                    $cart = $session->get('panier', []);
+        
+                    if (isset($cart[$produit->getId()])) {
+                        // Mise à jour quantité
+                        $cart[$produit->getId()]['quantite'] += $quantity;
+                    } else {
+                        // Ajout du produit 
+                        $cart[$produit->getId()] = [
+                            'id' => $produit->getId(),
+                            'nom' => $produit->getNomProduit(),
+                            'prixHt' => $produit->getPrixHt(),
+                            'TVA' => $produit->getTVA(),
+                            'prixTTC' => round($produit->getTTC(), 2),
+                            'categorie' => $produit->getCategorie(),
+                            'quantite' => $quantity
+                        ];
+                    }
+        
+                    // Mise à jour de la session
+                    $session->set('panier', $cart);
+        
+                    $this->addFlash('success', 'Produit ajouté au panier !');
+        
+                    // Redirection vers la page de catégorie
+                    if ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Sucré') {
+                        return $this->redirectToRoute('sweety_produit');
+                    } elseif ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Salé') {
+                        return $this->redirectToRoute('salty_produit');
+                    }
                 }
             }
         }

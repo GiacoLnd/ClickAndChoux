@@ -6,9 +6,11 @@ use App\Entity\User;
 use App\Entity\Contact;
 use App\Entity\Produit;
 use App\Entity\Commande;
+use App\Entity\Allergene;
 use App\Form\AddProduitType;
 use App\Form\EditProfileType;
 use App\Form\DeleteProduitType;
+use App\Form\UpdateProduitType;
 use Doctrine\ORM\EntityManager;
 use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
@@ -133,6 +135,7 @@ final class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             if($produit->getNomProduit()){
                 $produit->generateSlug();
             }
@@ -194,6 +197,66 @@ final class AdminController extends AbstractController
         }
 
         return $this->render('admin/delete_product.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/produit/{slug}/modifier', name: 'update_product')]
+    public function edit(Produit $produit, Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(UpdateProduitType::class, $produit);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $imageName = uniqid() . '.' . $imageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('images_directory'), 
+                    $imageName
+                );
+                $produit->setImage($imageName);
+            }
+        
+            $produit->setNomProduit($form->get('nomProduit')->getData());
+            $produit->setPrixHt($form->get('prixHt')->getData());
+            $produit->setDescription($form->get('description')->getData());
+            $produit->setTVA($form->get('TVA')->getData());
+            $produit->setCategorie($form->get('categorie')->getData());
+            $produit->setIsActive($form->get('isActive')->getData());
+        
+            $newAllergenes = $form->get('newAllergenes')->getData();
+
+
+            foreach ($newAllergenes as $allergene) {
+                $nomAllergene = ucfirst($allergene->getNomAllergene());
+
+                $allergene->setNomAllergene($nomAllergene);
+
+                $existingAllergene = $em->getRepository(Allergene::class)->findOneBy([
+                    'nomAllergene' => $allergene->getNomAllergene()
+                ]);
+
+                if ($existingAllergene) {
+                    $produit->addAllergene($existingAllergene);
+                } else {
+                    $em->persist($allergene);
+                    $produit->addAllergene($allergene);
+                }
+            }
+
+            $em->flush();
+            $this->addFlash('success', 'Produit modifié avec succès !');
+    
+            if ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Sucré') {
+                return $this->redirectToRoute('sweety_produit');
+            } elseif ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Salé') {
+                return $this->redirectToRoute('salty_produit');
+            }
+        }
+
+        return $this->render('admin/edit_product.html.twig', [
             'form' => $form->createView(),
         ]);
     }

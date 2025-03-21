@@ -59,7 +59,7 @@ class Produit
     private ?string $slug = null;
 
     #[ORM\Column]
-    private ?bool $is_active = null;
+    private ?bool $is_active = true;
 
 
     public function __construct()

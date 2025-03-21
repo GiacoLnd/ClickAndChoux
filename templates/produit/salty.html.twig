@@ -61,22 +61,51 @@
                 <div class="choux-grid-container">
                     <ul class="choux-grid" id="produits-list">
                         {% for produit in produits %}
-                        <li>
-                            <a href="{{ path('produit_detail', {'slug': produit.slug} ) }}">
-                                <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image">
-                            </a>
-                            <div class="title-price">
-                                <div class="details">
-                                    <a href="{{ path('produit_detail', {'slug': produit.slug}) }}">
-                                        <h2>{{ produit.nomProduit }}</h2>
+                            {% if produit.isActive == true %}
+                                <li class="catalog-in-stock">
+                                    <a href="{{ path('produit_detail', {'slug': produit.slug} ) }}">
+                                        <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image">
                                     </a>
-                                    <p class="price">{{ produit.getTTC|number_format(2, ',', ' ') }}€</p>
-                                </div>
-                                {% if app.user %}
-                                <button class="favori-btn" data-id="{{ produit.id }}"><i class="fa-solid fa-heart"></i></button>
-                                {% endif %}
-                            </div>
-                        </li>
+                                    <div class="title-price">
+                                        <div class="details">
+                                            <a href="{{ path('produit_detail', {'slug': produit.slug}) }}">
+                                                <h2>{{ produit.nomProduit }}</h2>
+                                            </a>
+                                            <p class="price">{{ produit.getTTC|number_format(2, ',', ' ') }}€</p>
+                                        </div>
+                                        <div class="clickable-icon">
+                                            {% if app.user %}
+                                                <button class="favori-btn" data-id="{{ produit.id }}"><i class="fa-solid fa-heart"></i></button>
+                                            {% endif %}
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <a href="{{ path('admin_update_product', {'slug': produit.slug}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </li>
+                                {% elseif produit.isActive == false %}
+                                <li class="catalog-out-stock">
+                                    <a href="{{ path('produit_detail', {'slug': produit.slug} ) }}">
+                                        <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image">
+                                    </a>
+                                    <div class="title-price">
+                                        <div class="details">
+                                            <a href="{{ path('produit_detail', {'slug': produit.slug}) }}">
+                                                <h2>{{ produit.nomProduit }}</h2>
+                                            </a>
+                                            <P>Rupture de stock</P>
+                                        </div>
+                                        <div class="clickable-icon">
+                                            {% if app.user %}
+                                                <button class="favori-btn" data-id="{{ produit.id }}"><i class="fa-solid fa-heart"></i></button>
+                                            {% endif %}
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <a href="{{ path('admin_update_product', {'slug': produit.slug}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>

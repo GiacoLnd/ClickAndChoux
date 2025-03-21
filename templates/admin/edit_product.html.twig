@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Produit{% endblock %}
+
+{% block body %}
+    <section id="admin-add-product">
+        <h2 class="page-title">Ajouter un Produit</h2>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
+        {{ form_start(form, {'method': 'POST'}) }}
+        <div class="flex-column-center" id="update-product">
+            <div class="flex-column-center">
+                <label>{{ form_label(form.isActive) }}</label>
+                {{ form_widget(form.isActive) }}
+                {{ form_errors(form.isActive) }}
+            </div>
+            <div class="infos-update">
+                <div class="flex-column-center">
+                    <label>{{ form_label(form.nomProduit) }}</label>
+                    {{ form_widget(form.nomProduit) }}
+                    {{ form_errors(form.nomProduit) }}
+
+                    <label>{{ form_label(form.prixHt) }}</label>
+                    {{ form_widget(form.prixHt) }}
+                    {{ form_errors(form.prixHt) }}
+
+                    <label>{{ form_label(form.TVA) }}</label>
+                    {{ form_widget(form.TVA) }}
+                    {{ form_errors(form.TVA) }}
+
+                    <label>{{ form_label(form.image) }}</label>
+                    {{ form_widget(form.image)}}
+                    {{ form_errors(form.image) }}
+                </div>
+                <div class="flex-column-center">
+                    <label>{{ form_label(form.description) }}</label>
+                    {{ form_widget(form.description) }}
+                    {{ form_errors(form.description) }}
+
+                    <label>{{ form_label(form.categorie) }}</label>
+                    {{ form_widget(form.categorie) }}
+                    {{ form_errors(form.categorie) }}
+                </div>
+            </div>
+            <div class="allergen-forms">
+                <div class="existing-allergen">
+                    <label>{{ form_label(form.allergenes) }}</label>
+                    <p class="fs-6">Gardez la touche CTRL (CMD sur mac) enfoncée pour sélectionner plusieurs allergènes</p>
+                    {{ form_widget(form.allergenes) }}
+                    {{ form_errors(form.allergenes) }}
+                </div>
+
+                <div class="newAllergens">
+                    <button type="button" id="add-allergen-button" class="bubblegum-link"><i class="fa-solid fa-plus"></i></button>
+                    
+                    <div id="form_newAllergenes" data-prototype="{{ form_row(form.newAllergenes.vars.prototype)|e }}">
+                            {{ form_widget(form.newAllergenes) }}
+                    </div>            
+                </div>
+            </div>
+            <label>{{ form_label(form.submit) }}</label>
+            {{ form_widget(form.submit) }}
+
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}
