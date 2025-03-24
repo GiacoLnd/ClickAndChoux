@@ -6,6 +6,7 @@ use App\Entity\Favoris;
 use App\Entity\Produit;
 use App\Repository\FavorisRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -80,19 +81,13 @@ class FavorisController extends AbstractController
     }
 
     #[Route('/liste', name: 'liste', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
-    public function liste(FavorisRepository $favorisRepository, TokenStorageInterface $tokenStorage): JsonResponse
+    public function liste(FavorisRepository $favorisRepository, Request $request): JsonResponse
     {
-
-        if (!$this->getUser()) {
+        $user = $this->getUser();
+        if (!$user) {
             return $this->json(['message' => 'Non autorisé'], 401);
         }
-        $user = $tokenStorage->getToken()?->getUser();
-    
-        if (!$user || !is_object($user)) {
-            return new JsonResponse(['favoris' => [], 'message' => 'Utilisateur non connecté'], 200);
-        }
-    
+
         $favoris = $favorisRepository->findBy(['user' => $user]);
         $favorisIds = array_map(fn($favori) => $favori->getProduit()->getId(), $favoris);
     

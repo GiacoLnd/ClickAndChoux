@@ -374,7 +374,6 @@ $(document).ready(function() {
 
 
 // Script AJAX for fav 
-// WARNING : Let this function at the bottom of the js sheet code FTM, problem TO FIX with logged and non-logged user when fetching JSON response
 document.addEventListener('DOMContentLoaded', function () {
     // Liste des URLs où l'AJAX est autorisé
     const urlsCatalogues = [
@@ -388,25 +387,27 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    fetch('/favoris/liste', { credentials: 'include' }) 
-        .then(response => {
-            // Si la réponse a un statut 401 (non autorisé) ou 302 (redirection), l'utilisateur doit se connecter
-            if (response.status === 401 || response.status === 302) {
-                window.location.href = '/login';  // Rediriger vers la page de connexion
-                return Promise.reject('Utilisateur non connecté');
+    fetch('/favoris/liste', { credentials: 'include',headers: { 'Accept': 'application/json' } }) 
+    .then(response => {
+        if (!response.ok) { 
+            if (response.status === 401) {
+                console.warn('Utilisateur non connecté');
+                return null;
             }
-            return response.json();
-        })
-        .then(data => {
-            if (data.favoris) {
-                document.querySelectorAll('.favori-btn').forEach(button => {
-                    const produitId = button.dataset.id;
-                    if (data.favoris.includes(parseInt(produitId))) {
-                        button.classList.add('favori-active');
-                    }
-                });
-            }
-        });
+            throw new Error('Erreur réseau');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.favoris) {
+            document.querySelectorAll('.favori-btn').forEach(button => {
+                const produitId = button.dataset.id;
+                if (data.favoris.includes(parseInt(produitId))) {
+                    button.classList.add('favori-active');
+                }
+            });
+        }
+    })
 
     // Gérer l'ajout et la suppression des favoris
     document.querySelectorAll('.favori-btn').forEach(button => {
@@ -432,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     const productElement = this.closest('.favori-item');  // Trouve l'élément parent : .favori-item
                     if (productElement) {
-                        productElement.remove();  // Retirer l'élément du DOM 
+                        productElement.remove();  // Retire l'élément du DOM 
                     }
                 }
             });
