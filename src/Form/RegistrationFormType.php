@@ -62,8 +62,7 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'flex-column-center',
                     'autocomplete' => 'email',
-                ],
-                
+                ],   
             ])
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,

@@ -8,14 +8,18 @@ use App\Entity\Produit;
 use App\Entity\Commande;
 use Cocur\Slugify\Slugify;
 use Stripe\Checkout\Session;
+use App\Service\InvoiceGenerator;
+use Symfony\Component\Mime\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Loader\Configurator\mailer;
 
 class PaymentController extends AbstractController{
 
@@ -88,7 +92,7 @@ class PaymentController extends AbstractController{
 
 
     #[Route('/success', name: 'payment_success')]
-    public function StripeSuccess(SessionInterface $session, EntityManagerInterface $em): Response
+    public function StripeSuccess(SessionInterface $session, EntityManagerInterface $em, MailerInterface $mailer, InvoiceGenerator $invoiceGenerator): Response
     {
         $commandeSession = $session->get('commande');
     
@@ -144,6 +148,10 @@ class PaymentController extends AbstractController{
             'dateCommande' => (new \DateTime())->format('Y-m-d H:i:s'),
             'datePaiement' => (new \DateTime())->format('Y-m-d H:i:s'),
             'montantTotal' => round($commandeSession['total'], 2), // arrondi à deux décimales
+            'user' => [
+                'pseudo' => $commande->getUser()->getNickName(),
+                'email'=> $commande->getUser()->getEmail(),
+            ],
             'statutPaiement' => "payé",
             'adresseLivraison' => [
                 'nom' => $commandeSession['nomLivraison'] ?? '',
@@ -192,6 +200,36 @@ class PaymentController extends AbstractController{
         $em->persist($commande);
         $em->flush();
 
+        // Création et envoi du mail de confirmation 
+        // Utilisation du service de création de facture 
+        $pdfContent = $invoiceGenerator->generateInvoicePdf($commande);
+        // Insertion du slug de la commande en num de facture dans une variable
+        $fileName = "facture-".$commande->getSlug().".pdf";
+
+        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/img/logo.png';
+        $logoBase64 = base64_encode(file_get_contents($logoPath));
+        $logoMimeType = mime_content_type($logoPath);
+
+        $email = (new Email())
+        ->from('noreply@clickAndChoux.com')
+        ->to($commande->getUser()->getEmail())
+        ->subject('Votre commande a été validée !')
+        ->html($this->renderView('commande/confirmation_mail.html.twig', [
+            'nickName' => ucfirst($commande->getUser()->getNickName()),
+            'montantTotal' => $commande->getMontantTotal(),
+            'orderDate' => $commande->getDateCommande(),
+            'deliveryDate' => $commande->getDateLivraison(),
+            'reference' => $commande->getReference(),
+            'produits' => $historiqueCommande['produits'],
+            'logoBase64' => $logoBase64,
+            'logoMimeType' => $logoMimeType
+        ]));
+
+        $email->attach($pdfContent, $fileName, 'application/pdf');
+
+        // Envoie l'email
+        $mailer->send($email);
+
         // Suppression des données en session
         $session->remove('commande');
         $session->remove('panier');
@@ -220,7 +258,7 @@ class PaymentController extends AbstractController{
         // Redirection vers récap de la commande pour nouvelle tentative de paiement
         return $this->redirectToRoute('commande_confirmer');
     }
-    
+
 }
 
 

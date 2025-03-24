@@ -42,6 +42,12 @@
                 {{ form_errors(form.message) }}
             </div>
         </div>
+
+        <div class="flex-row-center">
+                <label>{{ form_label(form.consent) }}</label>
+                {{ form_widget(form.consent) }}
+                {{ form_errors(form.consent) }}
+        </div>
         <div class="flex-column-center">
             <button type="submit" class="bubblegum-link">
                 Valider

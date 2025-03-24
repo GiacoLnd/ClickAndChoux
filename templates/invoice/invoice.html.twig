@@ -4,15 +4,30 @@
     <meta charset="UTF-8">
     <title>Facture - Click&Choux</title>
     <style>
-        body { font-family: Arial, sans-serif; font-size: 14px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 0.9em;
+        }
         h1 { font-size: 24px; margin-bottom: 10px; color: #55211A;}
         .header, h2 { text-align: center; margin-bottom: 20px; }
         .logo { width: 150px; height: 150px; }
-        .info { margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .infos{ margin-bottom: 20px; }
+        .infos-livraison {text-align: right;}
+        table { width: 100%; border-collapse: collapse; }
         table, th, td { border: 1px solid black; padding: 8px; text-align: center; }
         th { background-color: #f2f2f2; }
-        .total { text-align: center; font-weight: bold; margin-top: 20px; }
+        .total { text-align: right; font-weight: bold; margin-right: 15px;}
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #000;
+            font-size: 0.8em;
+        }
     </style>
 </head>
 <body>
@@ -20,13 +35,26 @@
         <div class="header">
             <img src="data:image/png;base64,{{ logoBase64 }}" class="logo"> <!-- data:image/png;base64, : Ressort le logo encodé en système d'encodage base64-->
             <h1>Click&Choux</h1>
-            <p>Facture acquittée n° {{ commande.reference }} - {{ commande.dateCommande|date('d/m/Y') }}</p>
         </div>
     </div>
 
-    <div class="info">
-        <strong>Client :</strong> {{ commande.user.nickName }}<br>
-        <strong>Email :</strong> {{ commande.user.email }}
+    <div class="infos">
+        <div class="infos-facturation">
+            <p>Facture n° {{ commande.reference }}<br>
+                Acquittée le {{ commande.datePaiement|date('d/m/Y') }}<br>
+                Date de commande : {{ commande.dateCommande|date('d/m/Y') }}</p>
+            <strong>Informations de facturation :</strong><br>
+            {{ historique.adresseFacturation.prenom }} {{ historique.adresseFacturation.nom }}<br>
+            {{ historique.adresseFacturation.adresse }}<br>
+            {{ historique.adresseFacturation.codePostal }}, {{ historique.adresseFacturation.ville }}
+        </div>
+        <div class="infos-livraison">
+            <strong>Informations de livraison :</strong><br>
+            {{ historique.adresseLivraison.prenom }} {{ historique.adresseLivraison.nom }}<br>
+            {{ historique.adresseLivraison.adresse }}<br>
+            {{ historique.adresseLivraison.codePostal }}, {{ historique.adresseLivraison.ville }}
+            <p>Date de livraison : {{ commande.dateLivraison|date('d/m/Y') }}</p>
+        </div>
     </div>
 
     <h2>Détails de la commande</h2>
@@ -46,7 +74,7 @@
             <tbody>
                 {% for produit in historique.produits %}
                 <tr>
-                    <td>{{ produit.nomProduit }}</td>
+                    <td>{{ produit.nom }}</td>
                     <td>{{ produit.quantite }}</td> 
                     <td>{{ produit.prixHt|number_format(2, ',', ' ') }} €</td>
                     <td>{{ produit.TVA }}%</td>
@@ -59,9 +87,14 @@
     {% else %}
         <p>Aucun produit trouvé.</p>
     {% endif %}
-
     <div class="total">
-        <p><strong>Montant total :</strong> {{ commande.montantTotal|number_format(2, ',', ' ') }} €</p>
+        <p><strong>Montant total HT :</strong> {{ totalHT|number_format(2, ',', ' ') }} €</p>
+        <p>TVA : {{ montantTVA|number_format(2, ',', ' ') }} €</p>
+        <p>Frais de livraison : 3€</p>
+        <p><strong>Montant total TTC :</strong> {{ commande.montantTotal|number_format(2, ',', ' ') }} €</p>
     </div>
+    <div class="footer">
+        <p><strong>Click&Choux</strong> | 11 rue de l'exemple, 67XXX Exempleheim | tel. : 03 88 01 02 03 | email : support@click&choux.com</p>
+    </div> 
 </body>
 </html>
