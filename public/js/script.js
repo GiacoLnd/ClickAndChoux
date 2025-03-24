@@ -372,24 +372,6 @@ $(document).ready(function() {
     });
 });
 
-// Script to zoom images in detail produit 
-
-// Vérifiez si l'URL correspond à /produit/{id}
-if (window.location.pathname.match(/^\/produit\/\d+$/)) { // Conditionne l'activation de cette fonction à la page de détail d'un produit avec son id via une regex : recherche produit et un ou plusieurs chiffres - \/ marque le / 
-    const image = document.getElementById("image");
-
-    // Écouter le clic sur l'image
-    image.addEventListener("click", function() {
-        this.classList.toggle("zoom");
-    });
-
-    const textImage = document.getElementById("text-image");
-
-    // Écouter le clic sur le texte de l'image
-    textImage.addEventListener("click", function() {
-        image.classList.toggle("zoom");
-    });
-}
 
 // Script AJAX for fav 
 // WARNING : Let this function at the bottom of the js sheet code FTM, problem TO FIX with logged and non-logged user when fetching JSON response
@@ -407,7 +389,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     fetch('/favoris/liste', { credentials: 'include' }) 
-        .then(response => response.json())
+        .then(response => {
+            // Si la réponse a un statut 401 (non autorisé) ou 302 (redirection), l'utilisateur doit se connecter
+            if (response.status === 401 || response.status === 302) {
+                window.location.href = '/login';  // Rediriger vers la page de connexion
+                return Promise.reject('Utilisateur non connecté');
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.favoris) {
                 document.querySelectorAll('.favori-btn').forEach(button => {

@@ -83,6 +83,10 @@ class FavorisController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function liste(FavorisRepository $favorisRepository, TokenStorageInterface $tokenStorage): JsonResponse
     {
+
+        if (!$this->getUser()) {
+            return $this->json(['message' => 'Non autorisé'], 401);
+        }
         $user = $tokenStorage->getToken()?->getUser();
     
         if (!$user || !is_object($user)) {

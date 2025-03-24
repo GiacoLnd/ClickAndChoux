@@ -61,12 +61,19 @@ class Produit
     #[ORM\Column]
     private ?bool $is_active = true;
 
+    /**
+     * @var Collection<int, Commentaire>
+     */
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'produit')]
+    private Collection $commentaires;
+
 
     public function __construct()
     {
         $this->paniers = new ArrayCollection();
         $this->favoris = new ArrayCollection();
         $this->allergenes = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -265,6 +272,36 @@ class Produit
     public function setIsActive(bool $is_active): static
     {
         $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getProduit() === $this) {
+                $commentaire->setProduit(null);
+            }
+        }
 
         return $this;
     }

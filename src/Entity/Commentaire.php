@@ -15,15 +15,17 @@ class Commentaire
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $contenu = null;
+    private ?string $Contenu = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $ddateCommentaire = null;
+    private ?\DateTimeInterface $DateCommentaire = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Commentaires')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Produit $produit = null;
 
     public function getId(): ?int
     {
@@ -32,24 +34,24 @@ class Commentaire
 
     public function getContenu(): ?string
     {
-        return $this->contenu;
+        return $this->Contenu;
     }
 
-    public function setContenu(string $contenu): static
+    public function setContenu(string $Contenu): static
     {
-        $this->contenu = $contenu;
+        $this->Contenu = $Contenu;
 
         return $this;
     }
 
-    public function getDdateCommentaire(): ?\DateTimeInterface
+    public function getDateCommentaire(): ?\DateTimeInterface
     {
-        return $this->ddateCommentaire;
+        return $this->DateCommentaire;
     }
 
-    public function setDdateCommentaire(\DateTimeInterface $ddateCommentaire): static
+    public function setDateCommentaire(\DateTimeInterface $DateCommentaire): static
     {
-        $this->ddateCommentaire = $ddateCommentaire;
+        $this->DateCommentaire = $DateCommentaire;
 
         return $this;
     }
@@ -66,4 +68,15 @@ class Commentaire
         return $this;
     }
 
+    public function getProduit(): ?Produit
+    {
+        return $this->produit;
+    }
+
+    public function setProduit(?Produit $produit): static
+    {
+        $this->produit = $produit;
+
+        return $this;
+    }
 }

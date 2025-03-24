@@ -30,7 +30,7 @@
         {% if is_granted('ROLE_ADMIN') %}
             <div class="flex-row-center">
                 <a href="{{ path('invoice_send', {'slug': commande.slug}) }}" class="bubblegum-link">Envoyer la facture par e-mail</a>
-                {# <p><a class="bubblegum-link" href="{{ path('admin_user_commandes', { id: commande.user.slug}) }}">Liste des commandes de {{ commande.user.nickName }}</a></p> #}
+                <p><a class="bubblegum-link" href="{{ path('admin_user_commandes', { id: commande.user.id}) }}">Liste des commandes de {{ commande.user.nickName }}</a></p>
                 <p><a class="bubblegum-link" href="{{ path('admin_list_commandes') }}">Retour à la liste des commandes</a></p>
             </div>
         {% else %}

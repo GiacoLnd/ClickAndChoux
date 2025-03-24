@@ -59,11 +59,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Favoris::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
     private Collection $favoris;
 
+    /**
+     * @var Collection<int, Commentaire>
+     */
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'user')]
+    private Collection $commentaires;
+
     public function __construct()
     {
         $this->Commandes = new ArrayCollection();
         $this->Commentaires = new ArrayCollection();
         $this->favoris = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getId(): ?int

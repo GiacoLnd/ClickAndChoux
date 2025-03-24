@@ -43,15 +43,36 @@
                     {% endfor %}
                 </div>
                 {% if produit.isActive == true %}
-                {{ form_start(form) }}
-                <div id="quantity-container">
-                    {{ form_widget(form.quantity) }}
-                    <button type="submit" class="bubblegum-link">Ajouter au panier</button>
-                </div>
-            {{ form_end(form) }}
+                {{ form_start(cartForm) }}
+                    <div id="quantity-container">
+                        {{ form_widget(cartForm.quantity) }}
+                        <button type="submit" class="bubblegum-link">Ajouter au panier</button>
+                    </div>
+                    {{ form_end(cartForm) }}
                     {% else %}
                 {% endif %}
             </div>
+        </div>
+        <div class="comment-section">
+            {% if commentaires is empty %}
+            <p>Aucun commentaire pour ce produit.</p>
+        {% else %}
+            <ul>
+                {% for commentaire in commentaires %}
+                    <li>
+                        <p><strong>{{ commentaire.user ? commentaire.user.nickName : 'Utilisateur inconnu' }}</strong> (le {{ commentaire.dateCommentaire|date('d/m/Y H:i') }}) :</p>
+                        <p>{{ commentaire.contenu }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if app.user %}
+        <h3>Laisser un commentaire</h3>
+            {{ form_start(commentForm) }}
+                {{ form_row(commentForm.contenu) }}
+                {{ form_row(commentForm.commenter) }}
+            {{ form_end(commentForm) }}
+        {% endif %}
         </div>
     </section>
 {% endblock %}

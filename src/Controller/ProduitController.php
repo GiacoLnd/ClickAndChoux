@@ -8,13 +8,16 @@ use App\Entity\Commande;
 use App\Form\PanierType;
 use App\Entity\Allergene;
 use App\Entity\Categorie;
+use App\Entity\Commentaire;
+use App\Form\CommentaireType;
 use App\Form\AllergenFilterType;
 use App\Controller\PanierController;
-use App\Repository\AllergeneRepository;
 use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
+use App\Repository\AllergeneRepository;
 use App\Repository\CategorieRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -150,6 +153,7 @@ class ProduitController extends AbstractController
             $produits = $produitRepository->findBySearchQuery($query, $categorie);
         }
     
+        
         return $this->render('produit/sweety.html.twig', [
             'produits' => $produits,
             'query' => $query,
@@ -190,15 +194,67 @@ class ProduitController extends AbstractController
     public function detailProduit(
         Produit $produit,
         Request $request,
-        SessionInterface $session
+        SessionInterface $session,
+        EntityManagerInterface $em,
+        CommandeRepository $commandeRepository,
     ): Response {
-        
-        $form = $this->createForm(PanierType::class);
-        $form->handleRequest($request);
+        $user = $this->getUser();
+        $hasOrdered = false; // Initialise en false de base
+
+        if($user) {
+            $commandes = $commandeRepository->findBy(['user' => $user]);
+
+            foreach ($commandes as $commande) {
+                // Vérification de la validation du paiement
+                if ($commande->getStatutPaiement() === 'payé') {
+                    // Recherche des paniers associés à cette commande
+                    $paniers = $commande->getPaniers();
+    
+                    foreach ($paniers as $panier) {
+                        if ($panier->getProduit() === $produit) {
+                            // Si produit commandé par user -> passe en true
+                            $hasOrdered = true;
+                            break 2; // Sort de 2 boucles quand produit commandé = OK
+                        }
+                    }
+                }
+            }
+        }
+
+        $commentaire = new Commentaire();
+        $commentForm = $this->createForm(CommentaireType::class, $commentaire);
+
+        if ($hasOrdered) {
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            
+            $commentaire = $commentForm->getData();
+            $commentaire->setUser($user);
+            $commentaire->setProduit($produit);
+            $commentaire->setDateCommentaire(new datetime());
+
+            $em->persist($commentaire);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre commentaire a été ajouté.');
+
+            return $this->redirectToRoute('produit_detail', ['slug' => $produit->getSlug()]);
+        }
+    } else {
+        // Message si l'utilisateur n'a pas acheté ce produit
+        $this->addFlash('warning', 'Vous devez acheter ce produit avant de pouvoir le commenter');
+    }
+
+        // Récupérer les commentaires du produit
+        $commentaires = $produit->getCommentaires();
+
+        $cartForm = $this->createForm(PanierType::class);
+        $cartForm->handleRequest($request);
         
         if($produit->isActive() == true) {
-            if ($form->isSubmitted() && $form->isValid()) {
-                $quantity = (int) $form->get('quantity')->getData();
+            if ($cartForm->isSubmitted() && $cartForm->isValid()) {
+                $quantity = (int) $cartForm->get('quantity')->getData();
         
                 if ($quantity < 1) {
                     $this->addFlash('danger', 'La quantité doit être supérieure à 0 !');
@@ -239,7 +295,10 @@ class ProduitController extends AbstractController
     
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
-            'form' => $form->createView(),
+            'cartForm' => $cartForm->createView(),
+            'commentForm' => $commentForm->createView(),
+            'commentaires' => $commentaires,
+            'hasOrdered' => $hasOrdered,
             'allergenes' => $produit->getAllergenes(),
         ]);
     }
