@@ -491,3 +491,51 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// AJAX for edit comment
+document.addEventListener('DOMContentLoaded', function () {
+    // Bouton de modification du commentaire
+    const editButtons = document.querySelectorAll('.btn-edit');
+    
+    editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const commentId = this.getAttribute('data-comment-id');
+            const slug = this.getAttribute('data-slug');
+            
+            // Obtention du formulaire de modification
+            fetch(`/produit/${slug}/modifier-commentaire/${commentId}`)
+                .then(response => response.text())
+                .then(data => {
+                    // Injection le formulaire dans la modale
+                    document.getElementById('modalContent').innerHTML = data;
+                    
+                    // Affichage la modale
+                    new bootstrap.Modal(document.getElementById('editCommentModal')).show();
+                });
+        });
+    });
+
+    // Soumettre le formulaire via AJAX
+    document.getElementById('editCommentForm')?.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Mise à jour de l'interface sans recharger la page
+                alert(data.message);
+                location.reload(); // Ou mets à jour le commentaire sur la page
+            } else {
+                alert(data.message);
+            }
+        });
+    });
+});
+

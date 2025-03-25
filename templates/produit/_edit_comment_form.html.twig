@@ -1,0 +1,5 @@
+{{ form_start(form, {'action': path('produit_modifier_commentaire', {'slug': produit.slug, 'commentId': commentaire.id}), 'attr': {'class': 'flex-column-center'}}) }}
+    {{ form_row(form.contenu, {'attr': {'class': 'modal-textarea'}}) }}
+    {{ form_row(form.modifier) }}
+{{ form_end(form) }}
+

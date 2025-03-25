@@ -18,10 +18,13 @@ class CommentaireType extends AbstractType
     {
         $builder
             ->add('contenu', TextareaType::class, [
-                'label' => 'Commentez ...',
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Commenter ...'],
             ])
             ->add('commenter', SubmitType::class, [
-                'label' => 'Commenter'
+                'label' => 'Commenter',
+                'attr' => ['class' => 'bubblegum-link'],
             ] );
     }
 
@@ -29,6 +32,9 @@ class CommentaireType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Commentaire::class,
+            'attr' => [
+                'class' => 'comment-text-button'  // Ajoute une classe CSS à l'élément <form>
+            ]
         ]);
     }
 }

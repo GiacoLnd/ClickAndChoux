@@ -54,25 +54,48 @@
             </div>
         </div>
         <div class="comment-section">
+            <div class="comment-show">
+                <div class="comment-add">
+                    {% if app.user %}
+                        {{ form_start(commentForm) }}
+                            {{ form_row(commentForm.contenu) }}
+                            {{ form_row(commentForm.commenter) }}
+                        {{ form_end(commentForm) }}
+                    {% endif %}
+                </div>
             {% if commentaires is empty %}
-            <p>Aucun commentaire pour ce produit.</p>
-        {% else %}
-            <ul>
-                {% for commentaire in commentaires %}
-                    <li>
-                        <p><strong>{{ commentaire.user ? commentaire.user.nickName : 'Utilisateur inconnu' }}</strong> (le {{ commentaire.dateCommentaire|date('d/m/Y H:i') }}) :</p>
-                        <p>{{ commentaire.contenu }}</p>
+                <p>Aucun commentaire pour ce produit.</p>
+            {% else %}
+                <ul>
+                    {% for commentaire in commentaires %}
+                    <li class="comment-item">
+                        <div class="comment-content">
+                            <p><strong>{{ commentaire.user ? commentaire.user.nickName : 'Utilisateur inconnu' }}</strong> (le {{ commentaire.dateCommentaire |date("d/m/Y H:i") }})</p>
+                            <p>{{ commentaire.contenu }}</p>
+                            {% if app.user == commentaire.user %}
+                                <button class="btn btn-sm btn-edit" data-comment-id="{{ commentaire.id }}" data-slug="{{ produit.slug }}"><i class="fa-solid fa-pen"></i></button>
+                            {% endif %}
+                        </div>
                     </li>
                 {% endfor %}
-            </ul>
-        {% endif %}
-        {% if app.user %}
-        <h3>Laisser un commentaire</h3>
-            {{ form_start(commentForm) }}
-                {{ form_row(commentForm.contenu) }}
-                {{ form_row(commentForm.commenter) }}
-            {{ form_end(commentForm) }}
-        {% endif %}
+
+                    <!-- Modale de modification -->
+                    <div id="editCommentModal" class="modal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Modifiez votre commentaire</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="modalContent">
+                                    <!-- Formulaire ICI -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+            {% endif %}
+            </div>
         </div>
     </section>
 {% endblock %}

@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Produit;
 use App\Entity\Commentaire;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Commentaire>
@@ -40,4 +41,15 @@ class CommentaireRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findCommentairesByProduit(Produit $produit)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.produit = :produit')  // Le champ 'produit' fait référence à la relation ManyToOne dans Commentaire
+            ->setParameter('produit', $produit)
+            ->orderBy('c.DateCommentaire', 'DESC')  // Tri décroissant par date
+            ->getQuery()
+            ->getResult();
+    }
+    
 }

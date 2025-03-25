@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Panier;
 use App\Entity\Produit;
 use App\Entity\Commande;
@@ -10,26 +11,31 @@ use App\Entity\Allergene;
 use App\Entity\Categorie;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
+use Doctrine\ORM\EntityManager;
 use App\Form\AllergenFilterType;
+use App\Form\UpdateCommentaireType;
 use App\Controller\PanierController;
 use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
 use App\Repository\AllergeneRepository;
 use App\Repository\CategorieRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\CommentaireRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProduitController extends AbstractController
 {
+    
     #[Route('/produit', name: 'app_produit')]
     public function index(): Response
     {
@@ -186,7 +192,7 @@ class ProduitController extends AbstractController
         }
 
         return new JsonResponse(['produits' => $produitsData]);
-    }
+    } 
 
     // Fonction d'affichage des détails produit
     // Attention : cette fonction gère l'ajout au panier avec une adaptation de la quantité via un input number
@@ -197,6 +203,7 @@ class ProduitController extends AbstractController
         SessionInterface $session,
         EntityManagerInterface $em,
         CommandeRepository $commandeRepository,
+        CommentaireRepository $commentaireRepository,
     ): Response {
         $user = $this->getUser();
         $hasOrdered = false; // Initialise en false de base
@@ -209,7 +216,7 @@ class ProduitController extends AbstractController
                 if ($commande->getStatutPaiement() === 'payé') {
                     // Recherche des paniers associés à cette commande
                     $paniers = $commande->getPaniers();
-    
+
                     foreach ($paniers as $panier) {
                         if ($panier->getProduit() === $produit) {
                             // Si produit commandé par user -> passe en true
@@ -225,29 +232,24 @@ class ProduitController extends AbstractController
         $commentForm = $this->createForm(CommentaireType::class, $commentaire);
 
         if ($hasOrdered) {
-        $commentForm->handleRequest($request);
+            $commentForm->handleRequest($request);
 
-        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            
-            $commentaire = $commentForm->getData();
-            $commentaire->setUser($user);
-            $commentaire->setProduit($produit);
-            $commentaire->setDateCommentaire(new datetime());
+            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+                $commentaire = $commentForm->getData();
+                $commentaire->setUser($user);
+                $commentaire->setProduit($produit);
+                $commentaire->setDateCommentaire(new datetime());
 
-            $em->persist($commentaire);
-            $em->flush();
+                $em->persist($commentaire);
+                $em->flush();
 
-            $this->addFlash('success', 'Votre commentaire a été ajouté.');
+                $this->addFlash('success', 'Votre commentaire a été ajouté.');
 
-            return $this->redirectToRoute('produit_detail', ['slug' => $produit->getSlug()]);
+                return $this->redirectToRoute('produit_detail', ['slug' => $produit->getSlug()]);
+            }
         }
-    } else {
-        // Message si l'utilisateur n'a pas acheté ce produit
-        $this->addFlash('warning', 'Vous devez acheter ce produit avant de pouvoir le commenter');
-    }
 
-        // Récupérer les commentaires du produit
-        $commentaires = $produit->getCommentaires();
+        $commentaires = $commentaireRepository->findCommentairesByProduit($produit);
 
         $cartForm = $this->createForm(PanierType::class);
         $cartForm->handleRequest($request);
@@ -259,7 +261,6 @@ class ProduitController extends AbstractController
                 if ($quantity < 1) {
                     $this->addFlash('danger', 'La quantité doit être supérieure à 0 !');
                 } else {
-                    // Récupération du panier en session
                     $cart = $session->get('panier', []);
         
                     if (isset($cart[$produit->getId()])) {
@@ -292,7 +293,7 @@ class ProduitController extends AbstractController
                 }
             }
         }
-    
+
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
             'cartForm' => $cartForm->createView(),
@@ -302,5 +303,55 @@ class ProduitController extends AbstractController
             'allergenes' => $produit->getAllergenes(),
         ]);
     }
+    #[Route('/produit/{slug}/modifier-commentaire/{commentId}', name: 'produit_modifier_commentaire', methods: ['GET', 'POST'])]
+    public function modifierCommentaire(
+        Produit $produit,
+        Commentaire $commentaire,
+        int $commentId,
+        CommentaireRepository $commentaireRepository,  
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+        $user = $this->getUser(); 
     
+        $commentaire = $commentaireRepository->find($commentId);
+    
+        if (!$commentaire) {
+            throw $this->createNotFoundException('Commentaire introuvable.');
+        }
+    
+        if ($user !== $commentaire->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier ce commentaire.');
+        }
+    
+
+        $form = $this->createForm(UpdateCommentaireType::class, $commentaire);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Mise à jour de la date et du produit
+            if (!$commentaire->getDateCommentaire()) {
+                $commentaire->setDateCommentaire(new DateTime());
+            }
+            $commentaire->setProduit($produit);
+    
+            $em->flush();
+    
+            $this->addFlash('success', 'Votre commentaire a été modifié.');
+    
+            // Retourne une réponse JSON
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(['success' => true, 'message' => 'Commentaire modifié avec succès.']);
+            }
+    
+            return $this->redirectToRoute('produit_detail', ['slug' => $produit->getSlug()]);
+        }
+
+        return $this->render('produit/_edit_comment_form.html.twig', [
+            'form' => $form->createView(),
+            'produit' => $produit,
+            'commentaire' => $commentaire,
+        ]);
+    }
+
 }
