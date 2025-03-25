@@ -3,35 +3,28 @@
 namespace App\Controller;
 
 use DateTime;
-use App\Entity\Panier;
 use App\Entity\Produit;
-use App\Entity\Commande;
 use App\Form\PanierType;
-use App\Entity\Allergene;
-use App\Entity\Categorie;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use Doctrine\ORM\EntityManager;
 use App\Form\AllergenFilterType;
 use App\Form\UpdateCommentaireType;
-use App\Controller\PanierController;
-use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
 use App\Repository\AllergeneRepository;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommentaireRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProduitController extends AbstractController
 {
@@ -354,4 +347,32 @@ class ProduitController extends AbstractController
         ]);
     }
 
+    #[Route('/commentaire/{id}/supprimer', name: 'commentaire_supprimer', methods: ['POST'])]
+    public function supprimer(
+        Commentaire $commentaire, 
+        EntityManagerInterface $em, 
+        Security $security, 
+        Request $request, 
+        CsrfTokenManagerInterface $csrfTokenManager,
+        ): Response
+    {
+
+        $produit = $commentaire->getProduit();
+        $token = new CsrfToken('delete' . $commentaire->getId(), $request->request->get('_token'));
+        
+        if (!$csrfTokenManager->isTokenValid($token)) {
+            return $this->redirectToRoute('produit_detail', ['slug' => $produit->getSlug()]);
+        }
+
+        if ($security->isGranted('ROLE_ADMIN') || $this->getUser() === $commentaire->getUser()) {
+            $em->remove($commentaire);
+            $em->flush();
+
+            $this->addFlash('success', 'Commentaire supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Vous n\'avez pas le droit de supprimer ce commentaire.');
+        }
+
+        return $this->redirectToRoute('produit_detail', ['slug' => $produit->getSlug()]);
+    }
 }

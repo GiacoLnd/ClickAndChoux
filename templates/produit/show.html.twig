@@ -72,9 +72,17 @@
                         <div class="comment-content">
                             <p><strong>{{ commentaire.user ? commentaire.user.nickName : 'Utilisateur inconnu' }}</strong> (le {{ commentaire.dateCommentaire |date("d/m/Y H:i") }})</p>
                             <p>{{ commentaire.contenu }}</p>
-                            {% if app.user == commentaire.user %}
-                                <button class="btn btn-sm btn-edit" data-comment-id="{{ commentaire.id }}" data-slug="{{ produit.slug }}"><i class="fa-solid fa-pen"></i></button>
-                            {% endif %}
+                            <div class="comment-icons">
+                                {% if app.user == commentaire.user %}
+                                    <button class="btn btn-sm btn-edit" data-comment-id="{{ commentaire.id }}" data-slug="{{ produit.slug }}"><i class="fa-solid fa-pen" title="Modifier le commentaire"></i></button>
+                                {% endif %}
+                                {% if app.user == commentaire.user or is_granted('ROLE_ADMIN') %}
+                                    <form method="post" action="{{ path('commentaire_supprimer', {id: commentaire.id}) }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
+                                        <button type="submit" class="supress-comment"><i class="fa-solid fa-trash" title="Supprimer le commentaire"></i></button>
+                                    </form>
+                                {% endif %}
+                            </div>
                         </div>
                     </li>
                 {% endfor %}

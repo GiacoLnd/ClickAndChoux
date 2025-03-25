@@ -711,7 +711,7 @@ body{
 /* Détails produit */
 .details-container{
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     padding: 15px;
     margin: 20px; 
@@ -725,7 +725,6 @@ body{
         transition: transform 0.2s ease-out;
         transform-origin: right center;
         cursor: pointer;
-        margin-right: 3rem;
     }
 
     .image-out-stock{
@@ -1017,15 +1016,34 @@ table.dataTable thead th, table.dataTable tbody td{
     .comment-show{
 
         ul{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
 
             li{
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: flex-start;
-                gap: 15px;
 
+                .comment-content{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                    width: 80vw;
 
+                    .comment-icons{
+                        display: flex;
+                        justify-content: flex-start;
+                        gap: 10px;
+
+                        .supress-comment{
+                            background-color: transparent;
+                            color: rgba(184, 0, 0, 0.768);
+                            border: none;
+                        }
+                    }
+                    button{
+                        padding: 0;
+                    }
+                }
                 .comment-info{
                     font-size: 0.9em;
                     padding: 10px;
@@ -1034,7 +1052,6 @@ table.dataTable thead th, table.dataTable tbody td{
 
                 p{
                     text-align: start;
-                    
                 }
             }
         }
@@ -1057,6 +1074,8 @@ table.dataTable thead th, table.dataTable tbody td{
                 height: 100px;
                 text-align: start;
                 font-size: 0.9em;
+                margin: 0;
+                padding: 5px;
             }
             
             .bubblegum-link{

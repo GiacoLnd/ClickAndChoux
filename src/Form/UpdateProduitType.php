@@ -25,7 +25,7 @@ class UpdateProduitType extends AbstractType
     {
         $builder
         ->add('isActive', ChoiceType::class, [
-            'label' => 'Produit actif',
+            'label' => 'Disponible en stock ?',
             'choices' => [
                 'Oui' => true,
                 'Non' => false,
