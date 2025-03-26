@@ -69,14 +69,16 @@ final class AdminController extends AbstractController
     }   
     
     #[Route('/utilisateur/commandes', name: 'list_commandes')]
-    public function listeCommandes(CommandeRepository $commandeRepository, ): Response
+    public function listeCommandes(EntityManagerInterface $em ): Response
     {
-        $statutExclu = 'panier';
-        $commandes = $commandeRepository->findCommandesSansStatut($statutExclu);
-            
+        $nouvellesCommandes =   $em->getRepository(Commande::class)->findBy(['statut' => 'En préparation']); // Retourne les commandes 'En préparation'
+        $commandesEnLivraison =   $em->getRepository(Commande::class)->findBy(['statut' => 'En livraison']); 
+        $commandesTerminées =   $em->getRepository(Commande::class)->findBy(['statut' => 'Livrée']);
 
         return $this->render('admin/list_commandes.html.twig', [
-            'commandes' => $commandes,
+            'nouvellesCommandes' => $nouvellesCommandes,
+            'commandesEnLivraison' => $commandesEnLivraison,
+            'commandesTerminées' => $commandesTerminées,
         ]);
     }
 
@@ -291,7 +293,7 @@ final class AdminController extends AbstractController
     #[Route('/contact/{id}', name: 'contact_details', methods: ['GET'])]
     public function contactDetails(Contact $contact, EntityManagerInterface $em): Response
     {
-        // Fais passer de non-lu en lu à l'ouverture des détails du contact
+        // Fais passer de non-lu en lu à l'ouverture des détails du
         if ($contact->isread() == false) {
             $contact->setIsRead(true);
             $em->flush();

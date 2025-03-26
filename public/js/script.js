@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // User orders list dataTables
 $(document).ready(function() {
-    var table = $('#table').DataTable({
+    var table = $('#table').DataTable({ // TODO - Revoir les tableaux de liste commande mais avec la classe pour n'avoir qu'une seule fonction JS
         responsive: true,
         scrollX: true,
         "paging": true,       // Active la pagination
@@ -368,6 +368,36 @@ $(document).ready(function() {
         "lengthChange": false,
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
+        },
+    });
+    $('#tableCommandesEnLivraison').DataTable({
+        responsive: true,
+        scrollX: true,
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "order": [[2, "desc"]],
+        "info": false,
+        "scrollY": "500px",
+        "pagingType": "numbers",
+        "lengthChange": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
+        },
+    });
+    $('#tableCommandesTerminées').DataTable({
+        responsive: true,
+        scrollX: true,
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "order": [[2, "desc"]],
+        "info": false,
+        "scrollY": "500px",
+        "pagingType": "numbers",
+        "lengthChange": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
         },
     });
 });

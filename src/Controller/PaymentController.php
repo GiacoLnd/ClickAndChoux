@@ -109,7 +109,7 @@ class PaymentController extends AbstractController{
         $commande->setUser($user);
         $commande->setDateCommande(new \DateTime());
         $commande->setStatutPaiement("payé");
-        $commande->setStatut("en cours");
+        $commande->setStatut('En préparation');
         $commande->setMontantTotal($commandeSession['total']);
         $commande->setDateLivraison(new \DateTime($commandeSession['delivery_date']));
         $commande->setDatePaiement(new \DateTime());

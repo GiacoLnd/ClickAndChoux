@@ -8,10 +8,13 @@ use App\Form\FacturationType;
 use App\Service\DeliveryTimeService;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Workflow\Registry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -131,9 +134,9 @@ final class CommandeController extends AbstractController
         ]);
     }
 
-
+    // Fonction gérant le détail d'une commande
     #[Route('/commande/{slug}', name: 'commande_detail', methods: ['GET'])]
-    public function detailCommande(Commande $commande, Security $security): Response
+    public function detailCommande(Commande $commande, Security $security, WorkflowInterface $commandeWorkflow): Response
     {
         $user = $this->getUser();
 
@@ -141,9 +144,39 @@ final class CommandeController extends AbstractController
             throw $this->createAccessDeniedException("Vous n'avez pas accès à cette commande.");
         }
 
+        // Vérifie les transitions disponibles
+        $availableTransition = [];
+        if ($commandeWorkflow->can($commande, 'start_delivery')) {
+            $availableTransition[] = 'start_delivery';
+        }
+        if ($commandeWorkflow->can($commande, 'complete')) {
+            $availableTransition[] = 'complete';
+        }
+
         return $this->render('commande/detail.html.twig', [
             'commande' => $commande,
             'user' => $user,
+            'availableTransition' => $availableTransition,
         ]);
     }
+
+    // Fonction gérant le workflow du statut d'une commande En cours -> En livraison -> Terminée
+    #[Route('/commande/{id}/update_status', name: 'update_status_commande',)]
+   public function updateStatus(Commande $commande, WorkflowInterface $commandeWorkflow, EntityManagerInterface $em): RedirectResponse
+   {
+        // Condition de vérification de la transition
+       if ($commandeWorkflow->can($commande, 'start_delivery')) {
+        $commandeWorkflow->apply($commande, 'start_delivery');
+        $this->addFlash('success', 'Commande en livraison !');
+    } elseif ($commandeWorkflow->can($commande, 'complete')) {
+        $commandeWorkflow->apply($commande, 'complete');
+        $this->addFlash('success', 'Commande terminée !');
+    } else {
+        $this->addFlash('error', 'Transition impossible');
+    }
+
+    $em->flush();
+
+    return $this->redirectToRoute('commande_detail', ['slug' => $commande->getSlug()]);
+}
 }

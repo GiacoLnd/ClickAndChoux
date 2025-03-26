@@ -5,47 +5,111 @@
 {% block body %}
     <section id="admin-list-order">
         <h2 class="page-title">Liste des Commandes :</h2>
-        {% if commandes is empty %}
-            <p>Aucune commande passée pour le moment.</p>
-        {% else %}
-            <table class="dataTable" id="table">
-                <thead>
+
+        <h2>Les Nouvelles Commandes (En préparation)</h2>
+        <table class="dataTable" id="table">
+            <thead>
+                <tr>
+                    <th>N° Commande</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Montant Total</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in nouvellesCommandes %}
                     <tr>
-                        <th>N° Commande</th>
-                        <th>Client</th>
-                        <th>Date</th>
-                        <th>Montant Total</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
+                        <td>{{ commande.reference }}</td>
+                        {% if commande.user %}
+                            <td>{{ commande.user.nickName }}</td>
+                        {% else %}
+                            <td>Client anonymisé suite suppression de compte</td>
+                        {% endif %}
+                        <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                        <td>{{ commande.montantTotal }}€</td>
+                        <td>
+                            <span class="badge bg-danger">{{ commande.statut }}</span>
+                        </td>
+                        <td><a href="{{ path('commande_detail', { slug: commande.slug }) }}" class="bubblegum-link">Voir</a></td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for commande in commandes %}
-                        <tr>
-                            <td>{{ commande.reference }}</td>
-                            {% if commande.user %}
-                                <td>{{ commande.user.nickName }}</td>
-                            {% else %}
-                                <td>Client anonymisé suite suppression de compte</td>
-                            {% endif %}
-                            <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
-                            <td>{{ commande.montantTotal }}€</td>
-                            <td>
-                            {% if commande.statut == 'confirmée' %}
-                                <span class="badge bg-success">Confirmée</span>
-                            {% else %}
-                                <span class="badge bg-warning">{{ commande.statut }}</span>
-                            {% endif %}
-                            </td>
-                            <td><a href="{{ path('commande_detail', { slug: commande.slug }) }}" class="bubblegum-link">Voir</a></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="finished-order-table">
+        <div class="delivery-table">
+        <h2>Commandes En Livraison</h2>
+        <table class="tableCommandesEnLivraison" id="tableCommandesEnLivraison">
+            <thead>
+                <tr>
+                    <th>N° Commande</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Montant Total</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandesEnLivraison %}
+                    <tr>
+                        <td>{{ commande.reference }}</td>
+                        {% if commande.user %}
+                            <td>{{ commande.user.nickName }}</td>
+                        {% else %}
+                            <td>Client anonymisé suite suppression de compte</td>
+                        {% endif %}
+                        <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                        <td>{{ commande.montantTotal }}€</td>
+                        <td>
+                            <span class="badge bg-warning">{{ commande.statut }}</span>
+                        </td>
+                        <td><a href="{{ path('commande_detail', { slug: commande.slug }) }}" class="bubblegum-link">Voir</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        <div class="finished-table">
+        <h2>Commandes Terminées (Livrées)</h2>
+        <table class="tableCommandesTerminées" id="tableCommandesTerminées">
+            <thead>
+                <tr>
+                    <th>N° Commande</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Montant Total</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandesTerminées %}
+                    <tr>
+                        <td>{{ commande.reference }}</td>
+                        {% if commande.user %}
+                            <td>{{ commande.user.nickName }}</td>
+                        {% else %}
+                            <td>Client anonymisé suite suppression de compte</td>
+                        {% endif %}
+                        <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                        <td>{{ commande.montantTotal }}€</td>
+                        <td>
+                            <span class="badge bg-success">{{ commande.statut }}</span>
+                        </td>
+                        <td><a href="{{ path('commande_detail', { slug: commande.slug }) }}" class="bubblegum-link">Voir</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        </div>
             <div class="d-flex justify-content-center align-items-center p-3">
                 <a class="bubblegum-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
             </div>
-        {% endif %}
     </section>
 {% endblock %}
  

@@ -1,0 +1,21 @@
+framework:
+    workflows:
+        commande_workflow:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'statut'
+            supports:
+                - App\Entity\Commande
+            initial_marking: 'En préparation'
+            places:
+                - 'En préparation'
+                - 'En livraison'
+                - 'Livrée'
+            transitions:
+                start_delivery:
+                    from: 'En préparation'
+                    to: 'En livraison'
+                complete:
+                    from: 'En livraison'
+                    to: 'Livrée'

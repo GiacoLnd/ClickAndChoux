@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\CommandeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Cocur\Slugify\Slugify;
+use App\Repository\CommandeRepository;
+use Symfony\Component\Workflow\Marking;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -406,4 +407,14 @@ class Commande
 
         return $this;
     }
+    
+    // public function getMarking(): string
+    // {
+    //     return $this->statut;
+    // }
+
+    // public function setMarking(string $marking): void
+    // {
+    //     $this->statut = $marking;
+    // }
 }

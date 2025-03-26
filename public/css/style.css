@@ -1094,3 +1094,17 @@ table.dataTable thead th, table.dataTable tbody td{
     width: 100%;
 }
 
+.finished-order-table{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    .delivery-table{
+        margin: 15px;
+    }
+    .finished-table{
+        margin: 15px;
+    }
+}
+
