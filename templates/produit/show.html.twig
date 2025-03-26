@@ -3,7 +3,7 @@
 {% block title %}{{ produit.nomProduit }} - Détails{% endblock %}
 
 {% block body %}
-    <section id="product-details">
+    <section id="product-details"> 
         <div class="text-center">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
@@ -55,14 +55,18 @@
         </div>
         <div class="comment-section">
             <div class="comment-show">
-                <div class="comment-add">
-                    {% if app.user %}
-                        {{ form_start(commentForm) }}
-                            {{ form_row(commentForm.contenu) }}
-                            {{ form_row(commentForm.commenter) }}
-                        {{ form_end(commentForm) }}
-                    {% endif %}
-                </div>
+                {% if hasOrdered == true %}
+                    <div class="comment-add">
+                        {% if app.user %}
+                            {{ form_start(commentForm) }}
+                                {{ form_row(commentForm.contenu) }}
+                                {{ form_row(commentForm.commenter) }}
+                            {{ form_end(commentForm) }}
+                        {% endif %}
+                    </div>
+                {% else %}
+                <p style="color: #894e3f; font-size: 1.2em; font-weight:700;">Vous devez commander ce produit pour le commenter</p>
+                {% endif %}
             {% if commentaires is empty %}
                 <p>Aucun commentaire pour ce produit.</p>
             {% else %}
