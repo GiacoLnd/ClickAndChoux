@@ -10,6 +10,7 @@
         <table id="table">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Email</th>
                     <th>Téléphone</th>
                     <th>Date du contact</th>
@@ -19,6 +20,14 @@
             <tbody>
                 {% for contactForm in contactForms %}
                     <tr>
+
+                        <td>
+                            {% if contactForm.isRead == false %}
+                                <span style="color: green;"><i class="fa-solid fa-envelope"></i></span>
+                            {% else %}
+                                <span style="color: grey;"><i class="fa-solid fa-envelope-open-text"></i></span>
+                            {% endif %}
+                        </td>
                         <td>{{ contactForm.email }}</td>
                         <td>{{ contactForm.telephone }}</td>
                         <td>{{ contactForm.dateContact|date('d/m/Y H:i') }}</td>

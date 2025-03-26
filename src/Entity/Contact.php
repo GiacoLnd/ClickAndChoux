@@ -26,6 +26,9 @@ class Contact
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateContact = null;
 
+    #[ORM\Column]
+    private ?bool $is_read = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Contact
     public function setDateContact(\DateTimeInterface $dateContact): static
     {
         $this->dateContact = $dateContact;
+
+        return $this;
+    }
+
+    public function isRead(): ?bool
+    {
+        return $this->is_read;
+    }
+
+    public function setIsRead(bool $is_read): static
+    {
+        $this->is_read = $is_read;
 
         return $this;
     }

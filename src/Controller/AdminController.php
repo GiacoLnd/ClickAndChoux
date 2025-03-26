@@ -25,20 +25,35 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Stripe\Stripe;
+use Stripe\Balance;
 
 #[Route('/admin', name: 'admin_')]
 #[IsGranted('ROLE_ADMIN')]
 final class AdminController extends AbstractController
 {
+    public function __construct()
+    {
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']); 
+    }
+
     #[Route('/dashboard', name: 'profile')]
-    public function dashboardAdmin(Request $request, EntityManagerInterface $entityManager): Response
+    public function dashboardAdmin(): Response
     {
         $user = $this->getUser();
+
+        try {
+            $balance = Balance::retrieve();
+
+            $availableBalance = $balance->available[0]->amount / 100;
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la récupération du solde Stripe: ' . $e->getMessage());
+            $availableBalance = 0;
+        }
         
         return $this->render('admin/index.html.twig', [
             'user' => $user,
+            'availableBalance' => $availableBalance,
         ]);
     }
 
@@ -272,10 +287,15 @@ final class AdminController extends AbstractController
         ]);
     }
 
-    // Function to display contact list
+    // Function to display contact details
     #[Route('/contact/{id}', name: 'contact_details', methods: ['GET'])]
-    public function contactDetails(Contact $contact): Response
+    public function contactDetails(Contact $contact, EntityManagerInterface $em): Response
     {
+        // Fais passer de non-lu en lu à l'ouverture des détails du contact
+        if ($contact->isread() == false) {
+            $contact->setIsRead(true);
+            $em->flush();
+        }
 
         return $this->render('admin/contact_details.html.twig', [
             'contact'=> $contact,

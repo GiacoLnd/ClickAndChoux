@@ -1033,7 +1033,12 @@ table.dataTable thead th, table.dataTable tbody td{
                         display: flex;
                         justify-content: flex-start;
                         gap: 10px;
-
+                        
+                        .edit-comment-icon{
+                            background-color: transparent;
+                            color: var(--font-color);
+                            border: none;
+                        }
                         .supress-comment{
                             background-color: transparent;
                             color: rgba(184, 0, 0, 0.768);

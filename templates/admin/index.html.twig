@@ -19,15 +19,21 @@
                 <p>Bonjour, chérie</p>
                 <p>Email Admin : {{ user.email }}</p>
             </div>
-            <div class="flex-row-center">
+            <div class="flex-row-center p-5">
                 <a href="{{ path('admin_list_user') }}" class="bubblegum-link">Liste des utilisateurs</a>
                 <a href="{{ path('admin_list_commandes') }}" class="bubblegum-link">Liste des Commandes</a>
-            </div>
-            <div class="flex-row-center">
+
+
                 <a href="{{ path('admin_add_product') }}" class="bubblegum-link">Ajouter un produit</a>
                 <a href="{{ path('admin_delete_product') }}" class="bubblegum-link">Suppression produit</a>
-            </div>
+
             <a href="{{ path('admin_contact_list') }}" class="bubblegum-link">Contact client</a>
+            </div>
+            <div class="flex-row-center">
+                <p>Solde actuel de l'entreprise :</p>
+                <p>{{ availableBalance is not null ? availableBalance : 'Non disponible' }} €</p>
+            </div>
+            <a href="https://dashboard.stripe.com/test/dashboard" target="_blank">Tableau de bord financier</a>
         </div>
     </section>
 {% endblock %}

@@ -69,8 +69,9 @@ class PaymentController extends AbstractController{
             ],
             'quantity' => 1,
         ];
-    
-        Stripe::setApiKey('sk_test_51R1pUOHxeRAfTDA8PykJyMYP8Fc2K9JQPzAsB3f2yRW2L2LwO9t7A86sHI9FMavsUm2pkikgWm5ub7eLqtXuKx4f00XTuD6RRg');
+        $stripeSecretKey = $_ENV['STRIPE_SECRET_KEY'];
+        
+        Stripe::setApiKey($stripeSecretKey);
     
         // Création de la session de paiement
         $checkout_session = Session::create([

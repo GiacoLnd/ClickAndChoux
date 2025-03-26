@@ -74,18 +74,23 @@
                             <p>{{ commentaire.contenu }}</p>
                             <div class="comment-icons">
                                 {% if app.user == commentaire.user %}
-                                    <button class="btn btn-sm btn-edit" data-comment-id="{{ commentaire.id }}" data-slug="{{ produit.slug }}"><i class="fa-solid fa-pen" title="Modifier le commentaire"></i></button>
+                                    <button class="edit-comment-icon" data-comment-id="{{ commentaire.id }}" data-slug="{{ produit.slug }}" aria-label="Modifier"><i class="fa-solid fa-pen" title="Modifier le commentaire"></i></button>
                                 {% endif %}
                                 {% if app.user == commentaire.user or is_granted('ROLE_ADMIN') %}
                                     <form method="post" action="{{ path('commentaire_supprimer', {id: commentaire.id}) }}">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
-                                        <button type="submit" class="supress-comment"><i class="fa-solid fa-trash" title="Supprimer le commentaire"></i></button>
+                                        <button type="submit" class="supress-comment" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');" aria-label="Supprimer">
+                                            <i class="fa-solid fa-trash" title="Supprimer le commentaire"></i>
+                                        </button>
                                     </form>
                                 {% endif %}
                             </div>
                         </div>
                     </li>
                 {% endfor %}
+                {% if totalCommentaires > 5 %}
+                    <a href="{{ path('produit_all_comments', {'slug': produit.slug}) }}">Voir tous les commentaires ( {{ totalCommentaires }} )</a>
+                {% endif %}
 
                     <!-- Modale de modification -->
                     <div id="editCommentModal" class="modal" tabindex="-1" aria-hidden="true">
@@ -93,7 +98,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Modifiez votre commentaire</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                                 </div>
                                 <div class="modal-body" id="modalContent">
                                     <!-- Formulaire ICI -->

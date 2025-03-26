@@ -242,7 +242,11 @@ class ProduitController extends AbstractController
             }
         }
 
-        $commentaires = $commentaireRepository->findCommentairesByProduit($produit);
+        $limit = 5;
+        $commentaires = $commentaireRepository->findCommentairesByProduit($produit, 1, $limit);  // Page 1 avec un maximum de 5 commentaires
+    
+        // Vérification du nombre total de commentaires pour le produit
+        $totalCommentaires = $commentaireRepository->countCommentairesByProduit($produit);
 
         $cartForm = $this->createForm(PanierType::class);
         $cartForm->handleRequest($request);
@@ -294,6 +298,7 @@ class ProduitController extends AbstractController
             'commentaires' => $commentaires,
             'hasOrdered' => $hasOrdered,
             'allergenes' => $produit->getAllergenes(),
+            'totalCommentaires' => $totalCommentaires,
         ]);
     }
     #[Route('/produit/{slug}/modifier-commentaire/{commentId}', name: 'produit_modifier_commentaire', methods: ['GET', 'POST'])]
@@ -374,5 +379,44 @@ class ProduitController extends AbstractController
         }
 
         return $this->redirectToRoute('produit_detail', ['slug' => $produit->getSlug()]);
+    }
+
+    // Fonction récupérant tous les commentaires d'un produit 
+    #[Route('/produit/{slug}/commentaires', name: 'produit_all_comments', methods: ['GET'])]
+    public function displayCommentaires(
+        Produit $produit,
+        Request $request,
+        EntityManagerInterface $em,
+        CommentaireRepository $commentaireRepository
+    ): Response {
+        $user = $this->getUser(); 
+        
+        $commentaire = new Commentaire();
+        $commentForm = $this->createForm(CommentaireType::class, $commentaire);
+    
+        if ($user) {
+            $commentForm->handleRequest($request);
+    
+            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+                $commentaire->setUser($user);
+                $commentaire->setProduit($produit);
+                $commentaire->setDateCommentaire(new DateTime());
+    
+                $em->persist($commentaire);
+                $em->flush();
+    
+                $this->addFlash('success', 'Votre commentaire a été ajouté avec succès.');
+    
+                return $this->redirectToRoute('produit_all_comments', ['slug' => $produit->getSlug()]);
+            }
+        }
+    
+        $commentaires = $commentaireRepository->findCommentairesByProduit($produit);
+    
+        return $this->render('produit/all_comments.html.twig', [
+            'produit' => $produit,
+            'commentaires' => $commentaires,
+            'commentForm' => $commentForm->createView(),
+        ]);
     }
 }
