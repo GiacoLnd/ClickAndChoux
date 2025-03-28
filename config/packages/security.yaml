@@ -22,7 +22,7 @@ security:
                 enable_csrf: true
                 default_target_path: app_home
             login_throttling: 
-                max_attempts: 3
+                max_attempts: 5
                 interval: '60 minutes'
                 
             logout:

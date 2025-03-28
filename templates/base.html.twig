@@ -1,9 +1,44 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="{{ asset('tarteaucitron/tarteaucitron.min.js') }}"></script>
+        <script type="text/javascript">
+            tarteaucitron.init({
+                "privacyUrl": "", /* Url de la politique de confidentialité */
+                "bodyPosition": "top", /* position du bandeau */
+                "hashtag": "#tarteaucitron", /* Hashtag pour ouvrir le panneau */
+                "cookieName": "tarteaucitron", /* Nom du cookie */
+                "orientation": "middle", /* Position de la bannière (top, bottom, popup, banner) */
+                "groupServices": true, /* Grouper les services */
+                "showDetailsOnClick": true, /* Cliquer pour afficher les détails */
+                "serviceDefaultState": "wait", /* Statut par défaut des services */
+                "showAlertSmall": false, /* Pas de petite bannière en bas à droite */
+                "cookieslist": false, /* Pas de liste des cookies */
+                "closePopup": true, /* X pour fermer le popup */
+                "showIcon": true, /* Afficher l'icône pour ouvrir le panneau */
+                "iconPosition": "BottomRight", /* Position de l'icône */
+                "adblocker": false, /* Message si un Adblocker est détecté */
+                "DenyAllCta": true, /* Bouton "Tout refuser" */
+                "AcceptAllCta": true, /* Bouton "Tout accepter" */
+                "highPrivacy": true, /* Attente du consentement */
+                "alwaysNeedConsent": false, /* Demander le consentement pour les services "Privacy by design" */
+                "handleBrowserDNTRequest": false, /* Respecter Do Not Track */
+                "removeCredit": false, /* Ne pas retirer le crédit vers tarteaucitron.io */
+                "moreInfoLink": true, /* Lien "En savoir plus" */
+                "useExternalCss": false, /* Ne pas utiliser de CSS externe */
+                "useExternalJs": false, /* Ne pas utiliser de JS externe */
+                "mandatory": true, /* Afficher les cookies obligatoires */
+                "mandatoryCta": false, /* Ne pas afficher de bouton pour cookies obligatoires */
+                "googleConsentMode": true, /* Activer le Google Consent Mode */
+                "bingConsentMode": true, /* Activer le Bing Consent Mode */
+                "softConsentMode": false, /* Pas de soft consent */
+                "dataLayer": false, /* Ne pas envoyer d'événements dans dataLayer */
+                "serverSide": false, /* Pas de traitement côté serveur */
+                "partnersList": true /* Afficher la liste des partenaires */
+            });
+        </script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
@@ -22,7 +57,7 @@
             <link rel="stylesheet" href="{{ asset('css/style.css') }}">
             <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
         {% endblock %}
-
+        
     </head>
     <body style="background-color: #FFFFFF">
         <div id="wrapper">
