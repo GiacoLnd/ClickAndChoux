@@ -6,13 +6,6 @@
     <section id="admin-add-product">
         <h2 class="page-title">Ajouter un Produit</h2>
 
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
-        {% for message in app.flashes('danger') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-
         {{ form_start(form, {'method': 'POST'}) }}
         <div class="flex-column-center" id="update-product">
             <div class="flex-column-center">

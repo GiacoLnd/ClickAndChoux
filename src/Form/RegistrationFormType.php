@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -107,8 +108,19 @@ class RegistrationFormType extends AbstractType
                         'message' =>    'Votre mot de passe doit contenir au moins 12 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
                     ]),
                 ],
-            ])
-        ;
+            ]);
+            
+            // Champs pour Honeypot
+        $builder
+            ->add('fax', TextType::class, [
+                'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'class' => 'honeypot',
+                    'aria-hidden' => 'true',
+                    'tabindex' => -1,
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

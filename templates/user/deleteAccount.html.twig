@@ -3,14 +3,6 @@
 {% block body %}
     <section id="delete-account">
         <div class="text-center">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
         <h2 class="page-title">Supprimer mon compte</h2>
         <p>Attention, cette action est irréversible.</p>
         <p>Veuillez confirmer votre mot de passe.</p>

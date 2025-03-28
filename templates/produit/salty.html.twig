@@ -4,16 +4,6 @@
 
 {% block body %}
     <section id="catalog-salty">
-        <div data-category="salty">
-            <div class="text-center">
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-            </div>
 
             <h2 class="page-title">Les Choux Salés</h2>
             <div class="catalog">

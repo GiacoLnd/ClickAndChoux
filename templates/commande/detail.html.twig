@@ -10,7 +10,7 @@
         <p><strong>Date de livraison : </strong> {{ commande.dateLivraison|date('d/m/Y') }}</p>
         <p><strong>Statut de la commande : </strong> {{ commande.statut }}</p>
         <h3 class="page-title">Total : {{ commande.montantTotal }}€</h3>
-
+        
         <h2 class="page-title pt-4">Produits commandés</h2>
         <div class="commande-list">
             {% for panier in commande.paniers %}
@@ -25,10 +25,10 @@
 
 
 
-        <div class="status-button">
+        <div class="flex-column-center">
             {% if 'start_delivery' in availableTransition %}
                 <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
-                    <button type="submit">
+                    <button type="submit" class="bubblegum-link" style="background: #FFA85C;">
                         Passer en livraison
                     </button>
                 </form>
@@ -36,7 +36,7 @@
 
             {% if 'complete' in availableTransition %}
                 <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
-                    <button type="submit">
+                    <button type="submit" class="bubblegum-link" style="background: #568203;">
                         Terminer la commande
                     </button>
                 </form>

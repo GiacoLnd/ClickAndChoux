@@ -4,25 +4,13 @@
 
 {% block body %}
     <section id="update-profile">
-        <div class="text-center">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
         <h2 class="page-title">Modifier mon profil</h2>
-        {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
         {{ form_start(formProfile) }}
-        {{ form_row(formProfile.nickName) }}
-        {{ form_row(formProfile.email) }}
-        <div class="flex-column-center">
-            {{ form_row(formProfile.save) }}
-        </div>
+            {{ form_row(formProfile.nickName) }}
+            {{ form_row(formProfile.email) }}
+            <div class="flex-column-center">
+                {{ form_row(formProfile.save) }}
+            </div>
         {{ form_end(formProfile) }}
         <a class="bubblegum-link" href="{{path('app_user_profil')}}">Retour au profil</a>
     </section>

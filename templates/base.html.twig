@@ -96,11 +96,21 @@
                         <button class="burger" id="burger-button" aria-label="Menu">
                             <i class="fa-solid fa-bars" id="burger-icon"></i>
                         </button>
-                </div>                     
+                </div>
+                <div class="text-center">
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}  
+                </div>
             </nav>
         </header>
         <main class="flex-column-center">
-            {% block body %}{% endblock %} 
+            {% block body %}
+            {% endblock %} 
         </main>
         <footer class="footer" role="contentinfo">
             <div class="footer-top">

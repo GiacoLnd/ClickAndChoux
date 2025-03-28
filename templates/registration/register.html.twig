@@ -35,7 +35,12 @@
                     {{ form_widget(registrationForm.agreeTerms) }}
                     {{ form_errors(registrationForm.agreeTerms) }}
                 </div>
-                
+
+                <div class="honeypot">
+                    {{ form_label(registrationForm.fax) }}
+                    {{ form_row(registrationForm.fax) }}
+                    {{ form_errors(registrationForm.fax) }}
+                </div>
             <div class="flex-column-center">
                 <button type="submit" class="bubblegum-link">
                     S'inscrire

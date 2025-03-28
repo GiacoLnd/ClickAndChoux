@@ -24,24 +24,34 @@ final class ContactController extends AbstractController
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
+            
             $email = $form->get('email');
             $phone = $form->get('telephone');
+            $fax = $form->get('fax');
 
             if (empty($email) && empty($phone)) {
                 $this->addFlash('error', "Pour pouvoir vous recontacter, nous avons besoin soit de votre email, soit de votre téléphone");
-        }
-        $contact->setDateContact(new DateTime());
+            }
 
-        $entityManager->persist($contact);
-        $entityManager->flush();
+            // Champs honeypot
+            if (!empty($fax->getData())) {
+                $this->addFlash('danger', 'Spam détecté. Vous avez rempli un champ caché');
+                return $this->redirectToRoute('app_home');
+            }
 
-        $this->addFlash('success', "Votre message a été envoyé !");
+            if ($form->isValid()) {
+                $contact->setDateContact(new DateTime());
 
-        return $this->redirectToRoute('app_home');
+                $entityManager->persist($contact);
+                $entityManager->flush();
+        
+                $this->addFlash('success', "Votre message a été envoyé !");
+        
+                return $this->redirectToRoute('app_home');
+            }
         }
     
-
         return $this->render('contact/index.html.twig', [
             'form' => $form,
         ]);

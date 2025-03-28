@@ -30,8 +30,17 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
+        if ($form->isSubmitted()) {
+            $fax = $form->get('fax');
+            
+            // Champs honeypot
+            if (!empty($fax->getData())) {
+                $this->addFlash('danger', 'Spam détecté. Vous avez rempli un champ caché');
+                return $this->redirectToRoute('app_home');
+            }
+            
+            if($form->isValid()){
+                            /** @var string $plainPassword */
             $user->setRoles(['ROLE_USER']);
             $plainPassword = $form->get('plainPassword')->getData();
 
@@ -53,6 +62,8 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
 
             return $security->login($user, 'form_login', 'main');
+            }
+
         }
 
         return $this->render('registration/register.html.twig', [

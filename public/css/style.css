@@ -932,28 +932,10 @@ table.dataTable thead th, table.dataTable tbody td{
     font-size: 0.9em;
     font-family: var(--font-family-primary);
 }
-#dt-search-0{
-    border: 2px solid var(--link-color);
-    border-radius: 50px;
-    margin: 10px;
-    text-align: center;
-}
 #dt-length-0{
     border: 2px solid var(--link-color);
     border-radius: 50px;
     text-align: center;
-}
-/* DataTable Admin */
-#table_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav{
-    background: transparent;
-    color: var(--link-color);
-    font-size: 1.2em;
-    font-family: var(--link-family-primary)
-}
-#table_wrapper > div:nth-child(3) > div.dt-layout-cell.dt-layout-end > div > nav button{
-    border: none;
-    background: none;
-    padding: 5px;
 }
 /* Fin DataTables */
 
@@ -1108,3 +1090,6 @@ table.dataTable thead th, table.dataTable tbody td{
     }
 }
 
+.honeypot{
+    display: none;
+}

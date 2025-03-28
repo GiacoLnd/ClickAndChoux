@@ -4,15 +4,6 @@
 
 {% block body %}
     <section id="profile">
-        <div class="text-center">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
         <h2 class="page-title">Profil</h2>
         <div class="text-center">
             <p>Email : {{ user.email }}</p>

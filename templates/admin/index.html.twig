@@ -4,15 +4,6 @@
 
 {% block body %}
     <section id="admin-profile">
-        <div class="text-center">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
         <div class="flex-column-center">
             <div class="text-center">
                 <h2 class="page-title">Panneau Administrateur</h2>

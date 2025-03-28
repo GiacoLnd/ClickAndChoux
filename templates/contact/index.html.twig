@@ -5,13 +5,6 @@
 {% block body %}
     <section id="contact-form">
         <h2 class="page-title">Contactez-nous</h2>
-
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
-        {% for message in app.flashes('danger') %}
-            <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
         
         <p>
             Vous êtes un particulier ou une entreprise et avez un évènement en préparation ?<br> 
@@ -47,6 +40,11 @@
                 <label>{{ form_label(form.consent) }}</label>
                 {{ form_widget(form.consent) }}
                 {{ form_errors(form.consent) }}
+        </div>
+        <div class="honeypot">
+                <label>{{ form_label(form.fax) }}</label>
+                {{ form_widget(form.fax) }}
+                {{ form_errors(form.fax) }}
         </div>
         <div class="flex-column-center">
             <button type="submit" class="bubblegum-link">

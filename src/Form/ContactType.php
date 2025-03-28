@@ -58,7 +58,18 @@ class ContactType extends AbstractType
                     'class' => 'flex-column-center',
                 ],   
             ]);
-        
+
+            // Champs pour Honeypot
+        $builder
+            ->add('fax', TextType::class, [
+                'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'class' => 'honeypot',
+                    'tabindex' => -1,
+                    'aria-hidden' => 'true',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

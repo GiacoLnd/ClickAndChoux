@@ -5,15 +5,6 @@
 {% block body %}
     <section id="catalog-sweety">
         <div data-category="sweety">
-            <div class="text-center">
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-            </div>
             <div class="catalog-page">
                 <h2 class="page-title">Les Choux Sucrés</h2>
                 <p class="catalog-description">Tous nos choux se vendent par lot de six.<br>

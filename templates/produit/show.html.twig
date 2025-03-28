@@ -4,15 +4,6 @@
 
 {% block body %}
     <section id="product-details"> 
-        <div class="text-center">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
         <div class="details-container">
             {% if produit.isActive == true %}
                 <div class="details-image">
