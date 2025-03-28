@@ -2,10 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Panier;
-use App\Entity\Produit;
-use App\Entity\Commande;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,11 +12,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, SessionInterface $session): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
+        $session->set('_locale', 'fr');
         
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

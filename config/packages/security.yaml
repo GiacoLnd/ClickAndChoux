@@ -21,6 +21,10 @@ security:
                 check_path: app_login
                 enable_csrf: true
                 default_target_path: app_home
+            login_throttling: 
+                max_attempts: 3
+                interval: '60 minutes'
+                
             logout:
                 path: app_logout
                 target: /
@@ -30,7 +34,6 @@ security:
                 path: '/'               # Chemin pour lequel le cookie est valide
                 name: 'REMEMBERME'      # Nom du cookie
                 secure: auto            # Le cookie est transmis uniquement sur HTTPS si disponible
-                httponly: true          # Le cookie n'est pas accessible via JavaScript
                 samesite: lax           # Protection contre les attaques CSRF
                 always_remember_me: true # L'utilisateur doit cocher la case "Se souvenir de moi"
             # activate different ways to authenticate

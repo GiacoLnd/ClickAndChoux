@@ -1,0 +1,2 @@
+rate_limiter:
+    login_blocked: 'Trop de tentatives de connexion échouées. Veuillez réessayer dans %time%'
