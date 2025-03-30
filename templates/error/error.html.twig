@@ -17,7 +17,7 @@
             <p>Vous n'avez pas l'autorisation d'accéder à cette page (Erreur 403).</p>
         {% else %}
             <p>{{ exception.message }}</p>
-            <p>Code d'erreur : {{ exception.getStatusCode() }}</p>
+            {# <p>Code d'erreur : {{ exception.getStatusCode() }}</p> #}
         {% endif %}
     {% endif %}
 

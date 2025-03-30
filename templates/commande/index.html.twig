@@ -16,12 +16,17 @@
             {% for panier in commande.paniers %}
                 <div class="commande-product">
                     <a href="{{ path('produit_detail', {'slug': panier.produit.slug}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
-                    <a href="{{ path('produit_detail', {'slug': panier.produit.slug}) }}"><h3>{{ panier.produit.nomProduit }}</h3></a>
-                    <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
-                    <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
+                    <div class="title-price">
+                        <div class="details">
+                            <a href="{{ path('produit_detail', {'slug': panier.produit.slug}) }}"><h2>{{ panier.produit.nomProduit }}</h2></a>
+                            <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
+                            <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
         <a href="{{ path('app_user_profil') }}" class="bubblegum-link">Voir mes commandes</a>
     </section>
 {% endblock %}
+ 

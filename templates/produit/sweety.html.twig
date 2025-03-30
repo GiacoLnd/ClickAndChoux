@@ -21,6 +21,7 @@
                 <div class="catalog-container">
                     <div id="sidePanel" class="side-panel">
                         <div class="allergene-filter">
+                            <p>Allergène(s) à exclure :</p>
                             {{ form_start(form) }}
                             
                             {% for item in form.allergenes %}
@@ -45,7 +46,7 @@
                     <button id="toggleFilterPanelBtn" class="side-panel-btn">
                         <i class="fa-solid fa-sliders"></i> Filtres
                     </button>
-                </div> 
+                </div>  
                 <div class="choux-grid-container">
                     <ul class="choux-grid" id="produits-list">
                         {% for produit in produits %}

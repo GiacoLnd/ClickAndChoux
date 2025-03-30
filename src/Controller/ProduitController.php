@@ -17,11 +17,13 @@ use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommentaireRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -254,17 +256,15 @@ class ProduitController extends AbstractController
         if($produit->isActive() == true) {
             if ($cartForm->isSubmitted() && $cartForm->isValid()) {
                 $quantity = (int) $cartForm->get('quantity')->getData();
-        
+            
                 if ($quantity < 1) {
                     $this->addFlash('danger', 'La quantité doit être supérieure à 0 !');
                 } else {
                     $cart = $session->get('panier', []);
-        
+            
                     if (isset($cart[$produit->getId()])) {
-                        // Mise à jour quantité
                         $cart[$produit->getId()]['quantite'] += $quantity;
                     } else {
-                        // Ajout du produit 
                         $cart[$produit->getId()] = [
                             'id' => $produit->getId(),
                             'nom' => $produit->getNomProduit(),
@@ -275,18 +275,30 @@ class ProduitController extends AbstractController
                             'quantite' => $quantity
                         ];
                     }
-        
-                    // Mise à jour de la session
+            
                     $session->set('panier', $cart);
-        
                     $this->addFlash('success', 'Produit ajouté au panier !');
-        
-                    // Redirection vers la page de catégorie
-                    if ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Sucré') {
-                        return $this->redirectToRoute('sweety_produit');
-                    } elseif ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Salé') {
-                        return $this->redirectToRoute('salty_produit');
-                    }
+            
+                    // Création de la redirection avec le cookie
+                    $categorie = $produit->getCategorie()->getNomCategorie();
+                    $route = $categorie === 'Sucré' ? 'sweety_produit' : 'salty_produit';
+            
+                    $response = new RedirectResponse($this->generateUrl($route));
+                    $response->headers->setCookie(
+                        Cookie::create(
+                            'panier_backup',
+                            json_encode($cart),
+                            time() + 3600 * 24 * 7, // 7 jours
+                            '/', // Dispo sur tout le site
+                            null, // Domaine par defaut - aucun
+                            true, // Mode HTTPS - activé
+                            true, // httpOnly
+                            false, // Laisse symfony encoder le cookie
+                            'strict' // SameSite - évite le vol de cookie
+                        )
+                    );
+            
+                    return $response;
                 }
             }
         }

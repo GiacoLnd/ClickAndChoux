@@ -9,18 +9,25 @@
         {% if commande.cart is empty %}
             <p class="catalog-description">Aucune commande trouvée.</p>
         {% else %}
-            <div class="commande-list">
-                {% for item in commande.cart %}
-                    <div class="commande-product">
-                        <a href="{{ path('produit_detail', {'slug': item.slug}) }}">
-                            <img src="/img/{{ item.image }}" alt="{{ item.nom }}" class="commande-image">
-                        </a>
-                        <a href="{{ path('produit_detail', {'slug': item.slug}) }}"><h3>{{ item.nom }}</h3></a>
-                        <p>Quantité : <strong>{{ item.quantite }}</strong></p>
-                        <p>Prix total : <strong>{{ (item.prixTTC * item.quantite)|number_format(2, ',', ' ') }} €</strong></p>
+        <div class="commande-list">
+            {% for item in commande.cart %}
+                <div class="commande-product">
+                    <a href="{{ path('produit_detail', {'slug': item.slug}) }}">
+                        <img src="/img/{{ item.image }}" alt="{{ item.nom }}" class="commande-image">
+                    </a>
+                    <div class="title-price">
+                        <div class="details">
+                            <a href="{{ path('produit_detail', {'slug': item.slug}) }}">
+                                <h2>{{ item.nom }}</h2>
+                            </a>
+                            <p>Quantité : <strong>{{ item.quantite }}</strong></p>
+                            <p>Prix total : <strong>{{ (item.prixTTC * item.quantite)|number_format(2, ',', ' ') }} €</strong></p>
+                        </div>
                     </div>
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
+        </div>
+        
 
             <p>Frais de livraison : + {{ delivery_fees }}€</p>
             <h3>Montant total : {{ commande.total|number_format(2, ',', ' ') }} €</h3>

@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,7 +96,10 @@ class PanierController extends AbstractController
         
         $this->addFlash('success', 'Tous les produits ont été supprimés du panier !');
     
-        return $this->redirectToRoute('panier_afficher');
+        $response = new RedirectResponse($this->generateUrl('panier_afficher'));
+        $response->headers->clearCookie('panier_backup');
+    
+        return $response;
     }
 
     // Fonction Validant le panier

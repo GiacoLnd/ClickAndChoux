@@ -237,7 +237,15 @@ class PaymentController extends AbstractController{
     
         $this->addFlash('success', 'Votre paiement a été validé !');
     
-        return $this->redirectToRoute('commande_confirmation', ['slug' => $reference]);
+        // Redirection avec suppression du cookie de backup du panier
+        $url = $this->generateUrl('commande_confirmation', ['slug' => $reference]);
+        $response = new RedirectResponse($url);
+
+        // Suppression le cookie du panier
+        $response->headers->clearCookie('panier_backup');
+
+        // Retourne la redirection avec le cookie supprimé
+        return $response;
     }
     
     
