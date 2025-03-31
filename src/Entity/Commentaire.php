@@ -21,6 +21,7 @@ class Commentaire
     private ?\DateTimeInterface $DateCommentaire = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]

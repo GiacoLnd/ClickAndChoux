@@ -103,7 +103,7 @@ final class AdminController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Informations personnelles mises à jour.');
-            return $this->redirectToRoute('admin_list_user');
+            return $this->redirectToRoute('admin_produits');
         }
 
         return $this->render('admin/user_edit_profile.html.twig', [
@@ -149,7 +149,7 @@ final class AdminController extends AbstractController
             $entityManager->flush();
         
             $this->addFlash('success', 'Produit ajouté avec succès !');
-            return $this->redirectToRoute('admin_profile');
+            return $this->redirectToRoute('admin_produits');
         }
 
         return $this->render('admin/add_product.html.twig', [
@@ -234,11 +234,7 @@ final class AdminController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Produit modifié avec succès !');
     
-            if ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Sucré') {
-                return $this->redirectToRoute('sweety_produit');
-            } elseif ($produit->getCategorie() && $produit->getCategorie()->getNomCategorie() === 'Salé') {
-                return $this->redirectToRoute('salty_produit');
-            }
+            return $this->redirectToRoute('admin_produits');
         }
 
         return $this->render('admin/edit_product.html.twig', [
@@ -288,7 +284,9 @@ final class AdminController extends AbstractController
         {
             $em->remove($produit);
             $em->flush();
+
+            $this->addFlash('success', 'Produit supprimé avec succès');
     
             return $this->redirectToRoute('admin_produits');
         }
-}
+} 
