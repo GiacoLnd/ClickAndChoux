@@ -5,30 +5,75 @@
 {% block body %}
     <section id="order-details" class="text-center">
         <h2 class="page-title">Détail de la commande</h2>
-        <p><strong>Référence :</strong> {{ commande.reference }}</p>
-        <p><strong>Date :</strong> {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
-        <p><strong>Date de livraison : </strong> {{ commande.dateLivraison|date('d/m/Y') }}</p>
-        <p><strong>Statut de la commande : </strong> {{ commande.statut }}</p>
-        <h3 class="page-title">Total : {{ commande.montantTotal }}€</h3>
+        <a class="bubblegum-link" href="{{ path('app_user_commandes') }}">Retour aux commandes</a>
+        <a href="{{ path('invoice_generate', {'slug': commande.slug}) }}" class="bubblegum-link" target="_blank">
+            Télécharger la facture
+        </a>
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="flex-row-center">
+            <a href="{{ path('invoice_send', {'slug': commande.slug}) }}" class="bubblegum-link">Envoyer la facture par e-mail</a>
+            <a class="bubblegum-link" href="{{ path('admin_user_commandes', { id: commande.user.id}) }}">Liste des commandes de {{ commande.user.nickName }}</a>
+        </div>
+        {% endif %}
+
+        <div class="infos-commande">
+            <div class="info-livraison-commande">
+                <p>
+                    <strong>Adresse de livraison :</strong><br>
+                    {{ commande.historique.adresseLivraison.prenom }} {{ commande.historique.adresseLivraison.nom }}<br>
+                    {{ commande.historique.adresseLivraison.adresse }}<br>
+                    {{ commande.historique.adresseLivraison.codePostal }} {{ commande.historique.adresseLivraison.ville }}
+                </p>
+            </div>
+            <div class="info-generale-commande">
+                <p><strong>Référence :</strong> {{ commande.reference }}</p>
+                <p><strong>Date :</strong> {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
+                <p><strong>Date de livraison : </strong> {{ commande.dateLivraison|date('d/m/Y') }}</p>
+                <p><strong>Statut de la commande : </strong> {{ commande.statut }}</p>
+                <h3 class="page-title">Total : {{ commande.montantTotal }}€</h3>
+            </div>
+            <div class="info-facturation-commande">
+                <p>
+                    <strong>Adresse de facturation :</strong><br>
+                    {{ commande.historique.adresseFacturation.prenom }} {{ commande.historique.adresseFacturation.nom }}<br>
+                    {{ commande.historique.adresseFacturation.adresse }}<br>
+                    {{ commande.historique.adresseFacturation.codePostal }} {{ commande.historique.adresseFacturation.ville }}
+                </p>
+            </div>
+        </div>
         
         <h2 class="page-title pt-4">Produits commandés</h2>
         <div class="commande-list">
-            {% for panier in commande.paniers %}
+            {% for produit in commande.historique.produits %}
+                {% set produitBase = null %}
+            
+                {# On parcourt les paniers liés à la commande pour retrouver le produit actuel #}
+                {% for panier in commande.paniers %}
+                    {% if panier.produit.id == produit.id %}
+                        {% set produitBase = panier.produit %}
+                    {% endif %}
+                {% endfor %}
+            
                 <div class="commande-product">
-                    <a href="{{ path('produit_detail', {'slug': panier.produit.slug}) }}"><img src="/img/{{ panier.produit.image }}" alt="{{ panier.produit.nomProduit }}" class="commande-image"></a>
+                    {% if produitBase %}
+                        <a href="{{ path('produit_detail', {'slug': produitBase.slug}) }}">
+                            <img src="/img/{{ produitBase.image }}" alt="{{ produit.nom }}" class="commande-image">
+                        </a>
+                    {% endif %}
+            
                     <div class="title-price">
                         <div class="details">
-                            <a href="{{ path('produit_detail', {'slug': panier.produit.slug}) }}"><h2>{{ panier.produit.nomProduit }}</h2></a>
-                            <p>Quantité : <strong>{{ panier.quantity }}</strong></p>
-                            <p>Prix total : <strong>{{ panier.getTotalTTC()|number_format(2, ',', ' ') }} €</strong></p>
+                            <h2>{{ produit.nom }}</h2>
+                            <p>Quantité : <strong>{{ produit.quantite }}</strong></p>
+                            <p>Prix unitaire TTC : <strong>{{ produit.prixTTC|number_format(2, ',', ' ') }} €</strong></p>
+                            <p>Prix total : <strong>{{ produit.total|number_format(2, ',', ' ') }} €</strong></p>
                         </div>
                     </div>
                 </div>
             {% endfor %}
+        
         </div>
-
-
-
+        
         <div class="flex-column-center">
             {% if 'start_delivery' in availableTransition %}
                 <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
@@ -46,19 +91,5 @@
                 </form>
             {% endif %}
         </div>
-
-        <a href="{{ path('invoice_generate', {'slug': commande.slug}) }}" class="bubblegum-link" target="_blank">
-            Télécharger la facture
-        </a>
-
-        {% if is_granted('ROLE_ADMIN') %}
-            <div class="flex-row-center">
-                <a href="{{ path('invoice_send', {'slug': commande.slug}) }}" class="bubblegum-link">Envoyer la facture par e-mail</a>
-                <p><a class="bubblegum-link" href="{{ path('admin_user_commandes', { id: commande.user.id}) }}">Liste des commandes de {{ commande.user.nickName }}</a></p>
-                <p><a class="bubblegum-link" href="{{ path('admin_list_commandes') }}">Retour à la liste des commandes</a></p>
-            </div>
-        {% else %}
-            <a class="bubblegum-link" href="{{ path('app_user_commandes') }}">Retour aux commandes</a>
-        {% endif %}
     </section>
 {% endblock %}

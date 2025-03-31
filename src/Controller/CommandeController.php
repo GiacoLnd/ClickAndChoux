@@ -153,9 +153,12 @@ final class CommandeController extends AbstractController
             $availableTransition[] = 'complete';
         }
 
+        $historique = $commande->getHistorique(); 
+
         return $this->render('commande/detail.html.twig', [
             'commande' => $commande,
             'user' => $user,
+            'historique' => $historique,
             'availableTransition' => $availableTransition,
         ]);
     }

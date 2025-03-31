@@ -987,6 +987,13 @@ body{
 /* Fin commande */
 /* DataTables */
 /* DataTable styles communs */
+div.dt-container div.dt-layout-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80vw;
+    margin: .75em 0;
+}
 table.dataTable thead th, table.dataTable tbody td{
     text-align: center;
     padding: 10px;
@@ -1158,4 +1165,9 @@ table.dataTable thead th, table.dataTable tbody td{
 
 .honeypot{
     display: none;
+}
+
+.infos-commande{
+    display: flex;
+    justify-content: space-around;
 }

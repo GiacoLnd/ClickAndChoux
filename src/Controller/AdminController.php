@@ -18,6 +18,7 @@ use App\Repository\ContactRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Dom\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -289,4 +290,23 @@ final class AdminController extends AbstractController
     
             return $this->redirectToRoute('admin_produits');
         }
+
+        #[Route('/admin/produit/stock/{slug}', name: 'update_stock')]
+        public function updateStock(Produit $produit, EntityManagerInterface $em): Response
+        {
+            if($produit->isActive() == true) {
+                $produit->setIsActive(false);
+                $this->addFlash('success', 'Produit mis hors stock');
+            } else if($produit->isActive() == false) {
+                $produit->setIsActive(true);
+                $this->addFlash('success', 'Produit mis en stock');
+            }
+
+            $em->persist($produit);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_produits');
+        }
+
+
 } 
