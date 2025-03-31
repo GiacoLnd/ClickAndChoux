@@ -41,6 +41,7 @@
             {% if produits is empty %}
             <div class="align-self-center">
                 <p>Aucun produit proposé pour l'instant</p>
+                <a href="{{ path('salty_produit') }}">Réinitialiser</a>
             </div>
             {% else %} 
             <div class="flex-column-center">          <!-- Filter SidePanel -->

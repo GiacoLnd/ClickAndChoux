@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Stripe\Stripe;
+use Stripe\Balance;
 use App\Entity\User;
 use App\Entity\Contact;
 use App\Entity\Produit;
@@ -11,10 +13,9 @@ use App\Form\AddProduitType;
 use App\Form\EditProfileType;
 use App\Form\DeleteProduitType;
 use App\Form\UpdateProduitType;
-use Doctrine\ORM\EntityManager;
-use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
 use App\Repository\ContactRepository;
+use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,8 +26,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Stripe\Stripe;
-use Stripe\Balance;
 
 #[Route('/admin', name: 'admin_')]
 #[IsGranted('ROLE_ADMIN')]
@@ -112,37 +111,6 @@ final class AdminController extends AbstractController
             'formProfile' => $formProfile->createView(),
         ]);
     }
-    #[Route('/utilisateurs/{id}/updatePassword', name: 'user_edit_password')]
-    public function adminUpdatePassword(User $user, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-    {
-        // Création du formulaire de changement de mot de passe
-        $formPassword = $this->createForm(ChangePasswordType::class);
-        $formPassword->handleRequest($request);
-    
-        if ($formPassword->isSubmitted() && $formPassword->isValid()) {
-
-            // Récupération du nouveau mot de passe
-            $newPassword = $formPassword->get('plainPassword')->getData();
-    
-            // Hachage du mot de passe via bcrypt
-            $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
-            $user->setPassword($hashedPassword);
-    
-            $entityManager->persist($user);
-            $entityManager->flush();
-    
-            $this->addFlash('success', 'Mot de passe modifié avec succès.');
-    
-            return $this->redirectToRoute('admin_profile');
-        }
-    
-        // Affichage du formulaire
-        return $this->render('admin/user_edit_password.html.twig', [
-            'user' => $user,
-            'formPassword' => $formPassword->createView(),
-        ]);
-    }
-
     // Function to add a product
     #[Route('/admin/produit/ajouter', name: 'add_product')]
     public function ajouterProduit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
@@ -191,7 +159,7 @@ final class AdminController extends AbstractController
     }
 
     // Function to remove one or multiple products 
-    #[Route('/admin/produit/supprimer', name: 'delete_product')]
+    #[Route('/admin/produit/supprimer', name: 'delete_produit')]
     public function deleteProduit(Request $request, EntityManagerInterface $entityManager): Response
     {
         $produits = $entityManager->getRepository(Produit::class)->findAll();
@@ -304,4 +272,23 @@ final class AdminController extends AbstractController
         ]);
     }
 
+        // Function to display all product
+        #[Route('/produits', name: 'produits')]
+        public function displayProduits(ProduitRepository $produitRepository): Response
+        {
+            $produits = $produitRepository->findAll();
+
+            return $this->render('admin/gestion_produit.html.twig', [
+                'produits' => $produits,
+            ]);
+        }
+
+        #[Route('/admin/produit/delete/{slug}', name: 'delete_product')]
+        public function deleteProduct(Produit $produit, EntityManagerInterface $em): Response
+        {
+            $em->remove($produit);
+            $em->flush();
+    
+            return $this->redirectToRoute('admin_produits');
+        }
 }

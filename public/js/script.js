@@ -56,26 +56,60 @@ document.addEventListener("DOMContentLoaded", function() {
                     } else {
                         // Affiche les produits trouvés
                         data.produits.forEach(produit => {
+                            // Création de l'élément li avec la classe catalog-in-stock
                             const li = document.createElement('li');
-                            const a = document.createElement('a');
-                            a.setAttribute('href', '/produit/' + produit.id);
-
+                            li.classList.add('catalog-in-stock');
+                            
+                            // Création du lien avec l'image
+                            const imageLink = document.createElement('a');
+                            imageLink.setAttribute('href', '/produit/' + produit.slug);
+                            
                             const img = document.createElement('img');
                             img.setAttribute('src', '/img/' + produit.image);
                             img.setAttribute('alt', produit.nomProduit);
                             img.classList.add('catalog-image');
-                            a.appendChild(img);
-
+                            
+                            imageLink.appendChild(img);
+                            li.appendChild(imageLink);
+                            
+                            // Création du conteneur title-price
+                            const titlePrice = document.createElement('div');
+                            titlePrice.classList.add('title-price');
+                            
+                            // Création du conteneur details
+                            const details = document.createElement('div');
+                            details.classList.add('details');
+                            
+                            // Lien avec le titre h2
+                            const titleLink = document.createElement('a');
+                            titleLink.setAttribute('href', '/produit/' + produit.slug);
+                            
                             const h2 = document.createElement('h2');
                             h2.textContent = produit.nomProduit;
+                            
+                            titleLink.appendChild(h2);
+                            details.appendChild(titleLink);
+                            
+                            // Paragraphe du prix avec classe price
+                            const price = document.createElement('p');
+                            price.classList.add('price');
+                            // Formatage du prix comme dans le template original
+                            const formattedPrice = new Intl.NumberFormat('fr-FR', { 
+                                minimumFractionDigits: 2, 
+                                maximumFractionDigits: 2 
+                            }).format(produit.getTTC);
+                            price.textContent = formattedPrice + '€';
+                            
+                            details.appendChild(price);
+                            titlePrice.appendChild(details);
+                            
+                            // Création du conteneur clickable-icon
+                            const clickableIcon = document.createElement('div');
+                            clickableIcon.classList.add('clickable-icon');
 
-                            const p = document.createElement('p');
-                            p.textContent = produit.getTTC + '€';
-
-                            li.appendChild(a);
-                            li.appendChild(h2);
-                            li.appendChild(p);
-
+                            titlePrice.appendChild(clickableIcon);
+                            li.appendChild(titlePrice);
+                            
                             produitsList.appendChild(li);
                         });
                     }
@@ -134,26 +168,60 @@ document.addEventListener("DOMContentLoaded", function() {
                     } else {
                         // Affiche les produits trouvés
                         data.produits.forEach(produit => {
+                            // Création de l'élément li avec la classe catalog-in-stock
                             const li = document.createElement('li');
-                            const a = document.createElement('a');
-                            a.setAttribute('href', '/produit/' + produit.id);
-
+                            li.classList.add('catalog-in-stock');
+                            
+                            // Création du lien avec l'image
+                            const imageLink = document.createElement('a');
+                            imageLink.setAttribute('href', '/produit/' + produit.slug);
+                            
                             const img = document.createElement('img');
                             img.setAttribute('src', '/img/' + produit.image);
                             img.setAttribute('alt', produit.nomProduit);
                             img.classList.add('catalog-image');
-                            a.appendChild(img);
-
+                            
+                            imageLink.appendChild(img);
+                            li.appendChild(imageLink);
+                            
+                            // Création du conteneur title-price
+                            const titlePrice = document.createElement('div');
+                            titlePrice.classList.add('title-price');
+                            
+                            // Création du conteneur details
+                            const details = document.createElement('div');
+                            details.classList.add('details');
+                            
+                            // Lien avec le titre h2
+                            const titleLink = document.createElement('a');
+                            titleLink.setAttribute('href', '/produit/' + produit.slug);
+                            
                             const h2 = document.createElement('h2');
                             h2.textContent = produit.nomProduit;
-
-                            const p = document.createElement('p');
-                            p.textContent = produit.getTTC + '€';
-
-                            li.appendChild(a);
-                            li.appendChild(h2);
-                            li.appendChild(p);
-
+                            
+                            titleLink.appendChild(h2);
+                            details.appendChild(titleLink);
+                            
+                            // Paragraphe du prix avec classe price
+                            const price = document.createElement('p');
+                            price.classList.add('price');
+                            // Formatage du prix comme dans le template original
+                            const formattedPrice = new Intl.NumberFormat('fr-FR', { 
+                                minimumFractionDigits: 2, 
+                                maximumFractionDigits: 2 
+                            }).format(produit.getTTC);
+                            price.textContent = formattedPrice + '€';
+                            
+                            details.appendChild(price);
+                            titlePrice.appendChild(details);
+                            
+                            // Création du conteneur clickable-icon
+                            const clickableIcon = document.createElement('div');
+                            clickableIcon.classList.add('clickable-icon');
+                            
+                            titlePrice.appendChild(clickableIcon);
+                            li.appendChild(titlePrice);
+                            
                             produitsList.appendChild(li);
                         });
                     }
@@ -170,7 +238,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
-
 
 //Alergen filter 
 // //sweety
@@ -447,51 +514,6 @@ const retourHaut = document.getElementById('retour-haut');
 retourHaut.addEventListener('click', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
-
-// Function handling new allergens integration in add product and update product
-document.addEventListener('DOMContentLoaded', function() {
-    const addButton = document.getElementById('add-allergen-button');
-    const allergenCollection = document.getElementById('form_newAllergenes'); // ID du form newAllergene
-    
-    const prototype = allergenCollection.dataset.prototype;
-
-    // Lorsqu'on clique sur le bouton d'ajout
-    addButton.addEventListener('click', function() {
-        const newItem = prototype.replace(/__name__/g, allergenCollection.children.length); // Modifie __name__ par index de chaque proto
-        const div = document.createElement('div');
-        div.innerHTML = newItem;
-        div.classList.add('flex-row-center')
-
-
-        // Ajout du bouton de suppression
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.classList.add('delete-allergen');
-        deleteButton.classList.add('bubblegum-link');
-        deleteButton.innerHTML = '<i class="fa-solid fa-minus"></i>';
-
-        // Evènement de suppression du proto
-        deleteButton.addEventListener('click', function() {
-            allergenCollection.removeChild(div);
-        });
-
-        // Bouton de suppression dans div
-        div.appendChild(deleteButton);
-
-        // Ajout du nouvel élément dans collection
-        allergenCollection.appendChild(div);
-    });
-
-    // Ecoute de l'évènement de click sur le bouton de suppression
-    allergenCollection.addEventListener('click', function(event) {
-        if (event.target && event.target.classList.contains('delete-allergen')) {
-            // Trouve l'élément à supprimer
-            const allergenItem = event.target.closest('.allergen-item');
-            allergenCollection.removeChild(allergenItem);
-        }
-    });
-});
-
 // AJAX for edit comment
 document.addEventListener('DOMContentLoaded', function () {
     // Bouton de modification du commentaire
@@ -538,4 +560,49 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+// Function handling new allergens integration in add product and update product
+document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.getElementById('add-allergen-button');
+    const allergenCollection = document.getElementById('form_newAllergenes'); // ID du form newAllergene
+    
+    const prototype = allergenCollection.dataset.prototype;
+
+    // Lorsqu'on clique sur le bouton d'ajout
+    addButton.addEventListener('click', function() {
+        const newItem = prototype.replace(/__name__/g, allergenCollection.children.length); // Modifie __name__ par index de chaque proto
+        const div = document.createElement('div');
+        div.innerHTML = newItem;
+        div.classList.add('flex-row-center')
+
+
+        // Ajout du bouton de suppression
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.classList.add('delete-allergen');
+        deleteButton.classList.add('bubblegum-link');
+        deleteButton.innerHTML = '<i class="fa-solid fa-minus"></i>';
+
+        // Evènement de suppression du proto
+        deleteButton.addEventListener('click', function() {
+            allergenCollection.removeChild(div);
+        });
+
+        // Bouton de suppression dans div
+        div.appendChild(deleteButton);
+
+        // Ajout du nouvel élément dans collection
+        allergenCollection.appendChild(div);
+    });
+
+    // Ecoute de l'évènement de click sur le bouton de suppression
+    allergenCollection.addEventListener('click', function(event) {
+        if (event.target && event.target.classList.contains('delete-allergen')) {
+            // Trouve l'élément à supprimer
+            const allergenItem = event.target.closest('.allergen-item');
+            allergenCollection.removeChild(allergenItem);
+        }
+    });
+});
+
+
 

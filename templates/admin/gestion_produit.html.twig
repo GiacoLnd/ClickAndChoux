@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Produits{% endblock %}
+
+{% block body %}
+    <h1>Gestion des Produits</h1>
+
+    <a href="{{ path('admin_add_product') }}" class="btn btn-primary">Ajouter un produit</a>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits %}
+                <tr>
+                    <td>{{ produit.id }}</td>
+                    <td>{{ produit.nomProduit }}</td>
+                    <td>{{ produit.getTTC }}€</td>
+                    <td>
+                        <a href="{{ path('admin_update_product', {slug: produit.slug}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{{ path('admin_delete_product', {slug: produit.slug}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">Aucun produit trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -24,8 +24,9 @@ class Commentaire
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Produit $produit = null;
+    
 
     public function getId(): ?int
     {

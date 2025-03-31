@@ -18,6 +18,7 @@ class Panier
     private ?int $quantity = null;
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
+    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
     private ?Produit $produit = null;
 
     #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'paniers')]
