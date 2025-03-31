@@ -147,6 +147,13 @@
             {% block body %}
             {% endblock %} 
         </main>
+        <div class="newsletter-container">
+            <div class="newsletter-description">
+                <h4>On reste en contact ?</h4><br>
+                <p><strong>Abonnez-vous à notre newsletter pour vous tenir informés de nos dernières nouveautés !</strong></p>
+            </div>
+            {{ render(controller('App\\Controller\\NewsletterController::newsletterForm')) }}
+        </div>
         <footer class="footer" role="contentinfo">
             <div class="footer-top">
                 <div class="footer-links">

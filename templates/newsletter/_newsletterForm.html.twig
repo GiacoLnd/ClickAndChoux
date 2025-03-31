@@ -1,0 +1,9 @@
+{{ form_start(newsletter_form, {'action': path('newsletter_subscribe')}) }}
+    <div class="flex-column-center">
+    <label>{{ form_label(newsletter_form.email) }}</label>
+    {{ form_widget(newsletter_form.email) }}
+</div>
+<div class="newletter-submit">
+    {{ form_widget(newsletter_form.subscribe) }}
+</div>
+{{ form_end(newsletter_form) }}

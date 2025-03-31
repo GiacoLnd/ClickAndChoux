@@ -6,6 +6,7 @@
 parameters:
     images_directory: '%kernel.project_dir%/public/img'
     stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
+    newsletter_api_key: '%env(NEWSLETTER_API_KEY)%'
 
 
 services:
@@ -29,6 +30,11 @@ services:
     App\Service\PostalCodeService:
         arguments:
             $httpClient: '@http_client'
+
+    App\Service\NewsletterService:
+        arguments:
+            $httpClient: '@http_client'
+            $apiToken: '%newsletter_api_key%'
     
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

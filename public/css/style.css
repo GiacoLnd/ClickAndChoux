@@ -306,10 +306,43 @@ body{
         font-family: var(--font-family-primary);
         font-size:  var(--font-size);
     }
+    
+    .newsletter-container{
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        
+        .newsletter-description{
+            display: flex;
+            justify-content: center; 
+            flex-direction: column;
+            width: 50%;
+            margin: 10px;
+
+        }
+
+        .newsletter-form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+
+            .flex-column-center{
+
+                input{
+                    text-align: start;
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
     footer{
         background: var(--footer-right-bg);
         color: white;
         padding: 20px;
+        display: flex;
+        flex-direction: column;
 
         .footer-top{
             display: flex;
