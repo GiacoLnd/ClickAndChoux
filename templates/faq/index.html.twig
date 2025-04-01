@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}F.A.Q.{% endblock %}
+
+{% block body %}
+    <section id="f-a-q">
+        <div class="flex-column-center">
+        <h1 class="page-title">F.A.Q.</h1>
+        <div class="allergen-faq">
+            <h2>Liste des allergènes</h2>
+            <div class="allergen-list">
+                <div class="salty-allergen">
+                    <p style="cursor: pointer;">
+                        <strong>Allergènes présents dans les produits salés <i class="fa-solid fa-angle-down"></i></strong>
+                    </p>
+                    <div class="faq-content">
+                        {% for allergene in allergeneSalés %}
+                            <ul>
+                                <li>{{ allergene.nomAllergene }}</li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="sweety-allergen">
+                    <p style="cursor: pointer;">
+                        <strong>Allergènes présents dans les produits sucrés <i class="fa-solid fa-angle-down"></i></strong>
+                    </p>
+                    <div class="faq-content">
+                        {% for allergene in allergeneSucrés %}
+                            <ul>
+                                <li>{{ allergene.nomAllergene }}</li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <p class="allergen-contact">Vous pourrez retrouver les allergènes d'un produit spécifique en accédant à ses détails. Si aucun de nos choux ne convient, n’hésitez pas à commander des choux sur mesures adaptés à vos besoins via notre <a href="{{ path('app_contact') }}">formulaire de contact</a>.</p>
+        </div>
+        <div class="faq-questions">
+            <h2 class="p-4 text-center">D'où proviennent nos produits <i class="fa-solid fa-angle-down"></i></h2>
+            <div class="faq-content">
+            <p>La base d’un chou, salés ou sucrés, réside dans sa pâte. Chez Click&Choux, chaque ingrédient constituant sa pâte provient de producteurs bas-rhinois et certifié Agriculture Biologique. Un chou, c’est aussi sa crème. Qu'elle soit chantilly, pâtissière ou diplomate, tous les ingrédients composant cette crème sont issus d’une production responsable, éthique et toujours certifiée Agriculture Biologique.</p>
+            </div>
+
+            <h2 class="p-4 text-center">
+                La commande <i class="fa-solid fa-angle-down"></i>
+            </h2>
+            <div class="faq-content">
+                <h3>Annulation et modification</h3>
+                <p>Une commande, une fois payée, ne peut être modifiée. En revanche, vous pouvez annuler votre commande jusqu'à deux heures après le paiement. Une fois ce délai passé, aucune annulation ne sera permise. Vous pouvez demander l'annulation en nous contactant par téléphone au 03 88 XX XX XX, ou par mail à l'adresse <a href="mailto:support@clickandchoux.com">support@clickandchoux.com</a>.</p>
+                
+                <h3>Remboursement</h3>
+                <p>Le remboursement d’une commande n’est possible que lors de la détérioration des choux pendant la livraison, ou lorsque l'annulation d'une commande est demandée. Tout autre motif de remboursement ne pourra pas être pris en compte.</p>
+            </div>
+            
+            <h2 class="p-4 text-center">
+                La livraison <i class="fa-solid fa-angle-down"></i>
+            </h2>
+            <div class="faq-content">
+                <p>Toutes nos livraisons sont effectuées dans le respect de la chaine du froid. Celles-ci sont délivrées par un livreur affilié à la société Click&Choux dans un conteneur réfrigéré, vous offrant la meilleure qualité lors de la réception.</p>
+                <p>Si votre commande est effectuée avant 16h00, vous réceptionnerez vos choux le lendemain. En revanche, Si votre commande est effectuée après 16h00, vos choux ne partiront que deux jours plus tard. Notez qu'aucune livraison n'est effectuée le dimanche ni les jours fériés.</p>
+                <p>Les frais de livraisons sont de 3 euros.</p>
+            </div>
+            
+            <h2 class="p-4 text-center">
+                Les conseils <i class="fa-solid fa-angle-down"></i>
+            </h2>
+            <div class="faq-content">
+                <h3>La conservation</h3>
+                <p>Etant essentiellement composés d'ingrédients à conservation courte, nos choux peuvent être stockés dans un endroit sec et frais, entre 0° et 4°, pendant un maximum de 3 jours à partir de la livraison.</p>
+
+                <h3>La dégustation</h3>
+                <p>Afin de profiter d’une qualité optimale lors de la dégustation, nous conseillons à nos gourmands de savourer leurs choux le jour de leur réception.</p>
+                <p>Besoin d'un conseil pour marier nos choux avec d'autres mets ou saveurs ? Nous serons ravis de vous aider à trouver l'accord parfait ! Nous vous invitons à vous abonner à notre newsletter pour découvrir tous nos conseils d'association.</p>
+            </div>
+        </div>
+    </div>
+    </section>
+{% endblock %}

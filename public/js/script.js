@@ -604,5 +604,45 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Display F.A.Q. blocks
+document.addEventListener('DOMContentLoaded', function () {
+    const allergenHeaders = document.querySelectorAll('.salty-allergen p, .sweety-allergen p');
+
+    allergenHeaders.forEach(function(header) {
+
+        header.addEventListener('click', function() {
+            const content = header.nextElementSibling; 
+            const arrowIcon = header.querySelector('i');
+
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                arrowIcon.classList.replace('fa-angle-down', 'fa-angle-up');
+            } else {
+                content.style.display = 'none';
+                arrowIcon.classList.replace('fa-angle-up', 'fa-angle-down');
+            }
+        });
+    });
+    
+    const faqHeaders = document.querySelectorAll('.faq-questions h2');
+
+    faqHeaders.forEach(function(header) {
+        header.addEventListener('click', function() {
+            const content = header.nextElementSibling;
+            const arrowIcon = header.querySelector('i'); 
+
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block'; 
+                arrowIcon.classList.remove('fa-angle-down');
+                arrowIcon.classList.add('fa-angle-up');
+            } else {
+                content.style.display = 'none'; 
+                arrowIcon.classList.remove('fa-angle-up');
+                arrowIcon.classList.add('fa-angle-down');
+            }
+        });
+    });
+});
+
 
 

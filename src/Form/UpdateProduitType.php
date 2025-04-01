@@ -65,6 +65,8 @@ class UpdateProduitType extends AbstractType
             'attr' => ['class' => 'flex-column-center'],
             'constraints' => [
                 new Assert\Image([
+                    'maxSize' => '2M',
+                    'maxSizeMessage' => 'La taille du fichier ne doit pas dépasser 2 Mo',
                     'mimeTypes' => ["image/jpeg", "image/png", "image/webp"],
                     'mimeTypesMessage' => "Seuls les fichiers JPG, PNG ou WebP sont autorisés."
                 ])
