@@ -5,14 +5,13 @@
 }
 :root{
     --font-color: #55211A;
-    --font-family-primary: "Open sans", sans-serif;
+    --font-family-primary: 'Tenor Sans', sans-serif;
     --font-size: 1.1em;
     --link-color: #4F1926;
-    --link-gradient: linear-gradient(42deg, rgba(33,7,13,1) 3%, rgba(130,40,62,1) 89%);
-    --link-family-primary: "Bubblegum Sans", sans-serif;
+    --link-background: #ffcc80;
+    --link-family-primary: 'Archivo Narrow', sans-serif;
     --link-size: 1.1em;
-    --footer-left-bg-primary: #FFA85C;
-    --footer-left-bg-secondary: #FFC18B;
+    --footer-left-bg-secondary: #ffcc80;
     --footer-right-bg: #894e3f;
     --navbar-bg-primary: #FFFFFF;
     --price-color: #894e3f;
@@ -25,7 +24,6 @@ li{
 a{
     text-decoration: none;
     color: var(--link-color);
-    font-size: var(--link-size);
     font-family: var(--link-family-primary);
 }
 p{
@@ -99,23 +97,76 @@ select{
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-color: var(--link-color);
-    background-image: var(--link-gradient);
+    background-color: var(--link-background);
     font-family: var(--link-family-primary);
     font-size: var(--link-size);
-    color: white;
-    padding: 12px;
+    color: var(--font-color);
+    padding: 12px 16px;
     margin: 30px;
     border: none;
     border-radius: 10px;
     transition: background-color 0.3s linear;
     transition: all 0.3s linear;
-
+    
     &:hover{
-        box-shadow: inset 0 0 0 3px var(--link-color);
+        box-shadow: inset 0 0 0 3px var(--link-background);
         background-color: transparent;
         background-image: none;
         color: var(--link-color);
+    }
+}
+.no-bg-link{
+    color: var(--font-color);
+    font-family: var(--font-family-primary);
+    background: none;
+    border: none;
+    font-weight: bold;
+    position:relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+
+    &::after{
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        display: block;
+        left: 0;
+        background: var(--link-color);
+        background-color: var(--link-background);
+        transition: width 0.3s ease-in-out;
+    }
+
+    &:hover::after{
+        width: 100%;
+    }
+}
+.no-bg-delete-link{
+    color: var(--font-color);
+    font-family: var(--font-family-primary);
+    background: none;
+    border: none;
+    position:relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+
+    &::after{
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        display: block;
+        left: 0;
+        background: var(--link-color);
+        background-color: red;
+        transition: width 0.3s ease-in-out;
+    }
+
+    &:hover::after{
+        width: 100%;
+    }
+    &:hover{
+        color: red;
     }
 }
 .delete-link{
@@ -156,6 +207,7 @@ select{
 body{
     background: white;
     height: 100vh;
+    width: 100vw;
     font-family: var(--font-family-primary);
     font-size: var(--font-size);
     color: var(--font-color);
@@ -227,12 +279,12 @@ body{
         .navbar-list{
             list-style-type: none;
             padding: 5px;
-            font-size: 0.8em;
+            font-size: 0.9em;
             display: flex;
             align-items: center;
             text-align: center;
             background: transparent;
-
+            
             .horizontal-bar{
                 display: none;
             }
@@ -245,6 +297,7 @@ body{
                     color: var(--font-color);
                     text-transform: uppercase;
                     font-family: var(--font-family-primary);
+                    font-size: 1.3em;
                     position:relative;
                     display: inline-block;
 
@@ -310,13 +363,12 @@ body{
     .newsletter-container{
         display: flex;
         justify-content: space-around;
-        flex-wrap: wrap;
         
         .newsletter-description{
             display: flex;
             justify-content: center; 
             flex-direction: column;
-            width: 50%;
+            width: 40%;
             margin: 10px;
 
         }
@@ -333,6 +385,7 @@ body{
                 input{
                     text-align: start;
                     margin-bottom: 0;
+                    width: 30vw;
                 }
             }
         }
@@ -352,7 +405,7 @@ body{
             width: 100%;
 
             h1{
-                font-family: "Bubblegum Sans", sans-serif;
+                font-family: var(--link-family-primary), sans-serif;
             }
             
             p{
@@ -369,7 +422,7 @@ body{
                 align-items: flex-start;
                 
                 a {
-                    font-family: "Open Sans", sans-serif;
+                    font-family: var(--font-family-primary), sans-serif;
                     font-size: 0.9em;
                     color: white;
                     opacity: 0.75;
@@ -543,7 +596,6 @@ body{
         justify-content: center;
         align-items: center;
         gap: 20px;
-        margin: 25px;
         width: 100%;
         
         
@@ -551,15 +603,14 @@ body{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             column-gap: 70px;
-            width: 60vw;
+            width: 90vw;
             max-width: 100%;
             place-items: center;
-            padding: 20px;
             
             .catalog-in-stock {
                 background: #FFFFFF;
-                padding: 20px;
-                border-radius: 12px;
+                padding: 10px;
+                border-radius: 5px;
                 text-align: center;
                 transition: transform 0.3s ease-in-out;
                 display: flex;
@@ -612,7 +663,7 @@ body{
                         h2{
                             font-family: var(--font-family-primary);
                             color: var(--font-color);
-                            font-size: 0.8em;
+                            font-size: 0.9em;
                             text-align: start;
                             width: 95%;
                             height: 70px;
@@ -646,8 +697,8 @@ body{
 
             .catalog-out-stock{
                 background: #FFFFFF;
-                padding: 20px;
-                border-radius: 12px;
+                padding: 10px;
+                border-radius: 5px;
                 text-align: center;
                 transition: transform 0.3s ease-in-out;
                 display: flex;
@@ -696,7 +747,7 @@ body{
                     h2{
                         font-family: var(--font-family-primary);
                         color: var(--font-color);
-                        font-size: 0.8em;
+                        font-size: 0.9em;
                         text-align: start;
                         width: 95%;
                         height: 70px;
@@ -802,8 +853,18 @@ body{
         }
         #quantity-container {
             display: flex;
-            align-items: baseline;
+            align-items: flex-start;
             justify-content: start;
+            
+            input[type="number"]{
+                width: 100%;
+                margin: 0;
+            }
+            .bubblegum-link{
+                width: 50%;
+                padding: 0 15px;
+                margin: 0 15px;
+            }
             
             .quantity{
                 border: 2px solid var(--font-color);
@@ -831,7 +892,7 @@ body{
     padding: 10px;
 }
 .flex-column-center input[type="text"], .flex-column-center input[type="number"], .flex-column-center input[type="email"], .flex-column-center input[type="password"]  {
-    width: 500px;
+    width: 50vw;
     padding: 10px;
     margin-bottom: 20px;
     border: 2px solid var(--font-color);
@@ -967,7 +1028,7 @@ body{
                 h2{
                     font-family: var(--font-family-primary);
                     color: var(--font-color);
-                    font-size: 0.8em;
+                    font-size: 0.9em;
                     width: 95%;
                     height: 70px;
                     line-height: 1.5;

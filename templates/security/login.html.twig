@@ -15,7 +15,6 @@
             </div>
         {% endif %}
         <h1 class="page-title">Connectez-vous</h1>
-        <div class="flex-column-center">
             <label for="username" class="security-text">Email :</label>
                 
             <input type="email" value="{{ last_username }}" name="_username" id="username" class="flex-column-center" autocomplete="email" required autofocus >
@@ -32,9 +31,8 @@
                 <button type="submit" class="bubblegum-link">Connexion</button>
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             </div>   
-        </div>
-        <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a> !</p>     
-        <p>Mot de passe oublié ? <a href="{{ path('app_forgot_password_request') }}">Réinitialisez votre mot de passe</a> !</p>     
+        <p>Pas encore de compte ? <a href="{{ path('app_register') }}" class="no-bg-link">Inscrivez-vous</a> !</p>     
+        <p>Mot de passe oublié ? <a href="{{ path('app_forgot_password_request') }}" class="no-bg-link">Réinitialisez votre mot de passe</a> !</p>     
     </form>
 </section>
 {% endblock %}

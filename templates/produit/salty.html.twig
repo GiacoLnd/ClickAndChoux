@@ -9,8 +9,8 @@
             <div class="catalog">
                 <p class="catalog-description">Tous nos choux se vendent par lot de six.<br>
                     Vous ne trouvez pas votre douceur ? Commandez vos choux sur-mesure 
-                    en cliquant sur ce <a href="/">lien</a>.<br>
-                    En cas d’allergie, merci de consulter notre page <a href="/">dédiée</a>.
+                    en cliquant sur ce <a href="{{ path('app_contact') }}" class="no-bg-link">lien</a>.<br>
+                    En cas d’allergie, merci de consulter notre page <a href="{{ path('app_faq') }}" class="no-bg-link">dédiée</a>.
                 </p>
             </div>
 
@@ -33,7 +33,7 @@
                         <div class="flex-column-center">
                             {{ form_widget(form.filtrer) }}
                         </div>
-                        <a href="{{ path('salty_produit') }}">Réinitialiser</a>
+                        <a href="{{ path('salty_produit') }}" class="no-bg-link">Réinitialiser</a>
                         {{ form_end(form) }}
                     </div>
                 </div>
@@ -41,7 +41,7 @@
             {% if produits is empty %}
             <div class="align-self-center">
                 <p>Aucun produit proposé pour l'instant</p>
-                <a href="{{ path('salty_produit') }}">Réinitialiser</a>
+                <a href="{{ path('salty_produit') }}" class="no-bg-link">Réinitialiser</a>
             </div>
             {% else %} 
             <div class="flex-column-center">          <!-- Filter SidePanel -->

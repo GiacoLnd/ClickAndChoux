@@ -4,8 +4,7 @@
 
 {% block body %}
     <section id="user-order-list">
-        <div class="container">
-            <h1 class="page-title text-center p-4">Mes Commandes</h1>
+            <h2 class="page-title text-center p-4">Mes Commandes</h2>
 
             {% if commandes is empty %}
                 <p>Aucune commande passée pour le moment.</p>
@@ -44,8 +43,7 @@
                 </table>
             {% endif %}
             <div class="d-flex justify-content-center align-items-center p-3">
-                <a href="{{ path('app_user_profil') }}" class="bubblegum-link">Retour au Profil</a>
+                <a href="{{ path('app_user_profil') }}" class="no-bg-link">Retour au Profil</a>
             </div>
-        </div>
     </section>
 {% endblock %}

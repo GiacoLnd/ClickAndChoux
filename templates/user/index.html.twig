@@ -5,18 +5,16 @@
 {% block body %}
     <section id="profile">
         <h2 class="page-title">Profil</h2>
-        <div class="text-center">
-            <p>Email : {{ user.email }}</p>
+            <div class="flex-row-center">
+                <p>Nom du compte : {{ user.nickName }}</p>
+                <p>Email : {{ user.email }}</p>
+            </div>
             <div class="flex-row-center">
                 <a href="{{ path('app_update_profile') }}" class="bubblegum-link">Modifier mes informations</a>
+                <a href="{{ path('app_user_commandes') }}" class="bubblegum-link">Mes Commandes</a>
                 <a href="{{ path('app_update_password') }}" class="bubblegum-link">Modifier mon mot de passe</a>
             </div>
-            <div class="flex-row-center">
-                <a href="{{ path('app_user_commandes') }}" class="bubblegum-link">Mes Commandes</a>
-                <a href="{{ path('favoris_page') }}" class="bubblegum-link">Mes Favoris</a>
-            </div>
-            <a href="{{ path('app_profile_delete') }}" class="delete-link">Supprimer le compte</a>
-        </div>
+            <a href="{{ path('app_profile_delete') }}" class="no-bg-delete-link">Supprimer le compte</a>
     </section>
 {% endblock %}
  

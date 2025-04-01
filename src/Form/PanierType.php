@@ -24,7 +24,10 @@ class PanierType extends AbstractType
         $builder
         ->add('quantity', IntegerType::class, [
             'label' => 'Quantité',
-            'attr' => ['min' => 1],
+            'data' => 1,
+            'attr' => [
+                'min' => 1
+            ],
         ]);
     }
 
