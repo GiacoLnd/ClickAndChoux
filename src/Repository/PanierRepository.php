@@ -42,5 +42,15 @@ class PanierRepository extends ServiceEntityRepository
     //            ->getQuery()
     //            ->getOneOrNullResult()
     //        ;
-    //    }
+    //    
+    public function findBestSellerProductIds(int $limit = 6): array
+{
+    return $this->createQueryBuilder('pa')
+        ->select('IDENTITY(pa.produit) as produitId') // Retourne uniquement l'ID de l'objet panier.produit
+        ->groupBy('pa.produit')
+        ->orderBy('SUM(pa.quantity)', 'DESC')
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getScalarResult(); // retourne array d'ID
+}
 }

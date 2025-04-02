@@ -1,6 +1,4 @@
-
 // script for burger menu
-
 document.addEventListener('DOMContentLoaded', () => {
     const burgerButton = document.getElementById('burger-button');
     const burgerIcon = document.getElementById('burger-icon');
@@ -417,29 +415,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-
-// Datatables scripts 
-
-// User orders list dataTables
-$(document).ready(function() {
-    var table = $('.dataTable').DataTable({
-        responsive: true,
-        scrollX: true,
-        "paging": true,       // Active la pagination
-        "searching": true,    // Active la recherche
-        "ordering": true,  
-        "order": [[2, "desc"]], // Trie par date (colonne 2) en ordre décroissant
-        "info": false,         // Désactive les informations sur le nombre d'éléments
-        "scrollY": "500px",
-        "pagingType": "numbers", // Donne uniquement les numéros de pages
-        "lengthChange": false,
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
-        },
-    });
-});
-
-
 // Script AJAX for fav 
 document.addEventListener('DOMContentLoaded', function () {
     // Liste des URLs où l'AJAX est autorisé
@@ -644,5 +619,49 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Homepage swiper.js 
+document.addEventListener('DOMContentLoaded', function () {
+    const swiper = new Swiper('.best-sellers-swiper', {
+        direction: 'horizontal',
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        scrollbar: {
+            el: '.swiper-scrollbar',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false, 
+        },
+});
+});
 
+  // Datatables scripts 
+
+// User orders list dataTables
+$(document).ready(function() {
+    var table = $('.dataTable').DataTable({
+        responsive: true,
+        scrollX: true,
+        "paging": true,       // Activer la pagination
+        "searching": true,    // Activer la recherche
+        "ordering": true,  
+        "order": [[2, "desc"]], // Triert par date (colonne 2) en ordre décroissant
+        "info": false,         // Désactiver les informations sur le nombre d'éléments
+        "scrollY": "500px",
+        "pagingType": "numbers", // Donner uniquement les numéros de pages
+        "lengthChange": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
+        },
+    });
+});
 

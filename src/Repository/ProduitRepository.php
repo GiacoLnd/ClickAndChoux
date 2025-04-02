@@ -72,5 +72,15 @@ class ProduitRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-
+    
+    public function findBestSellerProducts(int $limit = 6): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.paniers', 'pa')
+            ->groupBy('p.id')
+            ->orderBy('SUM(pa.quantity)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -4,7 +4,6 @@
 
 {% block body %}
     <section id="admin-profile">
-        <div class="flex-column-center">
             <div class="text-center">
                 <h2 class="page-title">Panneau Administrateur</h2>
                 <p>Bonjour, chérie</p>
@@ -12,17 +11,17 @@
             </div>
             <div class="flex-row-center p-5">
                 <a href="{{ path('admin_list_user') }}" class="bubblegum-link">Liste des utilisateurs</a>
-                <a href="{{ path('admin_list_commandes') }}" class="bubblegum-link">Liste des Commandes</a>
-
-                <a href="{{ path('admin_contact_list') }}" class="bubblegum-link">Contact client</a>
                 <a href="{{ path('admin_produits') }}" class="bubblegum-link">Gestion des produits</a>
+                <a href="{{ path('admin_list_commandes') }}" class="bubblegum-link">Liste des Commandes</a>
+                <a href="{{ path('admin_contact_list') }}" class="bubblegum-link">Contact client</a>
             </div>
             <div class="flex-row-center">
                 <p>Solde actuel de l'entreprise :</p>
                 <p>{{ availableBalance is not null ? availableBalance : 'Non disponible' }} €</p>
             </div>
-            <a href="https://dashboard.stripe.com/test/dashboard" target="_blank" class="bubblegum-link">Tableau de bord financier</a>
-        </div>
+            <div class="flex-row-center">
+                <a href="https://dashboard.stripe.com/test/dashboard" target="_blank" class="bubblegum-link">Tableau de bord financier</a>
+            </div>
     </section>
 {% endblock %}
  

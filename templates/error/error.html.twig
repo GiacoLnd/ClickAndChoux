@@ -5,21 +5,22 @@
 
 {% block body %}
     
-    
-    <p>Oups, quelque chose s'est mal passé !</p>
+    <div class="error-description">
+        <p>Oops, quelque chose s'est mal passé !</p>
 
-    {% if exception is not empty %}
-        {% if exception.message == 'Not Found' %}
-            <p>La page que vous recherchez n'a pas été trouvée (Erreur 404).</p>
-        {% elseif exception.message == 'Internal Server Error' %}
-            <p>Mince, une erreur interne est survenue (Erreur 500).</p>
-        {% elseif exception.message == 'Access Denied' %}
-            <p>Vous n'avez pas l'autorisation d'accéder à cette page (Erreur 403).</p>
-        {% else %}
-            <p>{{ exception.message }}</p>
-            {# <p>Code d'erreur : {{ exception.getStatusCode() }}</p> #}
+        {% if exception is not empty %}
+            {% if exception.message == 'Not Found' %}
+                <p>La page que vous recherchez n'a pas été trouvée (Erreur 404).</p>
+            {% elseif exception.message == 'Internal Server Error' %}
+                <p>Mince, une erreur interne est survenue (Erreur 500).</p>
+            {% elseif exception.message == 'Access Denied' %}
+                <p>Vous n'avez pas l'autorisation d'accéder à cette page (Erreur 403).</p>
+            {% else %}
+                <p>{{ exception.message }}</p>
+                {# <p>Code d'erreur : {{ exception.getStatusCode() }}</p> #}
+            {% endif %}
         {% endif %}
-    {% endif %}
-
-    <p><a href="{{ path('app_home') }}">Retour à la page d'accueil</a></p>
+    </div>
+    
+    <p><a href="{{ path('app_home') }}" class="no-bg-link">Retour à la page d'accueil</a></p>
 {% endblock %}

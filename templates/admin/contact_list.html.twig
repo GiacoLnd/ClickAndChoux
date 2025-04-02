@@ -20,7 +20,6 @@
             <tbody>
                 {% for contactForm in contactForms %}
                     <tr>
-
                         <td>
                             {% if contactForm.isRead == false %}
                                 <span style="color: green;"><i class="fa-solid fa-envelope"></i></span>
@@ -33,13 +32,9 @@
                         <td>{{ contactForm.dateContact|date('d/m/Y H:i') }}</td>
                         <td><a href="{{ path('admin_contact_details', { id: contactForm.id }) }}" class="bubblegum-link">Voir</a></td>
                     </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="7">Aucune soumission de formulaire</td>
-                    </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <a class="bubblegum-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
+        <a class="no-bg-link" href="{{ path('admin_profile') }}">Retour au panneau administrateur</a>
     </section>
 {% endblock %}

@@ -1,7 +1,110 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Click&Choux - Accueil{% endblock %}
+ 
+{% block meta_description %}
+  <meta name="description" content="Des choux faits maison, livrés avec soin : Click&Choux vous régale en 24 à 48h, sucrés ou salés, toujours frais.">
+{% endblock %}
 
 {% block body %}
-bonjour
+<div class="bienvenue">
+  <h2 class="page-title">Bienvenue au royaume du choux à la crème</h2>
+  <p>Spécialiste des choux à la crème artisanaux, Click&Choux vous propose une expérience de dégustation unique, alliant authenticité, qualité et créativité. Que ce soit pour une commande sur-mesure, un événement d’entreprise ou une pause gourmande, nous mettons notre savoir-faire au service de vos envies. Chez Click&Choux nous gardons un engagement constant : le goût, sans compromis.</p>
+  <div class="catalogue-homepage">
+    <h3>Quel sera votre plaisir du jour ?</h3>
+    <div class="catalogue-cta">
+      <a href="{{ path('sweety_produit') }}" class="bubblegum-link"> Sucrée</a>
+      <a href="{{ path('salty_produit') }}" class="bubblegum-link"> Salé</a>
+    </div>
+  </div>
+</div>
+<div class="bento-grid">
+  <div class="col-left">
+    <div class="box">
+      <div class="inner-box">
+        <img src="{{ asset('img/bento-homepage/chou1.webp') }}" alt="">
+      </div>
+      <div class="inner-box">
+        <img src="{{ asset('img/bento-homepage/chou2.webp') }}" alt="">
+      </div>
+    </div>
+    <div class="box">
+      <div class="inner-box">
+        <img src="{{ asset('img/bento-homepage/chou3.jpg') }}" alt="">
+      </div>
+      <div class="inner-box">
+        <img src="{{ asset('img/bento-homepage/chou4.jpg') }}" alt="">
+      </div>
+    </div>
+    <div class="box">
+      <div class="inner-box">
+        <img src="{{ asset('img/bento-homepage/chou5.jpg') }}" alt="">
+      </div>
+      <div class="inner-box">
+        <img src="{{ asset('img/bento-homepage/chou6.jpg') }}" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="col-right">
+    <div class="box">
+      <img src="{{ asset('img/bento-homepage/chou7.jpg') }}" alt="">
+    </div>
+    <div class="box">
+      <img src="{{ asset('img/bento-homepage/chou8.webp') }}" alt="">
+    </div>
+  </div>
+</div>
+<div class="contact-home">
+    <div class="contact-description-home">
+        <h3 class="page-title">Des choux sur mesure, <br>pour un plaisir sur commande</h3>
+        <p>
+            Une envie particulière, un événement à célébrer ou une idée gourmande à concrétiser ? N’hésitez pas à nous contacter ! Nous serons ravis de créer, avec vous, des choux à la hauteur de vos attentes. Sur-mesure, faits maison, et livrés avec soin.
+        </p>
+        <a href="{{ path('app_contact') }}" class="bubblegum-link">Contactez-nous</a>
+    </div>
+    <div class="contact-image-home">
+        <img src="{{ asset('img/choux-creme.jpg') }}" loading="lazy" alt="Contactez-nous">
+    </div>
+</div>
+<div class="flex-column-center">
+<h2 class="page-title" style="margin: 0; margin-top: 25px;">Nos meilleures ventes</h2>
+{% if bestSellers is not empty %}
+  <section class="best-sellers-section">
+
+    <div class="swiper best-sellers-swiper">
+      <div class="swiper-wrapper">
+        {% for produit in bestSellers %}
+          <div class="swiper-slide">
+                <p>{{ produit.nomProduit }}</p>
+                <a href="{{ path('produit_detail', {'slug': produit.slug} ) }}">
+                    <img src="/img/{{ produit.image }}" loading="lazy" alt="{{ produit.nomProduit }}" class="catalog-image">
+                </a>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination & navigation -->
+      
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+  </section>
+{% else %}
+  <p class="no-best-sellers">Aucun best-seller à afficher pour le moment.</p>
+{% endif %}
+</div>
+
+<div class="bio">
+    <h3 class="page-title">Le mot de la pâtissière</h3>
+    <p>Après plusieurs années à peaufiner mes recettes, j’ai décidé de créer une maison entièrement dédiée aux choux à la crème — sucrés, salés, mais toujours faits maison. Mon objectif ? Proposer des créations gourmandes, élégantes et accessibles, livrées rapidement dans tout le Bas-Rhin. Derrière chaque chou, il y a un vrai travail de recherche, des ingrédients de qualité, et une touche de créativité. Avec Click&Choux, je mêle tradition pâtissière et modernité pour vous offrir une expérience unique, du premier clic à la dernière bouchée.</p>
+    <div class="bio-img-patissiere">
+        <p>Photo de la patissière à insérer ici</p>
+        <p>La pâtissière<br>
+        <span style="color: grey; font-size: 0.9em">Fondatrice de Click&Choux</span></p>
+    </div>
+</div>
+
+
+
 {% endblock %}
