@@ -444,11 +444,14 @@
     .flex-column-center input[type="text"], .flex-column-center input[type="number"], .flex-column-center input[type="email"], .flex-column-center input[type="password"] {
         width: 70vw;
     }
-
+    
     .catalogue-cta{
         flex-direction: column;
+        
+        a.bubblegum-link{
+            margin: 30px 0;
+        }
     }
-    
     .contact-home {
         & .contact-description-home {
             a.bubblegum-link {
@@ -617,4 +620,3 @@
             font-size: 1.1em;
         }
     }
-}
