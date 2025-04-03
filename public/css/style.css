@@ -416,6 +416,15 @@ body{
                     text-align: start;
                     margin-bottom: 0;
                     width: 30vw;
+                    padding: 10px;
+                    border: 2px solid var(--font-color);
+                    border-radius: 10px;
+                    outline: none;
+                    
+                    &:focus{
+                        border: var(--link-color) solid 3px !important;
+                        box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+                    }
                 }
             }
         }
@@ -1058,7 +1067,7 @@ body{
     font-size: var(--font-size);
     padding: 10px;
 }
-.flex-column-sb input[type="text"], .flex-column-sb input[type="number"], .flex-column-sb input[type="email"], .flex-column-sb input[type="password"]  {
+.flex-column-sb input[type="text"], .flex-column-sb input[type="number"], .flex-column-sb input[type="email"], .flex-column-sb input[type="password"], .flex-column-sb input[type="email"]  {
     width: 50vw;
     padding: 10px;
     margin-bottom: 20px;
