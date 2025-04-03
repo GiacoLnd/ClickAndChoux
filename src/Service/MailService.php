@@ -23,7 +23,7 @@ class MailService
 
     public function sendInvoiceEmail(string $to, string $pdfContent, string $fileName, $commande)
     {
-        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/img/logo.png';
+        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/img/logo.webp';
 
         // Convertion du logo en Base64
         $logoBase64 = base64_encode(file_get_contents($logoPath));

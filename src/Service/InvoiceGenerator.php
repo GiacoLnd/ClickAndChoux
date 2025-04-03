@@ -39,7 +39,7 @@ class InvoiceGenerator
         $TVA = $totalHT * 0.055;
         
         // Chemin absolu du logo (nécessaire pour DomPDF)
-        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/img/logo.png';  // correspond à $logoPath = '/var/www/html/public/img/logo.png'; donne le chemin absolu
+        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/img/logo.webp';  // correspond à $logoPath = '/var/www/html/public/img/logo.webp'; donne le chemin absolu
         $logoBase64 = base64_encode(file_get_contents($logoPath)); // file_get_contents : lit le contenu du fichier, base64_encode : encode le contenu en base64 pour une lecture HTML
         
         $html = $this->twig->render('invoice/invoice.html.twig', [

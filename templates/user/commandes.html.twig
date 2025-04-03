@@ -26,10 +26,12 @@
                                 <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
                                 <td>{{ commande.montantTotal }}€</td>
                                 <td>
-                                    {% if commande.statut == 'confirmée' %}
-                                        <span class="badge bg-success">Confirmée</span>
+                                    {% if commande.statut == 'Livrée' %}
+                                        <span class="badge bg-success">Livrée</span>
+                                    {% elseif commande.statut == 'En livraison' %}
+                                        <span class="badge bg-warning">En livraison</span>
                                     {% else %}
-                                        <span class="badge bg-warning">{{ commande.statut }}</span>
+                                        <span class="badge bg-danger">En préparation</span>
                                     {% endif %}
                                 </td>
                                 <td>

@@ -207,7 +207,7 @@ class PaymentController extends AbstractController{
         // Insertion du slug de la commande en num de facture dans une variable
         $fileName = "facture-".$commande->getSlug().".pdf";
 
-        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/img/logo.png';
+        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/img/logo.webp';
         $logoBase64 = base64_encode(file_get_contents($logoPath));
         $logoMimeType = mime_content_type($logoPath);
 

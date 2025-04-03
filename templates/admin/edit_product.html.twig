@@ -59,8 +59,10 @@
             </div>
             <label>{{ form_label(form.submit) }}</label>
             {{ form_widget(form.submit) }}
-
             {{ form_end(form) }}
+            <div class="flex-column-center">
+                <a class="no-bg-link" href="{{ path('admin_produits') }}">Retour à la gestion des produits</a>
+            </div>
         </div>
     </section>
 {% endblock %}

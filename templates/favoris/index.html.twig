@@ -4,23 +4,40 @@
 
 {% block body %}
     <section id="fav-list">
-        <div class="flex-column-center">  
             <h2 class="page-title">Mes favoris</h2>
+            <div class="catalog-container">
             <div class="choux-grid-container">
                 <ul class="choux-grid">
                     {% for favori in favoris %}
-                    <li>
-                        <div class="favori-item d-flex flex-column ">
-                            <a href="{{ path('produit_detail', {'slug': favori.produit.slug}) }}"><img src="/img/{{ favori.produit.image }}" alt="{{ favori.produit.nomProduit }}" class="catalog-image" loading="lazy"></a>
-                            <button class="favori-btn" data-id="{{ favori.produit.id }}"><i class="fa-solid fa-heart"></i></button>
-                            <a href="{{ path('produit_detail', {'slug': favori.produit.slug}) }}"><h2>{{ favori.produit.nomProduit }}</h2></a>
-                            <p class="catalog-price">{{ favori.produit.getTTC }}€</p>      
-                        </div>
-                    </li>
+                        {% set produit = favori.produit %}
+                        <li class="{{ produit.isActive ? 'catalog-in-stock' : 'catalog-out-stock' }}">
+                            <a href="{{ path('produit_detail', {'slug': produit.slug}) }}">
+                                <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image" loading="lazy">
+                            </a>
+                            <div class="title-price">
+                                <div class="details">
+                                    <a href="{{ path('produit_detail', {'slug': produit.slug}) }}">
+                                        <h2>{{ produit.nomProduit }}</h2>
+                                    </a>
+                                    {% if produit.isActive %}
+                                        <p class="price">{{ produit.getTTC|number_format(2, ',', ' ') }}€</p>
+                                    {% else %}
+                                        <p>Rupture de stock</p>
+                                    {% endif %}
+                                </div>
+                                <div class="clickable-icon">
+                                    <button class="favori-btn" data-id="{{ produit.id }}" aria-label="Retirer des favoris">
+                                        <i class="fa-solid fa-heart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
-            <a class="bubblegum-link fw-bold" href="{{ path('app_user_profil') }}"> Retour au profil</a>
+        </div>
+        <div class="flex-column-center">
+            <a class="no-bg-link" href="{{ path('app_user_profil') }}"> Retour au profil</a>
         </div>
     </section>
 {% endblock %}
