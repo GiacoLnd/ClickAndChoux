@@ -540,6 +540,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const addButton = document.getElementById('add-allergen-button');
     const allergenCollection = document.getElementById('form_newAllergenes'); // ID du form newAllergene
     
+    if (!addButton || !allergenCollection) return;
+
     const prototype = allergenCollection.dataset.prototype;
 
     // Lorsqu'on clique sur le bouton d'ajout
