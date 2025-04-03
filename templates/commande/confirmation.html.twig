@@ -13,7 +13,7 @@
             {% for item in commande.cart %}
                 <div class="commande-product">
                     <a href="{{ path('produit_detail', {'slug': item.slug}) }}">
-                        <img src="/img/{{ item.image }}" alt="{{ item.nom }}" class="commande-image">
+                        <img src="/img/{{ item.image }}" alt="{{ item.nom }}" class="commande-image" loading="lazy">
                     </a>
                     <div class="title-price">
                         <div class="details">

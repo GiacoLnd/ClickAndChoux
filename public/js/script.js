@@ -644,8 +644,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 });
 
-  // Datatables scripts 
-
+// Datatables scripts 
 // User orders list dataTables
 $(document).ready(function() {
     var table = $('.dataTable').DataTable({

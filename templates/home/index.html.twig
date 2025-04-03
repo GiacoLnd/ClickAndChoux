@@ -77,7 +77,7 @@
             <div class="swiper-slide">
                   <p>{{ produit.nomProduit }}</p>
                   <a href="{{ path('produit_detail', {'slug': produit.slug} ) }}">
-                      <img src="/img/{{ produit.image }}" loading="lazy" alt="{{ produit.nomProduit }}" class="catalog-image">
+                      <img src="/img/{{ produit.image }}" loading="lazy" alt="{{ produit.nomProduit }}" class="catalog-image" loading="lazy">
                   </a>
             </div>
           {% endfor %}

@@ -60,7 +60,7 @@
                             {% if produit.isActive == true %}
                                 <li class="catalog-in-stock">
                                     <a href="{{ path('produit_detail', {'slug': produit.slug} ) }}">
-                                        <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image">
+                                        <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image" loading="lazy">
                                     </a>
                                     <div class="title-price">
                                         <div class="details">
@@ -79,7 +79,7 @@
                                 {% elseif produit.isActive == false %}
                                 <li class="catalog-out-stock">
                                     <a href="{{ path('produit_detail', {'slug': produit.slug} ) }}">
-                                        <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image">
+                                        <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="catalog-image" loading="lazy">
                                     </a>
                                     <div class="title-price">
                                         <div class="details">

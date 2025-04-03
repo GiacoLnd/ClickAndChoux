@@ -12,11 +12,11 @@
         <div class="details-container">
             {% if produit.isActive == true %}
                 <div class="details-image">
-                    <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image">
+                    <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image" loading="lazy">
                 </div>
             {% else %}
                 <div class="details-image image-out-stock">
-                    <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image">
+                    <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image" loading="lazy">
                 </div>
             {% endif %}
             <div class="list-details">

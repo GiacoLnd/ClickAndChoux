@@ -15,7 +15,7 @@
                         <div class="cart-item" data-price="{{ item.prixTTC }}">
                             <div class="product-gestion">
                                 <a href="{{ path('produit_detail', {'slug': item.slug}) }}">
-                                    <img src="/img/{{ item.image ?? 'default.jpg' }}" alt="{{ item.nom }}" class="cart-image">
+                                    <img src="/img/{{ item.image ?? 'default.jpg' }}" alt="{{ item.nom }}" class="cart-image" loading="lazy">
                                 </a>
                                 <!-- Suppression -->
                                 <form action="{{ path('panier_remove', { id: item.id }) }}" method="post" style="display: inline;">

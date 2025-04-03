@@ -57,7 +57,7 @@
                 <div class="commande-product">
                     {% if produitBase %}
                         <a href="{{ path('produit_detail', {'slug': produitBase.slug}) }}">
-                            <img src="/img/{{ produitBase.image }}" alt="{{ produit.nom }}" class="commande-image">
+                            <img src="/img/{{ produitBase.image }}" alt="{{ produit.nom }}" class="commande-image" loading="lazy">
                         </a>
                     {% endif %}
             
