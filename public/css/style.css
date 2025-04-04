@@ -1578,9 +1578,6 @@ table.dataTable thead th, table.dataTable tbody td{
     transition: transform 0.3s ease-in-out;
 
 }
-.inner-box img{
-max-height: 500px;
-}
 .col-right .box{
     overflow: hidden;
     opacity: 0.8;
