@@ -23,18 +23,20 @@
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
-                                <!-- Diminution -->
-                                <button data-id="{{ item.id }}" class="bubblegum-link decrease-btn">
-                                    <i class="fa-solid fa-minus"></i>
-                                </button>
-                                
-                                <!-- Quantité Dynamique -->
-                                <span id="quantity-{{ item.id }}">{{ item.quantite }}</span>
-                                
-                                <!-- Augmentation -->
-                                <button data-id="{{ item.id }}" class="bubblegum-link increase-btn">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
+                                <div class="cart-quantity">
+                                    <!-- Diminution -->
+                                    <button data-id="{{ item.id }}" class="bubblegum-link decrease-btn">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    
+                                    <!-- Quantité Dynamique -->
+                                    <span id="quantity-{{ item.id }}">{{ item.quantite }}</span>
+                                    
+                                    <!-- Augmentation -->
+                                    <button data-id="{{ item.id }}" class="bubblegum-link increase-btn">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
 
                                 <div class="product-identification">
                                     {{ item.nom }} - <span id="line-total-{{ item.id }}" class="line-total"> 
@@ -51,7 +53,7 @@
             <h3 id="montant-total">Total : {{ montantTotal|number_format(2, ',', ' ') }} €</h3>
                     
             <form action="{{ path('commande_valider') }}" method="post" class="flex-column-center">
-                <button type="submit" class="bubblegum-link">
+                <button type="submit" class="bubblegum-link .quantity-btn">
                     Valider le panier
                 </button>
             </form>

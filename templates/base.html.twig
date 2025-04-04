@@ -63,161 +63,164 @@
     </head>
     <body style="background-color: #FFFFFF">
         <div id="wrapper">
-        <header>
-            <nav>
-                <div class="burger-user">
-                    <a href="{{ path('panier_afficher') }}" class="position-relative" aria-label="Accès au panier">
-                        <i class="fa-solid fa-shopping-cart"></i>
-                        {% if quantity > 0 %}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge" id="navbar-cart-quantity">
-                                {{ quantity }}
-                            </span>
-                        {% endif %}
-                    </a>
-                    
-                    <div class="dropdown">
-                        <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu de connexion">
-                            <i class="fa-solid fa-user" style="color: {% if app.user %}#38B000{% else %}#9D0208{% endif %};"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            {% if app.user %}
-                                {% if is_granted('ROLE_ADMIN') %}
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('admin_profile') }}">
-                                    <i class="fa-solid fa-kitchen-set"></i> Administrateur</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
-                                    <i class="fa-solid fa-power-off"></i> Se déconnecter
-                                </a></li>
-                                {% else %} 
-                                <li>
-                                    <a class="dropdown-item" style="color: #55211A;" href="{{ path('app_user_profil') }}">
-                                    <i class="fa-solid fa-id-card-clip"></i> Mon profil</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
-                                    <i class="fa-solid fa-power-off"></i> Se déconnecter</a>    
-                                </li>
-                                {% endif %}
-                            {% else %}
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_login') }}">
-                                    <i class="fa-solid fa-sign-in-alt"></i> Se connecter</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_register') }}">
-                                    <i class="fa-solid fa-user-plus"></i> S'inscrire</a>
-                                </li>
+            <header>
+                <nav>
+                    <div class="burger-user">
+                        <a href="{{ path('panier_afficher') }}" class="position-relative" aria-label="Accès au panier">
+                            <i class="fa-solid fa-shopping-cart"></i>
+                            {% if quantity > 0 %}
+                                <span class="position-absolute top-0 start-100 cart-badge" id="navbar-cart-quantity">
+                                    {{ quantity }}
+                                </span>
                             {% endif %}
+                        </a>
+                        
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu de connexion">
+                                <i class="fa-solid fa-user" style="color: {% if app.user %}#38B000{% else %}#9D0208{% endif %};"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                {% if app.user %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('admin_profile') }}">
+                                        <i class="fa-solid fa-kitchen-set"></i> Administrateur</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
+                                        <i class="fa-solid fa-power-off"></i> Se déconnecter
+                                    </a></li>
+                                    {% else %} 
+                                    <li>
+                                        <a class="dropdown-item" style="color: #55211A;" href="{{ path('app_user_profil') }}">
+                                        <i class="fa-solid fa-id-card-clip"></i> Mon profil</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
+                                        <i class="fa-solid fa-power-off"></i> Se déconnecter</a>    
+                                    </li>
+                                    {% endif %}
+                                {% else %}
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('app_login') }}">
+                                        <i class="fa-solid fa-sign-in-alt"></i> Se connecter</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('app_register') }}">
+                                        <i class="fa-solid fa-user-plus"></i> S'inscrire</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="navbar-container">
+                        <div class="navbar-logo">
+                            <a href="{{ path('app_home') }}"><img src="{{ asset('img/logobis.webp') }}" alt="ClickAndChoux" class="logo"></a>
+                            <a href="{{ path('app_home') }}" class="navbar-title"><h1>Click&Choux</h1></a>
+                        </div>
+                        <ul class="navbar-list" id="navbar-list">
+                            <li><a href="{{ path('salty_produit') }}" class="menu-item">Choux Salés</a></li>
+                            <li class="vert-bar">|</li>
+                            <li class="horizontal-bar">-</li>
+                            <li><a href="{{ path('sweety_produit') }}" class="menu-item">Choux Sucrés</a></li>
+                            <li class="vert-bar">|</li>
+                            <li class="horizontal-bar">-</li>
+                            <li><a href="{{ path('app_contact') }}" class="menu-item">Contactez-nous</a></li>
+                            <li class="vert-bar">|</li>
+                            <li class="horizontal-bar">-</li>
+                            <li><a href="{{ path('app_faq') }}" class="menu-item">F.A.Q</a></li>
                         </ul>
+                            <button class="burger" id="burger-button" aria-label="Menu">
+                                <i class="fa-solid fa-bars" id="burger-icon"></i>
+                            </button>
+                    </div>
+                    <div class="text-center">
+                        {% for label, messages in app.flashes %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}  
+                    </div>
+                </nav>
+            </header>
+            <main class="flex-column-sb">
+                {% block body %}
+                {% endblock %} 
+            </main>
+            <footer class="footer" role="contentinfo">
+                <div class="informations-banner">
+                    <div class="biological-product"> 
+                        <i class="fa-solid fa-leaf" style="color: #82A776;"></i>
+                        <p>Produits Biologiques et éthiques</p>
+                    </div>
+                    <div class="payments">
+                        <i class="fa-solid fa-credit-card" style="color: #5D98E9;"></i>
+                        <p>Paiement sécurisés avec Visa, Mastercard, Amex</p>
+                    </div>
+                    <div class="delivery">
+                        <i class="fa-solid fa-truck-fast" style="color: #ffcc80;"></i>
+                        <p>Livraison réfrigérée à domicile</p>
+                    </div>
+                    <div class="order-reception">
+                        <i class="fa-solid fa-bag-shopping" style="color: #894e3f;"></i>
+                        <p>Réception sous 24h/48h</p>
                     </div>
                 </div>
-                <div id="navbar-container">
-                    <div class="navbar-logo">
-                        <a href="{{ path('app_home') }}"><img src="{{ asset('img/logobis.webp') }}" alt="ClickAndChoux" class="logo" loading="lazy"></a>
-                        <a href="{{ path('app_home') }}" class="navbar-title"><h1>Click&Choux</h1></a>
+                <div class="newsletter-container">
+                    <div class="newsletter-description">
+                        <h3>On reste en contact ?</h3><br>
+                        <p><strong>Abonnez-vous à notre newsletter pour vous tenir informés de nos dernières nouveautés !</strong></p>
                     </div>
-                    <ul class="navbar-list" id="navbar-list">
-                        <li><a href="{{ path('salty_produit') }}" class="menu-item">Choux Salés</a></li>
-                        <li class="vert-bar">|</li>
-                        <li class="horizontal-bar">-</li>
-                        <li><a href="{{ path('sweety_produit') }}" class="menu-item">Choux Sucrés</a></li>
-                        <li class="vert-bar">|</li>
-                        <li class="horizontal-bar">-</li>
-                        <li><a href="{{ path('app_contact') }}" class="menu-item">Contactez-nous</a></li>
-                        <li class="vert-bar">|</li>
-                        <li class="horizontal-bar">-</li>
-                        <li><a href="{{ path('app_faq') }}" class="menu-item">F.A.Q</a></li>
-                    </ul>
-                        <button class="burger" id="burger-button" aria-label="Menu">
-                            <i class="fa-solid fa-bars" id="burger-icon"></i>
-                        </button>
+                    {{ render(controller('App\\Controller\\NewsletterController::newsletterForm')) }}
                 </div>
-                <div class="text-center">
-                    {% for label, messages in app.flashes %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ label }}">
-                                {{ message }}
+
+                <div class="footer-container">
+                    <div class="footer-top">
+                        <div class="footer-links">
+                            <p class="fw-bold">Informations légales</p>
+                            <ul>
+                                <li><a href="">Conditions générales de vente</a></li>
+                                <li><a href="">Conditions générales d'utilisation</a></li>
+                                <li><a href="">Politique de confidentialité</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <p class="fw-bold">En savoir plus</p>
+                            <ul>
+                                <li><a href="">F.A.Q.</a></li>
+                                <li><a href="">Qui sommes-nous ?</a></li>
+                                <li><a href="">Nos partenaires</a></li>
+                                <li><a href="">Liste des allergènes</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <p class="fw-bold">Catalogues</p>
+                            <ul>
+                                <li><a href="{{ path('sweety_produit') }}">Choux sucrés</a></li>
+                                <li><a href="{{ path('salty_produit') }}">Choux salés</a></li>
+                                <li><a href="{{ path('app_contact') }}">Demande de devis</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr class="footer-break"> <!-- hr : ligne horizontale -->
+                    <div class="footer-bottom">
+                        <div class="footer-scroll">
+                            <button class="scrollTopButton" id="retour-haut" aria-label="Scroll to top">
+                                <i class="fa-solid fa-circle-arrow-up"></i>
+                            </button>
+                        </div>
+                        <div class="footer-social">
+                            <div class="social-icons" role="navigation" aria-labelledby="social-heading">
+                                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                                <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                                <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                             </div>
-                        {% endfor %}
-                    {% endfor %}  
-                </div>
-            </nav>
-        </header>
-        <main class="flex-column-sb">
-            {% block body %}
-            {% endblock %} 
-        </main>
-        <div class="informations-banner">
-            <div class="biological-product"> 
-                <i class="fa-solid fa-leaf" style="color: #82A776;"></i>
-                <p>Produits Biologiques et éthiques</p>
-            </div>
-            <div class="payments">
-                <i class="fa-solid fa-credit-card" style="color: #5D98E9;"></i>
-                <p>Paiement sécurisés avec Visa, Mastercard, Amex</p>
-            </div>
-            <div class="delivery">
-                <i class="fa-solid fa-truck-fast" style="color: #ffcc80;"></i>
-                <p>Livraison réfrigérée à domicile</p>
-            </div>
-            <div class="order-reception">
-                <i class="fa-solid fa-bag-shopping" style="color: #894e3f;"></i>
-                <p>Réception sous 24h/48h</p>
-            </div>
-        </div>
-        <div class="newsletter-container">
-            <div class="newsletter-description">
-                <h4>On reste en contact ?</h4><br>
-                <p><strong>Abonnez-vous à notre newsletter pour vous tenir informés de nos dernières nouveautés !</strong></p>
-            </div>
-            {{ render(controller('App\\Controller\\NewsletterController::newsletterForm')) }}
-        </div>
-        <footer class="footer" role="contentinfo">
-            <div class="footer-top">
-                <div class="footer-links">
-                    <p class="fw-bold">Informations légales</p>
-                    <ul>
-                        <li><a href="">Conditions générales de vente</a></li>
-                        <li><a href="">Conditions générales d'utilisation</a></li>
-                        <li><a href="">Politique de confidentialité</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <p class="fw-bold">En savoir plus</p>
-                    <ul>
-                        <li><a href="">F.A.Q.</a></li>
-                        <li><a href="">Qui sommes-nous ?</a></li>
-                        <li><a href="">Nos partenaires</a></li>
-                        <li><a href="">Liste des allergènes</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <p class="fw-bold">Catalogues</p>
-                    <ul>
-                        <li><a href="{{ path('sweety_produit') }}">Choux sucrés</a></li>
-                        <li><a href="{{ path('salty_produit') }}">Choux salés</a></li>
-                        <li><a href="{{ path('app_contact') }}">Demande de devis</a></li>
-                    </ul>
-                </div>
-            </div>
-            <hr class="footer-break"> <!-- hr : ligne horizontale -->
-            <div class="footer-bottom">
-                <div class="footer-scroll">
-                    <button class="scrollTopButton" id="retour-haut" aria-label="Scroll to top">
-                        <i class="fa-solid fa-circle-arrow-up"></i>
-                    </button>
-                </div>
-                <div class="footer-social">
-                    <div class="social-icons" role="navigation" aria-labelledby="social-heading">
-                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
         </div>
         
     {% block javascripts %}

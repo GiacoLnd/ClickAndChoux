@@ -10,8 +10,6 @@
 @media screen and (max-width: 1024px) {
     #wrapper {
         #navbar-container {
-            width: 100vw;
-            position: absolute fixed;
             flex-wrap: wrap;
         }
     }
@@ -103,9 +101,6 @@
 
 }
 @media screen and (max-width: 834px) {
-    .flex-column-center{
-        width: 95%;
-    }
     .burger {
         font-size: 28px;
     }
@@ -156,7 +151,13 @@
                 }
             }
         }
-        & footer {
+        footer{
+        .footer-container {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
             .footer-top{
                 flex-direction: column;
                 align-items: center;
@@ -177,6 +178,7 @@
                 }
             }
         }
+    }
     }
     .choux-grid-container {
         margin:5px !important;
@@ -298,10 +300,8 @@
                 gap: 15px;
                 
                 .product-gestion{
-                    display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
                     align-items: center;
-                    justify-content: center;
                 }
             }
         }
@@ -388,7 +388,7 @@
             align-items: center;
             justify-content: center;
         }
-        & footer {
+        .footer-container{
             .footer-container {
                 display: flex;
                 flex-direction: column;
@@ -557,13 +557,6 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 15px;
-                
-                .product-gestion{
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: center;
-                }
             }
         }
     }
