@@ -3,6 +3,16 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+#tarteaucitronIcon {
+    right: 2rem !important;
+    bottom: 3rem !important;
+    padding: 0 !important;
+}
+#tarteaucitronIcon #tarteaucitronManager {
+    padding: 0 !important;
+}
+
 :root{
     --font-color: #55211A;
     --font-family-primary: 'Tenor Sans', sans-serif;
@@ -242,7 +252,7 @@ body{
                 top: -30px;
                 right: 10px;
                 color: white;
-                background-color: var(--link-color);
+                background: var(--link-color);
                 padding: 10px;
                 width: 25px;
                 height: 25px;
@@ -252,12 +262,14 @@ body{
                 /* Badge de quantité sur cart icon */
         .cart-badge{
             color: var(--price-color);
+            background-color: var(--link-background);
             border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px;
-            font-weight: bold;
+            font-weight: bolder;
+            font-size: 1.1rem;
             width: 25px;
             height: 25px;
             transform: translate(-50%, -65%);
@@ -448,7 +460,7 @@ body{
         .footer-top{
             width: 100%;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             align-items: flex-start;
 
 
@@ -461,7 +473,7 @@ body{
                 width: 300px;
             }
             .footer-links{
-                padding: 10px;
+                padding: 1rem;
             }
             .footer-links h3{
                 font-size: 0.9em;
@@ -1094,7 +1106,7 @@ body{
     padding: 10px;
 }
 .flex-column-sb input[type="text"], .flex-column-sb input[type="number"], .flex-column-sb input[type="email"], .flex-column-sb input[type="password"], .flex-column-sb input[type="email"]  {
-    width: 50vw;
+    width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border: 2px solid var(--font-color);
@@ -1317,9 +1329,11 @@ table.dataTable thead th, table.dataTable tbody td{
 
         .infos-update{
             display: flex;
+            flex-direction: row;
             align-items: flex-start;
             justify-content: space-evenly;
             gap: 3em;
+            margin: 2rem;
         }
 }
 
