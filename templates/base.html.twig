@@ -183,9 +183,9 @@
                                 <p class="fw-bold">Informations légales</p>
                             </div>
                             <ul>
-                                <li><a href="">Conditions générales de vente</a></li>
+                                <li><a href="{{ path('app_legal_sales') }}">Conditions générales de vente</a></li>
                                 <li><a href="">Conditions générales d'utilisation</a></li>
-                                <li><a href="">Politique de confidentialité</a></li>
+                                <li><a href="{{ path('app_legal_privacy') }}">Politique de confidentialité</a></li>
                             </ul>
                         </div>
                         <div class="footer-links">
@@ -193,10 +193,10 @@
                                 <p class="fw-bold">En savoir plus</p>
                             </div>
                             <ul>
-                                <li><a href="">F.A.Q.</a></li>
-                                <li><a href="">Qui sommes-nous ?</a></li>
-                                <li><a href="">Nos partenaires</a></li>
-                                <li><a href="">Liste des allergènes</a></li>
+                                <li><a href="{{ path('app_faq') }}">F.A.Q.</a></li>
+                                <li><a href="{{ path('app_faq') }}">Qui sommes-nous ?</a></li>
+                                <li><a href="{{ path('app_faq') }}">Nos partenaires</a></li>
+                                <li><a href="{{ path('app_faq') }}">Liste des allergènes</a></li>
                             </ul>
                         </div>
                         <div class="footer-links">
@@ -213,7 +213,7 @@
                     <hr class="footer-break"> <!-- hr : ligne horizontale -->
                     <div class="footer-bottom">
                         <div class="footer-scroll">
-                            <button class="scrollTopButton" id="retour-haut" aria-label="Scroll to top">
+                            <button class="scrollTopButton" id="retour-haut" aria-label="Retour en haut de la page">
                                 <i class="fa-solid fa-circle-arrow-up"></i>
                             </button>
                         </div>

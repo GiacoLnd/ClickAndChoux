@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité{% endblock %}
+
+{% block body %}
+    <section id="conditions-generales-de-vente">
+        <div class="text-start" style="width: 60vw;">
+            <h2 class="page-title">Conditions Générales de Vente</h2>
+            
+            <h3>1. Champ d’application</h3>
+            <p>Les présentes Conditions Générales de Vente (CGV) s’appliquent à toutes les commandes passées sur le site Click&Choux. Elles régissent les relations contractuelles entre Click&Choux et tout utilisateur effectuant un achat via le site.</p>
+            
+            <h3>2. Produits</h3>
+            <p>Les produits proposés sont des choux à la crème artisanaux, présentés avec une description et un visuel aussi fidèles que possible. Toutefois, des différences légères peuvent exister entre les produits livrés et leur présentation en ligne, notamment du fait de leur fabrication artisanale.</p>
+            
+            <h3>3. Prix</h3>
+            <p>Les prix indiqués sur le site sont exprimés en euros, toutes taxes comprises (TTC). Click&Choux se réserve le droit de modifier ses prix à tout moment, mais les produits seront facturés sur la base des tarifs en vigueur au moment de la validation de la commande.</p>
+            
+            <h3>4. Commande</h3>
+            <p>L’utilisateur peut passer commande après création d’un compte. Toute commande vaut acceptation des présentes CGV. Un e-mail de confirmation récapitulant la commande est envoyé automatiquement à l’adresse fournie par l’utilisateur.</p>
+            
+            <h3>5. Paiement</h3>
+            <p>Le règlement s’effectue via un service de paiement sécurisé (Stripe). Les informations bancaires ne sont jamais stockées sur les serveurs de Click&Choux.</p>
+            
+            <h3>6. Livraison</h3>
+            <p>Les commandes sont livrées à l’adresse indiquée lors du processus de commande. Le client est responsable de l’exactitude des informations fournies. Click&Choux ne saurait être tenu responsable en cas d’erreur ou de retard lié à une adresse incorrecte.</p>
+            
+            <h3>7. Droit de rétractation</h3>
+            <p>Conformément à l’article L221-28 du Code de la consommation, les produits alimentaires périssables ne bénéficient pas du droit de rétractation. Par conséquent, toute commande validée est considérée comme ferme et définitive.</p>
+            
+            <h3>8. Réclamations</h3>
+            <p>En cas de produit non conforme ou endommagé, l’utilisateur doit contacter Click&Choux via le formulaire de contact ou par e-mail dans un délai de 48h après réception, en joignant une photo si nécessaire.</p>
+            
+            <h3>9. Données personnelles</h3>
+            <p>Les données personnelles collectées sont utilisées uniquement dans le cadre de la gestion des commandes ou de devis et ne sont en aucun cas cédées à des tiers. L’utilisateur peut à tout moment exercer ses droits (accès, rectification, oubli) en contactant le service concerné (voir <a href="{{path('app_legal_privacy')}}" class="no-bg-link">Politique de Confidentialité</a>).</p>
+            
+            <h3>10. Propriété intellectuelle</h3>
+            <p>Tous les éléments du site Click&Choux, visuels, textes, logos, sont la propriété exclusive de Click&Choux. Toute reproduction, totale ou partielle, est interdite sans autorisation écrite préalable.</p>
+            
+            <h3>11. Loi applicable et litiges</h3>
+            <p>Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera privilégiée. À défaut, les tribunaux compétents seront ceux du ressort du siège social de Click&Choux.</p>
+        </div>
+    </section>
+{% endblock %}

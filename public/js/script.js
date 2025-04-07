@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             // Création du conteneur details
                             const details = document.createElement('div');
                             details.classList.add('details');
-                            
+                             
                             // Lien avec le titre h2
                             const titleLink = document.createElement('a');
                             titleLink.setAttribute('href', '/produit/' + produit.slug);
