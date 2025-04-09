@@ -6,8 +6,14 @@
     <section id="update-profile">
         <h2 class="page-title">Modifier mon profil</h2>
         {{ form_start(formProfile) }}
-            {{ form_row(formProfile.nickName) }}
-            {{ form_row(formProfile.email) }}
+            <div class="flex-column-center">
+                {{ form_label(formProfile.nickName) }}
+                {{ form_widget(formProfile.nickName) }}
+            </div>
+            <div class="flex-column-center">
+                {{ form_label(formProfile.email) }}
+                {{ form_widget(formProfile.email) }}
+            </div>
             <div class="flex-column-center">
                 {{ form_row(formProfile.save) }}
             </div>

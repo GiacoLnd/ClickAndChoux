@@ -5,7 +5,11 @@
 {% block body %}
     <section id="order-details" class="text-center">
         <h2 class="page-title">Détail de la commande</h2>
-        <a class="bubblegum-link" href="{{ path('app_user_commandes') }}">Retour aux commandes</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="bubblegum-link" href="{{ path('admin_list_commandes') }}">Liste des commandes</a>
+        {% else %}
+            <a class="bubblegum-link" href="{{ path('app_user_commandes') }}">Retour aux commandes</a>
+        {% endif %}
         <a href="{{ path('invoice_generate', {'slug': commande.slug}) }}" class="bubblegum-link" target="_blank">
             Télécharger la facture
         </a>
@@ -44,33 +48,29 @@
         
         <h2 class="page-title pt-4">Produits commandés</h2>
         <div class="commande-list">
-            {% for produit in commande.historique.produits %}
-                {% set produitBase = null %}
-            
-                {# On parcourt les paniers liés à la commande pour retrouver le produit actuel #}
-                {% for panier in commande.paniers %}
-                    {% if panier.produit.id == produit.id %}
-                        {% set produitBase = panier.produit %}
-                    {% endif %}
-                {% endfor %}
-            
-                <div class="commande-product">
-                    {% if produitBase %}
-                        <a href="{{ path('produit_detail', {'slug': produitBase.slug}) }}">
-                            <img src="/img/{{ produitBase.image }}" alt="{{ produit.nom }}" class="commande-image" loading="lazy">
-                        </a>
-                    {% endif %}
-            
-                    <div class="title-price">
-                        <div class="details">
-                            <h2>{{ produit.nom }}</h2>
-                            <p>Quantité : <strong>{{ produit.quantite }}</strong></p>
-                            <p>Prix unitaire TTC : <strong>{{ produit.prixTTC|number_format(2, ',', ' ') }} €</strong></p>
-                            <p>Prix total : <strong>{{ produit.total|number_format(2, ',', ' ') }} €</strong></p>
-                        </div>
+            {% for produit in historique.produits %}
+            <div class="commande-product">
+                
+                {% set image = imagesProduit[loop.index0] %} <!-- Utilise le tableau imagesProduit en bouclant (loop) à partir de l'index donné : index0 -->
+                
+                {% if image %}
+                    <div class="commande-detail-img">
+                        <img src="{{ asset('img/' ~ image) }}" alt="{{ produit.nom }}" class="commande-image" loading="lazy">
+                    </div>
+                {% else %}
+                    <p>Aucune image disponible <br> produit retiré du catalogue</p>
+                {% endif %}
+                
+                <div class="title-price">
+                    <div class="details">
+                        <h2>{{ produit.nom }}</h2>
+                        <p>Quantité : <strong>{{ produit.quantite }}</strong></p>
+                        <p>Prix unitaire TTC : <strong>{{ produit.prixTTC|number_format(2, ',', ' ') }} €</strong></p>
+                        <p>Prix total : <strong>{{ produit.total|number_format(2, ',', ' ') }} €</strong></p>
                     </div>
                 </div>
-            {% endfor %}
+            </div>
+        {% endfor %}
         
         </div>
         

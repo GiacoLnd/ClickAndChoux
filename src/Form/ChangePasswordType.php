@@ -35,6 +35,7 @@ class ChangePasswordType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'required' => true,
+                'attr' => ['class' => 'flex-column-center'],
                 'first_options'  => [
                     'label' => 'Nouveau mot de passe',
                     'label_attr' => ['class' => 'security-text'],

@@ -480,9 +480,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (data.message.includes('retiré')) {
                     this.classList.remove('favori-active');
 
-                    const productElement = this.closest('.favori-item');  // Trouve l'élément parent : .favori-item
-                    if (productElement) {
-                        productElement.remove();  // Retire l'élément du DOM 
+                    if(path.includes('/favoris/page')) {
+                        const productElement = this.closest('li');  // Trouve l'élément parent : .favori-item
+                        if (productElement) {
+                            productElement.remove();  // Retire l'élément du DOM 
+                        }
                     }
                 }
             });

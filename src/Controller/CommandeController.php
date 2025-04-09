@@ -136,7 +136,7 @@ final class CommandeController extends AbstractController
 
     // Fonction gérant le détail d'une commande
     #[Route('/commande/{slug}', name: 'commande_detail', methods: ['GET'])]
-    public function detailCommande(Commande $commande, Security $security, WorkflowInterface $commandeWorkflow): Response
+    public function detailCommande(Commande $commande, Security $security, WorkflowInterface $commandeWorkflow, ProduitRepository $produitRepository): Response
     {
         $user = $this->getUser();
 
@@ -155,11 +155,31 @@ final class CommandeController extends AbstractController
 
         $historique = $commande->getHistorique(); 
 
+        // Initialise un tableau pour l'image
+        $imagesProduit = [];
+
+        // Parcours les produits de l'historique de la commande
+        foreach ($historique['produits'] as $produit) {
+            $nomProduit = $produit['nom'];  // Récupère le nom du produit
+
+            // Recherche du produit dans la base de données en fonction de son nom
+            $produitDB = $produitRepository->findOneBy(['nomProduit' => $nomProduit]);
+
+            // Si produit trouvé en DB 
+            if ($produitDB) {
+                $imagesProduit[] = $produitDB->getImage(); // Ajoute l'image du produit trouvé
+            } else { // Si produit pas trouvé 
+                $imagesProduit[] = null;
+            }
+        }
+
         return $this->render('commande/detail.html.twig', [
             'commande' => $commande,
             'user' => $user,
             'historique' => $historique,
             'availableTransition' => $availableTransition,
+            'imagesProduit' => $imagesProduit,
+
         ]);
     }
 

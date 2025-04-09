@@ -39,9 +39,9 @@
                 
                 <div class="flex-column-center">
                     <p>
-                        En cochant cette case, vous acceptez les <a href="' ~ path('app_legal_user_terms') ~ '" target="_blank" class="no-bg-link"> conditions générales d'utilisation </a> et les <a href="' ~ path('app_legal_sales') ~ '" target="_blank" class="no-bg-link"> conditions générales de vente </a> de Click&Choux.
+                        En cochant cette case, vous acceptez les <a href=" path('app_legal_user_terms')" target="_blank" class="no-bg-link"> conditions générales d'utilisation </a> et les <a href="path('app_legal_sales')" target="_blank" class="no-bg-link"> conditions générales de vente </a> de Click&Choux
                     </p>
-
+                    {{ form_label(registrationForm.agreeTerms,) }}
                     {{ form_widget(registrationForm.agreeTerms) }}
                     {{ form_errors(registrationForm.agreeTerms) }}
                 </div>

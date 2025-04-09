@@ -46,7 +46,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/updateProfile', name: 'app_update_profile')]
+    #[Route('/update/profil', name: 'app_update_profile')]
     public function updateProfile(Request $request, EntityManagerInterface $entityManager): Response {
         $user = $this->getUser();
 
@@ -66,7 +66,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/updatePassword', name: 'app_update_password')]
+    #[Route('/update/password', name: 'app_update_password')]
     public function updatePassword(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher,  TokenStorageInterface $tokenStorage): Response
     {
         $user = $this->getUser();

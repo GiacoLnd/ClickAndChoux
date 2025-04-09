@@ -1129,7 +1129,7 @@ body{
     padding: 10px;
 }
 .flex-column-sb input[type="text"], .flex-column-sb input[type="number"], .flex-column-sb input[type="email"], .flex-column-sb input[type="password"], .flex-column-sb input[type="email"]  {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     margin-bottom: 20px;
     border: 2px solid var(--font-color);
@@ -1138,7 +1138,7 @@ body{
     text-align: center;
     
     &:focus{
-        border: var(--link-color) solid 3px !important;
+        border: var(--link-background) solid 3px !important;
         box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
     }
 }
@@ -1233,6 +1233,12 @@ body{
         overflow: hidden;
         box-shadow: rgba(0, 0, 0, 0.16) 1px 1px 4px;
         margin: 15px;
+        
+        .commande-detail-img{
+            width: 300px;
+            height: 300px;
+            /* object-fit: cover; */
+        }
         
         a{
             overflow: hidden; 
