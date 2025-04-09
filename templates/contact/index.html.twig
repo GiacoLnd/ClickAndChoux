@@ -40,8 +40,10 @@
             </div>
         </div>
 
-        <div class="flex-row-center">
-                <label>{{ form_label(form.consent) }}</label>
+        <div class="flex-column-center">
+                <p>
+                    En cochant cette case, vous acceptez les <a href="' ~ path('app_legal_user_terms') ~ '" target="_blank" class="no-bg-link"> conditions générales d'utilisation </a> de Click&Choux.
+                </p>
                 {{ form_widget(form.consent) }}
                 {{ form_errors(form.consent) }}
         </div>

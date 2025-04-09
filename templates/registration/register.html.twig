@@ -25,13 +25,23 @@
                 </div>
                 
                 <div class="flex-column-center">
-                    {{ form_widget(registrationForm.plainPassword) }}
-                    {{ form_errors(registrationForm.plainPassword) }}
+                    <div class="flex-column-center">
+                        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe :') }}
+                        {{ form_widget(registrationForm.plainPassword.first) }}
+                        {{ form_errors(registrationForm.plainPassword.first) }}
+                    </div>
+                    <div class="flex-column-center">
+                        {{ form_label(registrationForm.plainPassword.second, 'Confirmer le mot de passe :') }}
+                        {{ form_widget(registrationForm.plainPassword.second) }}
+                        {{ form_errors(registrationForm.plainPassword.second) }}
+                    </div>
                 </div>
                 
-                
-                <div class="remember-me">
-                    {{ form_label(registrationForm.agreeTerms, 'J\'accepte les termes') }}
+                <div class="flex-column-center">
+                    <p>
+                        En cochant cette case, vous acceptez les <a href="' ~ path('app_legal_user_terms') ~ '" target="_blank" class="no-bg-link"> conditions générales d'utilisation </a> et les <a href="' ~ path('app_legal_sales') ~ '" target="_blank" class="no-bg-link"> conditions générales de vente </a> de Click&Choux.
+                    </p>
+
                     {{ form_widget(registrationForm.agreeTerms) }}
                     {{ form_errors(registrationForm.agreeTerms) }}
                 </div>

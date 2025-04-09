@@ -60,19 +60,6 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter les conditions d\'utilisation',
-                    ]),
-                ],
-                'label_attr' => ['class' => 'security-text'],
-                'attr' => [
-                    'class' => 'flex-column-center',
-                    'autocomplete' => 'email',
-                ],   
-            ])
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -100,7 +87,7 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'autocomplete' => 'new-password',
                     'class' => 'flex-column-center',
-                    ],
+                    ], 
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer un mot de passe',
@@ -116,6 +103,20 @@ class RegistrationFormType extends AbstractType
                         'message' =>    'Votre mot de passe doit contenir au moins 12 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
                     ]),
                 ],
+            ])
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter les conditions d\'utilisation et les conditions de vente pour vous inscrire',
+                    ]),
+                ],
+                'label' => 'En cochant cette case, vous acceptez les conditions d\'utilisation et les conditions de vente de Click&Choux.',
+                'label_html' => true,
+                'label_attr' => ['class' => 'security-text'],
+                'attr' => [
+                    'class' => 'flex-column-center',
+                ],   
             ]);
             
             // Champs pour Honeypot
