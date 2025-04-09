@@ -28,17 +28,26 @@
                     {% for commande in commandes %}
                         <tr>
                             <td>{{ commande.reference }}</td>
-                            <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
-                            <td>{{ commande.datePaiement|date('d/m/Y H:i') }}</td>
-                            <td>{{ commande.dateLivraison|date('d/m/Y H:i') }}</td>
+                            <!-- Cellules de dates forcant datatable à gérer des dates et pas des strings -->
+                            <td data-order="{{ commande.dateCommande|date('Y-m-d H:i:s') }}">
+                                {{ commande.dateCommande|date('d/m/Y H:i') }}
+                            </td>
+                            
+                            <td data-order="{{ commande.datePaiement|date('Y-m-d H:i:s') }}">
+                                {{ commande.datePaiement|date('d/m/Y H:i') }}
+                            </td>
+                            
+                            <td data-order="{{ commande.dateLivraison|date('Y-m-d H:i:s') }}">
+                                {{ commande.dateLivraison|date('d/m/Y H:i') }}
+                            </td>
                             <td>{{ commande.montantTotal }}€</td>
                             <td>
                                 {% if commande.statut == 'Livrée' %}
                                     <span class="badge bg-success">{{ commande.statut }}</span>
                                 {% elseif commande.statut == 'En livraison'  %}
-                                    <span class="badge bg-warning">{{ commande.statut }}</span>
+                                    <span class="badge bg-warning" style="color: white;">{{ commande.statut }}</span>
                                 {% else %}
-                                    <span class="badge bg-danger">{{ commande.statut }}</span>
+                                    <span class="badge bg-danger" style="color: white;">{{ commande.statut }}</span>
                                 {% endif %}
                             </td>
                             <td>

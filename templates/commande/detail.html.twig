@@ -13,7 +13,7 @@
         <a href="{{ path('invoice_generate', {'slug': commande.slug}) }}" class="bubblegum-link" target="_blank">
             Télécharger la facture
         </a>
-        {% if is_granted('ROLE_ADMIN') %}
+        {% if is_granted('ROLE_ADMIN') and commande.user is not empty%}
         <div class="flex-row-center">
             <a href="{{ path('invoice_send', {'slug': commande.slug}) }}" class="bubblegum-link">Envoyer la facture par e-mail</a>
             <a class="bubblegum-link" href="{{ path('admin_user_commandes', { id: commande.user.id}) }}">Liste des commandes de {{ commande.user.nickName }}</a>
@@ -77,7 +77,7 @@
         <div class="flex-column-center">
             {% if 'start_delivery' in availableTransition %}
                 <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
-                    <button type="submit" class="bubblegum-link" style="background: #FFA85C;">
+                    <button type="submit" class="bubblegum-link" style="background: #007BFF  ; color: white;">
                         Passer en livraison
                     </button>
                 </form>
@@ -85,7 +85,7 @@
 
             {% if 'complete' in availableTransition %}
                 <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
-                    <button type="submit" class="bubblegum-link" style="background: #568203;">
+                    <button type="submit" class="bubblegum-link" style="background: #568203;color: white;">
                         Terminer la commande
                     </button>
                 </form>

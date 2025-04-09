@@ -119,45 +119,66 @@ final class AdminController extends AbstractController
         $produit = new Produit();
         $form = $this->createForm(AddProduitType::class, $produit);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            
-            if($produit->getNomProduit()){
+    
+            // Slug
+            if ($produit->getNomProduit()) {
                 $produit->generateSlug();
             }
-
-            // Récupération de l'image transmise
+    
+            // Image
             $imageFile = $form->get('image')->getData();
-            // Gestion du nom du fichier
-            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename = $slugger->slug($originalFilename); // Slug : transformation d'un nom de fichier en une chaîne de caractères sécurisée compatible
-            //Génération d'un nom de fichier unique (nom du fichier sluggé + id unique + extention)
-            $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
-        
-            try {
-                $imageFile->move(
-                    $this->getParameter('images_directory'),
-                    $newFilename
-                );
-            } catch (FileException $e) {
-                $this->addFlash('danger', 'Erreur lors du téléchargement de l\'image.');
-                return $this->redirectToRoute('admin_produit_ajouter');
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+    
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('danger', 'Erreur lors du téléchargement de l\'image.');
+                    return $this->redirectToRoute('add_product');
+                }
+    
+                $produit->setImage($newFilename);
             }
-        
-            $produit->setImage($newFilename);
-        
+    
+            // Ajout d'allergènes 
+            $newAllergenes = $form->get('newAllergenes')->getData();
+    
+            foreach ($newAllergenes as $allergene) {
+                $nomAllergene = ucfirst($allergene->getNomAllergene());
+                $allergene->setNomAllergene($nomAllergene);
+    
+                $existing = $entityManager->getRepository(Allergene::class)->findOneBy([
+                    'nomAllergene' => $nomAllergene
+                ]);
+    
+                if ($existing) {
+                    $produit->addAllergene($existing);
+                } else {
+                    $entityManager->persist($allergene);
+                    $produit->addAllergene($allergene);
+                }
+            }
+    
             $entityManager->persist($produit);
             $entityManager->flush();
-        
+    
             $this->addFlash('success', 'Produit ajouté avec succès !');
             return $this->redirectToRoute('admin_produits');
         }
-
+    
         return $this->render('admin/add_product.html.twig', [
             'form' => $form->createView(),
             'produit' => $produit,
         ]);
     }
+    
 
     // Function to remove one or multiple products 
     #[Route('/admin/produit/supprimer', name: 'delete_produit')]
@@ -269,44 +290,72 @@ final class AdminController extends AbstractController
         ]);
     }
 
-        // Function to display all product
-        #[Route('/produits', name: 'produits')]
-        public function displayProduits(ProduitRepository $produitRepository): Response
-        {
-            $produits = $produitRepository->findAll();
+    // Function to display all product
+    #[Route('/produits', name: 'produits')]
+    public function displayProduits(ProduitRepository $produitRepository): Response
+    {
+        $produits = $produitRepository->findAll();
 
-            return $this->render('admin/gestion_produit.html.twig', [
-                'produits' => $produits,
-            ]);
-        }
+        return $this->render('admin/gestion_produit.html.twig', [
+            'produits' => $produits,
+        ]);
+    }
 
-        #[Route('/admin/produit/delete/{slug}', name: 'delete_product')]
-        public function deleteProduct(Produit $produit, EntityManagerInterface $em): Response
-        {
-            $em->remove($produit);
-            $em->flush();
+    #[Route('/admin/produit/delete/{slug}', name: 'delete_product')]
+    public function deleteProduct(Produit $produit, EntityManagerInterface $em): Response
+    {
+        $em->remove($produit);
+        $em->flush();
 
-            $this->addFlash('success', 'Produit supprimé avec succès');
+        $this->addFlash('success', 'Produit supprimé avec succès');
     
-            return $this->redirectToRoute('admin_produits');
+        return $this->redirectToRoute('admin_produits');
+    }
+
+    #[Route('/admin/produit/stock/{slug}', name: 'update_stock')]
+    public function updateStock(Produit $produit, EntityManagerInterface $em): Response
+    {
+        if($produit->isActive() == true) {
+            $produit->setIsActive(false);
+            $this->addFlash('success', 'Produit mis hors stock');
+        } else if($produit->isActive() == false) {
+            $produit->setIsActive(true);
+            $this->addFlash('success', 'Produit mis en stock');
         }
 
-        #[Route('/admin/produit/stock/{slug}', name: 'update_stock')]
-        public function updateStock(Produit $produit, EntityManagerInterface $em): Response
-        {
-            if($produit->isActive() == true) {
-                $produit->setIsActive(false);
-                $this->addFlash('success', 'Produit mis hors stock');
-            } else if($produit->isActive() == false) {
-                $produit->setIsActive(true);
-                $this->addFlash('success', 'Produit mis en stock');
+        $em->persist($produit);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_produits');
+    }
+
+    #[Route('/admin/user/{id}/supprimer', name: 'user_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deleteUser(User $user, Request $request, EntityManagerInterface $em): Response
+    {
+        // CSRF activated 
+        if ($this->isCsrfTokenValid('delete-user-' . $user->getId(), $request->request->get('_token'))) {
+            foreach ($user->getCommandes() as $commande) {
+                $commande->setUser(null);
             }
 
-            $em->persist($produit);
+            $resetRequests = $user->getResetPasswordRequests(); // méthode à ajouter si elle n'existe pas
+
+            foreach ($resetRequests as $reset) {
+                $em->remove($reset);
+}
+    
             $em->flush();
-
-            return $this->redirectToRoute('admin_produits');
+            $em->remove($user);
+            $em->flush();
+    
+            $this->addFlash('success', "L'utilisateur a bien été supprimé.");
+        } else {
+            $this->addFlash('danger', "Token CSRF invalide, suppression refusée.");
         }
-
+    
+        return $this->redirectToRoute('admin_users');
+    }
+    
 
 } 

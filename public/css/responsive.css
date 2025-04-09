@@ -74,6 +74,23 @@
             place-items: center;
         }
     }
+    .details-container {
+        flex-direction: column;
+        text-align: center;
+
+        & .details-image {
+            width: 90%;
+            height: 50%;
+        }
+
+        .list-details {
+            align-items: center;
+
+            .details-description {
+                text-align: center;
+            }
+        }
+    }
     .flex-column-center input[type="text"], .flex-column-center input[type="number"], .flex-column-center input[type="email"], .flex-column-center input[type="password"] {
         padding: 10px;
     }
@@ -198,13 +215,6 @@
         justify-content: center;
         padding: 0;
         margin:0;
-
-        .details-image {
-            transform-origin: bottom center;
-            .zoom{
-                transform: scale(1.8);
-            }
-        }
 
         .list-details {
             display: flex;
@@ -347,13 +357,20 @@
             text-align: center;
             width: 100%;
         }
-
     }
+
+
     .hidden-text{
         display: none;
     }
+    #update-product {
+        .infos-update {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
 }
-
 @media screen and (max-width: 450px) {
     .navbar-title {
         font-size: 1.5em;
@@ -434,12 +451,13 @@
     .catalog-container{
 
     .choux-grid-container {
-        margin: 0;
+        margin: 0 !important;
 
 
         .choux-grid {
             width: 100%;
             gap: 30px;
+            padding: 0;
             
             .catalog-in-stock {
                 padding: 5px;
@@ -457,8 +475,8 @@
                     justify-content: center;
 
                     .catalog-image{
-                        width: 70%;
-                        height: 200px;
+                        width: 250px;
+                        height: 250px;
                     }
                 } 
 
@@ -484,13 +502,7 @@
     }
     }
     .details-container {
-        flex-direction: column;
-        text-align: center;
-        
-        .details-image {
-            width: 100%;
-            height: 300px;
-        }
+
 
         & .list-details {
             .details-allergene {

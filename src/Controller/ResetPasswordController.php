@@ -156,6 +156,12 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_check_email');
         }
 
+        $logoPath = $_SERVER['DOCUMENT_ROOT'] . '/img/logo.webp';
+
+        // Convertion du logo en Base64
+        $logoBase64 = base64_encode(file_get_contents($logoPath));
+        $logoMimeType = mime_content_type($logoPath);
+
         $email = (new TemplatedEmail())
             ->from(new Address('noreply@clickAndChoux.com', 'Click&Choux'))
             ->to((string) $user->getEmail())
@@ -163,6 +169,8 @@ class ResetPasswordController extends AbstractController
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
+                'logoBase64' => $logoBase64,
+                'logoMimeType' => $logoMimeType,
             ])
         ;
 

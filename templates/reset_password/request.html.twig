@@ -10,8 +10,11 @@
 
     {{ form_start(requestForm) }}
         <div class="flex-column-center">
-            <p  class="p-4">Il suffit de saisir l'adresse email associée à votre compte, et nous vous enverrons un lien pour réinitialiser votre mot de passe.</p>
-            {{ form_row(requestForm.email) }}
+            <p  class="p-4">Il suffit de saisir l'adresse email associée à votre compte, et nous vous enverrons un lien pour réinitialiser votre mot de passe.</p> 
+            <div class="flex-column-center">
+                {{ form_label(requestForm.email) }}
+                {{ form_widget(requestForm.email) }}
+            </div>
             <button class="bubblegum-link">Envoyer le lien</button>
         </div>
     {{ form_end(requestForm) }}

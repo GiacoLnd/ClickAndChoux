@@ -7,6 +7,8 @@ use App\Entity\Categorie;
 use App\Entity\Allergene;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,6 +24,17 @@ class AddProduitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('isActive', ChoiceType::class, [
+                'label' => 'Disponible en stock ?',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'expanded' => true,
+                'multiple' => false,
+                'data' => true,
+                'attr' => ['class' => 'flex-row-center'],
+            ])
             ->add('nomProduit', TextType::class, [
                 'label' => 'Nom du produit',
                 'label_attr' => ['class' => 'security-text'],
@@ -60,7 +73,6 @@ class AddProduitType extends AbstractType
                     ])
                 ]
             ])
-            
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'nomCategorie',
@@ -68,17 +80,33 @@ class AddProduitType extends AbstractType
                 'label_attr' => ['class' => 'security-text'],
                 'attr' => ['class' => 'flex-column-center']
             ])
-
             ->add('allergenes', EntityType::class, [
                 'class' => Allergene::class,
-                'choice_label' => 'nomAllergene',  
+                'choice_label' => 'nomAllergene',
                 'label' => 'Sélectionner les allergènes',
                 'label_attr' => ['class' => 'security-text'],
                 'multiple' => true,
                 'expanded' => false,
-                'attr' => [
-                    'class' => 'flex-column-center',
-                    ]
+                'attr' => ['class' => 'flex-column-center']
+            ])
+            ->add('newAllergenes', CollectionType::class, [
+                'entry_type' => AllergenType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'mapped' => false,
+                'prototype' => true,
+                'by_reference' => false,
+                'label' => false,
+                'required' => false,
+                'entry_options' => [
+                    'attr' => ['class' => 'flex-column-center'],
+                    'label' => false,
+                ],
+                'attr' => ['class' => 'flex-column-center'],
+            ])
+            ->add('submit', SubmitType::class, [
+                'label'=> 'Ajouter le produit',
+                'attr' => ['class'=> 'bubblegum-link'],
             ]);
     }
 
@@ -89,4 +117,3 @@ class AddProduitType extends AbstractType
         ]);
     }
 }
- 

@@ -27,10 +27,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Kernel.php'
 
-    App\Service\PostalCodeService:
-        arguments:
-            $httpClient: '@http_client'
-
     App\Service\NewsletterService:
         arguments:
             $httpClient: '@http_client'

@@ -6,7 +6,12 @@
     <section id="admin-add-product">
         <h2 class="page-title">Ajouter un Produit</h2>
 
-        {{ form_start(form, {'method': 'POST'}) }}
+        {{ form_start(form, {
+            method: 'POST',
+            attr: {
+                class: 'edit-product'
+            }
+        }) }}
         <div class="flex-column-center" id="update-product">
             <div class="flex-column-center">
                 <label>{{ form_label(form.isActive) }}</label>

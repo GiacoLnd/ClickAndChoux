@@ -1,9 +1,88 @@
-<h1>Hi!</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Réinitialisation de mot de passe - Click&Choux</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
 
-<p>To reset your password, please visit the following link</p>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+        .header {
+            text-align: center;
+        }
 
-<p>This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+        .header img {
+            width: 120px;
+        }
 
-<p>Cheers!</p>
+        h1, h2 {
+            color: #55211A;
+            padding-bottom: 20px;
+        }
+
+        .content {
+            margin-top: 20px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #ffcc80;
+            color: #55211A;
+            text-decoration: none;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #894e3f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="data:{{ logoMimeType }};base64,{{ logoBase64 }}" alt="Click&Choux">
+            <h1>Réinitialisation de votre mot de passe</h1>
+        </div>
+        <div class="content">
+            <p>Bonjour,</p>
+            <p>Vous avez demandé la réinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe :</p>
+
+            <p style="text-align: center;">
+                <a href="{{ url('app_reset_password', {token: resetToken.token}) }}" class="btn">Réinitialiser mon mot de passe</a>
+            </p>
+
+            <p>Ce lien expirera {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+
+            <p>Si vous n’êtes pas à l’origine de cette demande, vous pouvez ignorer cet e-mail en toute sécurité.</p>
+        </div>
+        <div class="footer">
+            <p>Besoin d’aide ? Contactez-nous à <a href="mailto:support@clickandchoux.com">support@clickandchoux.com</a></p>
+            <p>Click&Choux</p>
+        </div>
+    </div>
+</body>
+</html>

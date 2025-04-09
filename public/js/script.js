@@ -657,21 +657,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Datatables scripts 
 // User orders list dataTables
-$(document).ready(function() {
+$(document).ready(function () {
     var table = $('.dataTable').DataTable({
         responsive: true,
         scrollX: true,
-        "paging": true,       // Activer la pagination
-        "searching": true,    // Activer la recherche
-        "ordering": true,  
-        "order": [[2, "desc"]], // Triert par date (colonne 2) en ordre décroissant
-        "info": false,         // Désactiver les informations sur le nombre d'éléments
-        "scrollY": "500px",
-        "pagingType": "numbers", // Donner uniquement les numéros de pages
-        "lengthChange": false,
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json" // Traduction en français
+        paging: true,
+        searching: true,
+        ordering: true,
+        order: [[2, "desc"]], // Colonne 2 → tri par défaut descendant
+        info: false,
+        scrollY: "500px",
+        pagingType: "numbers",
+        lengthChange: false,
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
         },
+        columnDefs: [
+            {
+                targets: 1, // Colonne index 2 (la 3e colonne -> date de commande)
+                type: 'date'
+            }
+        ]
     });
 });
 

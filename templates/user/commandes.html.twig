@@ -11,10 +11,10 @@
             {% else %}
                 <table class="dataTable">
                     <thead>
-                        <tr>
+                        <tr> 
                             <th>N° Commande</th>
-                            <th>Date</th>
                             <th>Montant Total</th>
+                            <th>Date</th>
                             <th>Statut</th>
                             <th>Actions</th>
                         </tr>
@@ -23,8 +23,10 @@
                         {% for commande in commandes %}
                             <tr>
                                 <td>{{ commande.reference }}</td>
-                                <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
                                 <td>{{ commande.montantTotal }}€</td>
+                                <td data-order="{{ commande.dateCommande|date('Y-m-d H:i:s') }}">
+                                    {{ commande.dateCommande|date('d/m/Y H:i') }}
+                                </td>
                                 <td>
                                     {% if commande.statut == 'Livrée' %}
                                         <span class="badge bg-success">Livrée</span>

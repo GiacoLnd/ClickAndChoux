@@ -59,11 +59,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Favoris::class, mappedBy: 'user', cascade: ['remove'], orphanRemoval: true)]
     private Collection $favoris;
 
+    /**
+     * @var Collection<int, ResetPasswordRequest>
+     */
+    #[ORM\OneToMany(targetEntity: ResetPasswordRequest::class, mappedBy: 'User', orphanRemoval: true)]
+    private Collection $resetPasswordRequest;
+
     public function __construct()
     {
         $this->Commandes = new ArrayCollection();
         $this->Commentaires = new ArrayCollection();
         $this->favoris = new ArrayCollection();
+        $this->resetPasswordRequest = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -249,6 +256,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($favori->getUser() === $this) {
                 $favori->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResetPasswordRequest>
+     */
+    public function getResetPasswordRequest(): Collection
+    {
+        return $this->resetPasswordRequest;
+    }
+
+    public function addResetPasswordRequest(ResetPasswordRequest $resetPasswordRequest): static
+    {
+        if (!$this->resetPasswordRequest->contains($resetPasswordRequest)) {
+            $this->resetPasswordRequest->add($resetPasswordRequest);
+            $resetPasswordRequest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResetPasswordRequest(ResetPasswordRequest $resetPasswordRequest): static
+    {
+        if ($this->resetPasswordRequest->removeElement($resetPasswordRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($resetPasswordRequest->getUser() === $this) {
+                $resetPasswordRequest->setUser(null);
             }
         }
 

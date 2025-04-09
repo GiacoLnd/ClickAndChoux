@@ -1,11 +1,89 @@
-<h1>Hi! Please confirm your email!</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmez votre compte - Click&Choux</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
 
-<p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-<p>
-    Cheers!
-</p>
+        .header {
+            text-align: center;
+        }
+
+        .header img {
+            width: 120px;
+        }
+
+        h1, h2 {
+            color: #55211A;
+            padding-bottom: 20px;
+        }
+
+        .content {
+            margin-top: 20px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #ffcc80;
+            color: #55211A;
+            text-decoration: none;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #894e3f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="data:{{ logoMimeType }};base64,{{ logoBase64 }}" alt="Click&Choux">
+            <h1>Click&Choux</h1>
+            <h2>Confirmez votre adresse e-mail</h2>
+        </div>
+        <div class="content">
+            <p>Salutations ! Nous vous remercions de vous être inscrit sur <strong>Click&Choux</strong> !</p>
+            <p>Pour finaliser la création de votre compte, veuillez confirmer votre adresse e-mail en cliquant sur le bouton ci-dessous :</p>
+
+            <p style="text-align: center;">
+                <a href="{{ signedUrl|raw }}" class="btn">Confirmer mon adresse</a>
+            </p>
+
+            <p>Ce lien expirera {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.</p>
+
+            <p>À très vite pour une expérience gourmande !</p>
+        </div>
+        <div class="footer">
+            <p>Des questions ? Contactez-nous à <a href="mailto:support@clickandchoux.com">support@clickandchoux.com</a></p>
+            <p>Click&Choux</p>
+        </div>z
+    </div>
+</body>
+</html>
