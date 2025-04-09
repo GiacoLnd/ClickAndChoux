@@ -55,7 +55,8 @@
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
             <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css" />
             <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.dataTables.min.css" />
-            <link rel="stylesheet" href="{{ asset('css/fonts.css') }}">
+            <link href="{{ asset('css/fonts.css') }}" rel="stylesheet" />
+            <link rel="stylesheet" href="{{ asset('lightbox2/dist/css/lightbox.css') }}">
             <link rel="stylesheet" href="{{ asset('css/style.css') }}">
             <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
         {% endblock %}
@@ -170,7 +171,7 @@
                 </div>
                 <div class="newsletter-container">
                     <div class="newsletter-description">
-                        <h3>On reste en contact ?</h3><br>
+                        <h2><strong>On reste en contact ?</strong></h2>
                         <p><strong>Abonnez-vous à notre newsletter pour vous tenir informés de nos dernières nouveautés !</strong></p>
                     </div>
                     {{ render(controller('App\\Controller\\NewsletterController::newsletterForm')) }}
@@ -235,6 +236,7 @@
         <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js" ></script>        
         <script src="https://cdn.datatables.net/responsive/3.0.4/js/dataTables.responsive.min.js" ></script>        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+        <script src="{{ asset('lightbox2/dist/js/lightbox.js') }}" defer></script>
         <script src="{{ asset('js/script.js') }}" ></script>
     {% endblock %}
     </body>

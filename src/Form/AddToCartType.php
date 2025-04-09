@@ -14,7 +14,7 @@ class AddToCartType extends AbstractType
     {
         $builder
             ->add('quantity', IntegerType::class, [
-                'label' => false,
+                'label' => 'Quantité',
                 'attr' => [
                     'min' => 1,
                     'value' => 1,

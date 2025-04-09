@@ -11,14 +11,16 @@
     <section id="product-details"> 
         <div class="details-container">
             {% if produit.isActive == true %}
-                <div class="details-image">
-                    <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image" loading="lazy">
-                </div>
-            {% else %}
-                <div class="details-image image-out-stock">
-                    <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image" loading="lazy">
-                </div>
-            {% endif %}
+            <div class="details-image">
+                <a href="/img/{{ produit.image }}" data-lightbox="product-image" data-title="{{ produit.nomProduit }}">
+                    <img src="/img/{{ produit.image }}" alt="{{ produit.nomProduit }}" class="details-image" id="image" loading="lazy" />
+                </a>
+            </div>
+        {% else %}
+            <div class="details-image image-out-stock">
+                <img src="/img/{{ produit.image }}" alt="Image de {{ produit.nomProduit }}" class="details-image" id="image" loading="lazy" />
+            </div>
+        {% endif %}
             <div class="list-details">
                 <div class="details-description">
                     <p class="details-title">{{ produit.nomProduit }}</p>
@@ -32,19 +34,33 @@
                 <div class="allergene-details">
                     <p>Liste des allergènes :</p>
                     {% for allergene in allergenes %}
-                        <li>{{ allergene.nomAllergene }}</li>
+                        <ul>
+                            <li>{{ allergene.nomAllergene }}</li>
+                        </ul>
                     {% else %}
-                        <li>Aucun allergène associé.</li>
+                        <ul>
+                            <li>Aucun allergène associé.</li>
+                        </ul>
                     {% endfor %}
                 </div>
                 {% if produit.isActive == true %}
                 {{ form_start(cartForm) }}
                     <div id="quantity-container">
-                        {{ form_widget(cartForm.quantity) }}
-                        <button type="submit" class="bubblegum-link">Ajouter au panier</button>
+                        <div class="quantity-favoris-btn">
+                            <label>{{ form_label(cartForm.quantity) }}</label>
+                            {{ form_widget(cartForm.quantity) }}
+                            {% if app.user %}
+                                <button type="button" class="favori-btn" data-id="{{ produit.id }}" aria-label="Ajouter ce produit aux favoris" title="favoris"><i class="fa-solid fa-heart"></i></button>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="bubblegum-link" aria-label="Ajouter au panier" title="favoris">Ajouter au panier</button>
+                        {{ form_end(cartForm) }}
                     </div>
-                    {{ form_end(cartForm) }}
                     {% else %}
+                    {% if app.user %}
+                        <button type="button" class="favori-btn" data-id="{{ produit.id }}" aria-label="Ajouter ce produit aux favoris"><i class="fa-solid fa-heart"></i></button>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

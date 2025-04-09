@@ -196,6 +196,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        padding: 0;
+        margin:0;
 
         .details-image {
             transform-origin: bottom center;
@@ -218,6 +220,10 @@
                 display: flex;
                 align-items: center;
                 flex-direction: column;
+
+                .quantity-favoris-btn {
+                    flex-direction: column;
+                }
             }
         }
     }
@@ -514,16 +520,11 @@
         text-align: center;
         
         .details-image {
-            transform-origin: bottom center;
-            .zoom{
-                transform: scale(1.25);
-            }
+            width: 100%;
+            height: 300px;
         }
 
         & .list-details {
-            #quantity-container {
-                justify-content: center;
-            }
             .details-allergene {
                 display: flex;
                 flex-wrap: wrap;

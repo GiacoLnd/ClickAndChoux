@@ -424,6 +424,13 @@ document.addEventListener('DOMContentLoaded', function () {
         '/favoris/page',
     ];
 
+    const path = window.location.pathname; // Récupère le chemin de l'URL actuel sans le domaine HTTPS
+    const slug = path.split('/')[2]; // Divise le chemin par le séparateur / et récupère un tableau contenant chaque partie [0] = '', [1] = 'produit', [2] = 'slug' (le slug étant passé dans l'URL pour déterminer le produit)
+    const produitUrl = `/produit/${slug}`; // Ajoute le chemin final dans une const pour pouvoir inclure la mise en favoris dans les détails produits
+    
+    // Ajoute l'URL du produit à la liste
+    urlsCatalogues.push(produitUrl);
+
     // Vérifie si l'URL actuelle correspond à un catalogue
     if (!urlsCatalogues.includes(window.location.pathname)) {
         return;
