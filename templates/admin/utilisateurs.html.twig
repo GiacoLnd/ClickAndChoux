@@ -24,13 +24,13 @@
                             <i class="fa-solid fa-square-caret-down" style="color: #FFA85C"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{{ path('admin_user_commandes', { id: user.id }) }}"><i class="fa-solid fa-eye" style="color: #FFA85C"></i> Voir les commandes</a> </li>
-                            <li><a class="dropdown-item" href="{{ path('admin_user_edit_profile', { id: user.id }) }}"><i class="fa-solid fa-pen-to-square" style="color: #FFA85C"></i> Edit. données personnelles</a></li>
+                            <li><a class="dropdown-item no-bg-link" href="{{ path('admin_user_commandes', { id: user.id }) }}"><i class="fa-solid fa-eye" style="color: #FFA85C"></i> Voir les commandes</a> </li>
+                            <li><a class="dropdown-item no-bg-link" href="{{ path('admin_user_edit_profile', { id: user.id }) }}"><i class="fa-solid fa-pen-to-square" style="color: #FFA85C"></i> Edit. données personnelles</a></li>
                             <li>
-                                <form method="post" action="{{ path('admin_user_delete', { id: user.id }) }}">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete-user-' ~ user.id) }}">
-                                    <button type="submit" class="dropdown-item" onclick="return confirm('Supprimer cet utilisateur ?');">
-                                        <i class="fa-solid fa-trash" style="color: red;"></i> Suppr. utilisateur
+                                <form class="dropdown-item" method="post" action="{{ path('admin_supprimer_utilisateur', {'id': user.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('supprimer_utilisateur' ~ user.id) }}">
+                                    <button type="submit" class="no-bg-delete-link">
+                                        <i class="fa-solid fa-trash" style="color: red;"></i> <strong>Suppr. utilisateur</strong>
                                     </button>
                                 </form>
                             </li>

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Dom\Entity;
 use Stripe\Stripe;
 use Stripe\Balance;
 use App\Entity\User;
@@ -10,6 +11,7 @@ use App\Entity\Produit;
 use App\Entity\Commande;
 use App\Entity\Allergene;
 use App\Form\AddProduitType;
+use App\Form\DeleteUserType;
 use App\Form\EditProfileType;
 use App\Form\DeleteProduitType;
 use App\Form\UpdateProduitType;
@@ -18,7 +20,7 @@ use App\Repository\ContactRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\CommandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Dom\Entity;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,7 +28,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[Route('/admin', name: 'admin_')]
 #[IsGranted('ROLE_ADMIN')]
@@ -61,7 +65,9 @@ final class AdminController extends AbstractController
     public function listUser(UserRepository $userRepository): Response
     {
         
-        $users = $userRepository->findOnlyUsers();    
+        $users = $userRepository->findOnlyUsers();   
+        
+         
 
         return $this->render('admin/utilisateurs.html.twig', [
             'users' => $users,
@@ -329,33 +335,35 @@ final class AdminController extends AbstractController
         return $this->redirectToRoute('admin_produits');
     }
 
-    #[Route('/admin/user/{id}/supprimer', name: 'user_delete', methods: ['POST'])]
+    #[Route('/admin/supprimer-utilisateur/{id}', name: 'supprimer_utilisateur')]
     #[IsGranted('ROLE_ADMIN')]
-    public function deleteUser(User $user, Request $request, EntityManagerInterface $em): Response
-    {
-        // CSRF activated 
-        if ($this->isCsrfTokenValid('delete-user-' . $user->getId(), $request->request->get('_token'))) {
+    public function supprimerUtilisateur(
+        User $user, 
+        Request $request, 
+        EntityManagerInterface $entityManager
+    ): Response {
+        // CSRF secure
+        if (!$this->isCsrfTokenValid('supprimer_utilisateur'.$user->getId(), $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token de sécurité invalide.');
+            return $this->redirectToRoute('list_user');
+        }
+        
+        try {
+            // Anonymisation de chaque commande de l'utilisateur
             foreach ($user->getCommandes() as $commande) {
                 $commande->setUser(null);
+                $entityManager->persist($commande);
             }
-
-            $resetRequests = $user->getResetPasswordRequests(); // méthode à ajouter si elle n'existe pas
-
-            foreach ($resetRequests as $reset) {
-                $em->remove($reset);
-}
-    
-            $em->flush();
-            $em->remove($user);
-            $em->flush();
-    
-            $this->addFlash('success', "L'utilisateur a bien été supprimé.");
-        } else {
-            $this->addFlash('danger', "Token CSRF invalide, suppression refusée.");
+            
+            // Supprime l'utilisateur
+            $entityManager->remove($user);
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la suppression : ' . $e->getMessage());
         }
-    
-        return $this->redirectToRoute('admin_users');
+        
+        return $this->redirectToRoute('admin_list_user');
     }
-    
-
-} 
+}

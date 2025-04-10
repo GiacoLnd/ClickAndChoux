@@ -62,7 +62,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, ResetPasswordRequest>
      */
-    #[ORM\OneToMany(targetEntity: ResetPasswordRequest::class, mappedBy: 'User', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: ResetPasswordRequest::class,
+        cascade: ['remove'],
+        orphanRemoval: true
+    )]
     private Collection $resetPasswordRequest;
 
     public function __construct()
