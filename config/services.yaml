@@ -8,7 +8,7 @@ parameters:
     stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
     newsletter_api_key: '%env(NEWSLETTER_API_KEY)%'
 
-
+ 
 services:
     # default configuration for services in *this* file
     _defaults:

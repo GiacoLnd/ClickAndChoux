@@ -102,10 +102,10 @@
                             </div>
                         </div>
                     </li>
-                {% endfor %}
-                {% if totalCommentaires > 5 %}
-                    <a href="{{ path('produit_all_comments', {'slug': produit.slug}) }}">Voir tous les commentaires ( {{ totalCommentaires }} )</a>
-                {% endif %}
+                    {% endfor %}
+                    {% if totalCommentaires > 5 %}
+                        <a href="{{ path('produit_all_comments', {'slug': produit.slug}) }}">Voir tous les commentaires ( {{ totalCommentaires }} )</a>
+                    {% endif %}
 
                     <!-- Modale de modification -->
                     <div id="editCommentModal" class="modal" tabindex="-1" aria-hidden="true">

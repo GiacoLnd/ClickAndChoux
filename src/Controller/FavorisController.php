@@ -34,7 +34,7 @@ class FavorisController extends AbstractController
     }
     
 
-
+ 
     #[Route('/ajouter/{id}', name: 'ajouter_favoris', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function ajouter(Produit $produit, EntityManagerInterface $em, FavorisRepository $favorisRepository): JsonResponse

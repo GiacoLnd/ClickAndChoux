@@ -456,7 +456,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
-    })
+    }) 
 
     // Gérer l'ajout et la suppression des favoris
     document.querySelectorAll('.favori-btn').forEach(button => {

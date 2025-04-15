@@ -44,7 +44,7 @@ class ProduitController extends AbstractController
     public function chouxSales(
         ProduitRepository $produitRepository,
         CategorieRepository $categorieRepository,
-        AllergeneRepository $allergeneRepository,
+        AllergeneRepository $allergeneRepository, 
         Request $request,
     ): Response {
         $categorie = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
@@ -367,7 +367,7 @@ class ProduitController extends AbstractController
     }
 
     #[Route('/commentaire/{id}/supprimer', name: 'commentaire_supprimer', methods: ['POST'])]
-    public function supprimer(
+    public function deleteComment(
         Commentaire $commentaire, 
         EntityManagerInterface $em, 
         Security $security, 

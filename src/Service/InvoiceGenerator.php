@@ -56,5 +56,4 @@ class InvoiceGenerator
     
         return $dompdf->output();
     }
-    
 }

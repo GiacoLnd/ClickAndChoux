@@ -24,7 +24,6 @@ security:
             login_throttling: 
                 max_attempts: 5
                 interval: '60 minutes'
-                
             logout:
                 path: app_logout
                 target: /

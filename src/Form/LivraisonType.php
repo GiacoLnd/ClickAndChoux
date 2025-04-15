@@ -78,7 +78,7 @@ class LivraisonType extends AbstractType
                 'attr' => [
                     'class' => 'flex-column-center',
                 ]
-            ])
+            ]) 
             ->add('prenomFacturation', TextType::class, [
                 'label' => 'Prénom (facturation)',
                 'required' => true,

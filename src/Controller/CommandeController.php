@@ -4,11 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Commande;
 use App\Form\LivraisonType;
-use App\Form\FacturationType;
 use App\Service\DeliveryTimeService;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Workflow\Registry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,7 +65,7 @@ final class CommandeController extends AbstractController
         // Calcul du montant total avec les frais de livrai
         $total = 0.0;
         $deliveryFees = 3.00; 
-        foreach ($cart as &$item) { 
+        foreach ($cart as &$item) {  
             $produit = $produitRepository->find($item['id']);
             if ($produit) {
                 $item['slug'] = $produit->getSlug();
@@ -81,7 +79,8 @@ final class CommandeController extends AbstractController
         // Calcul de la date de livraison
         $orderDate = (new \DateTime())->format('Y-m-d'); 
         $isHoliday = $deliveryTimeService->isHoliday($orderDate);
-        $deliveryDate = $deliveryTimeService->calculateDeliveryDate('12:00', $isHoliday);
+        $orderTime = (new \DateTime())->format('H:i');
+        $deliveryDate = $deliveryTimeService->calculateDeliveryDate($orderTime, $isHoliday);
     
         // Récupération des données en session
         $commandeSession = $session->get('commande', [
@@ -201,5 +200,6 @@ final class CommandeController extends AbstractController
     $em->flush();
 
     return $this->redirectToRoute('commande_detail', ['slug' => $commande->getSlug()]);
+    }
 }
-}
+ 

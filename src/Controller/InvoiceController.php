@@ -23,7 +23,7 @@ class InvoiceController extends AbstractController
             'Content-Disposition' => 'inline; filename="facture-'.$commande->getSlug().'.pdf"',
         ]);
     }
-
+ 
     // Génération de la facture pour envoi par mail
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/facture/envoyer/{slug}', name: 'invoice_send')]

@@ -18,7 +18,11 @@
         <tbody>
             {% for produit in produits %}
                 <tr>
-                    <td>{{ produit.nomProduit }}</td>
+                    <td>
+                        <a href="{{ path('produit_detail', {'slug': produit.slug}) }}" class="no-bg-link" >
+                            <h2>{{ produit.nomProduit }}</h2>
+                        </a>
+                    </td>
                     <td>{{ produit.getTTC }}€</td>
                     <td>
                         {% if produit.isActive == true %}
