@@ -104,7 +104,7 @@
                     </li>
                     {% endfor %}
                     {% if totalCommentaires > 5 %}
-                        <a href="{{ path('produit_all_comments', {'slug': produit.slug}) }}">Voir tous les commentaires ( {{ totalCommentaires }} )</a>
+                        <a href="{{ path('produit_all_comments', {'slug': produit.slug}) }}" class="no-bg-link">Voir tous les commentaires ( {{ totalCommentaires }} )</a>
                     {% endif %}
 
                     <!-- Modale de modification -->

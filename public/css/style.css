@@ -1424,13 +1424,14 @@ table.dataTable thead th, table.dataTable tbody td{
             flex-direction: column;
 
             li{
-
+                
                 .comment-content{
                     display: flex;
                     flex-direction: column;
                     align-items: flex-start;
                     justify-content: flex-start;
                     width: 80vw;
+                    margin: 1rem 0;
 
                     .comment-icons{
                         display: flex;
@@ -1459,7 +1460,9 @@ table.dataTable thead th, table.dataTable tbody td{
                 }
 
                 p{
-                    text-align: start;
+                    text-align: justify;
+                    overflow-wrap: break-word;
+                    word-break: break-word;
                 }
             }
         }
@@ -1478,7 +1481,7 @@ table.dataTable thead th, table.dataTable tbody td{
             align-items: end;
 
             textarea{
-                width: 90vw;
+                width: 80vw;
                 height: 100px;
                 text-align: start;
                 font-size: 0.9em;
@@ -1487,7 +1490,7 @@ table.dataTable thead th, table.dataTable tbody td{
             }
             
             .bubblegum-link{
-                margin: 0;
+                margin: 1rem 0;
             }
         }
     }
