@@ -21,25 +21,9 @@ final class UserController extends AbstractController
 {
     #[Route('/profil', name: 'app_user_profil')]
     #[IsGranted('ROLE_USER')]
-    public function profile(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function profile(): Response
     {
         $user = $this->getUser();
-
-        // Modification du mot de passe
-        $formPassword = $this->createForm(ChangePasswordType::class);
-        $formPassword->handleRequest($request);
-
-        if ($formPassword->isSubmitted() && $formPassword->isValid()) {
-            $newPassword = $formPassword->get('plainPassword')->getData();
-            $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
-            $user->setPassword($hashedPassword);
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Mot de passe modifié avec succès.');
-            return $this->redirectToRoute('app_user_profile');
-        }
 
         return $this->render('user/index.html.twig', [
             'user' => $user,
@@ -165,6 +149,7 @@ final class UserController extends AbstractController
             'formDelete' => $formDelete->createView(),
         ]);
     }
+    
     
     
     

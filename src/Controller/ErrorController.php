@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ErrorController extends AbstractController
 {
-    public function show(\Exception $exception): Response
+    public function show(\Throwable $exception): Response
     {
         $statusCode = 500; // Code d'erreur par défaut
         if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {

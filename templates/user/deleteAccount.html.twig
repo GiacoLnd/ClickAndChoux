@@ -8,7 +8,10 @@
         <p>Veuillez confirmer votre mot de passe.</p>
             
         {{ form_start(formDelete) }}
-            {{ form_row(formDelete.password) }}
+            <div class="flex-column-center">
+                {{ form_label(formDelete.password) }}
+                {{ form_widget(formDelete.password) }}
+            </div>
             <div class="text-center">
                 <button type="submit" class="no-bg-delete-link" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette suppression est définitive')">
                     <i class="fa-solid fa-trash"></i> Supprimer

@@ -87,7 +87,8 @@ class AddProduitType extends AbstractType
                 'label_attr' => ['class' => 'security-text'],
                 'multiple' => true,
                 'expanded' => false,
-                'attr' => ['class' => 'flex-column-center']
+                'attr' => ['class' => 'flex-column-center'],
+                'required' => false,
             ])
             ->add('newAllergenes', CollectionType::class, [
                 'entry_type' => AllergenType::class,

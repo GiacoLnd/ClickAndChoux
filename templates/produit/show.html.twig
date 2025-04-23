@@ -25,7 +25,7 @@
                 <div class="details-description">
                     <p class="details-title">{{ produit.nomProduit }}</p>
                     {% if produit.isActive == true %}
-                        <p><span class="details-price">{{ produit.getTTC }}€</span> / la boite de six</p>
+                        <p><span class="details-price">{{ produit.getTTC() | number_format(2, '.', '') }}€</span> / la boite de six</p>
                     {% else %}
                         <p class="product-out-stock">Produit actuellement indisponible</p>
                     {% endif %}
@@ -33,15 +33,13 @@
                 </div>
                 <div class="allergene-details">
                     <p>Liste des allergènes :</p>
+                        <ul>
                     {% for allergene in allergenes %}
-                        <ul>
                             <li>{{ allergene.nomAllergene }}</li>
-                        </ul>
                     {% else %}
-                        <ul>
                             <li>Aucun allergène associé.</li>
-                        </ul>
                     {% endfor %}
+                        </ul>
                 </div>
                 {% if produit.isActive == true %}
                 {{ form_start(cartForm) }}
