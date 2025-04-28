@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class ContactController extends AbstractController
 {
 
-    // Function handling the contact form -> sent to admin pannel
+    // Function handling the contact form & sent to admin pannel
     #[Route('/contact', name: 'app_contact')]
     public function contactForm(Request $request, EntityManager $entityManager): Response
     {

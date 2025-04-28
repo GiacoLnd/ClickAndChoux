@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class NewsletterController extends AbstractController
 {
+    //Fonction gérant la newsletter
     #[Route('/newsletter-subscribe', name: 'newsletter_subscribe', methods: ['POST'])]
     public function subscribe(Request $request, NewsletterService $NewsletterService): Response
     {
@@ -38,6 +39,7 @@ class NewsletterController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
+    //Fonction gérant uniquement le formulaire de newsletter pour le base.html.twig
     public function newsletterForm(): Response
     {
         $form = $this->createForm(NewsletterType::class, null, [

@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/favoris', name: 'favoris_')]
 class FavorisController extends AbstractController
 {
-    
+    //Fonction de listing des favoris
     #[Route('/page', name: 'page', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function pageFavoris(FavorisRepository $favorisRepository): Response
@@ -34,7 +34,7 @@ class FavorisController extends AbstractController
     }
     
 
- 
+    //Fonction d'ajout en favoris -> AJAX
     #[Route('/ajouter/{id}', name: 'ajouter_favoris', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function ajouter(Produit $produit, EntityManagerInterface $em, FavorisRepository $favorisRepository): JsonResponse
@@ -62,6 +62,7 @@ class FavorisController extends AbstractController
         return new JsonResponse(['message' => 'Produit ajouté aux favoris']);
     }
 
+    //Fonction de suppresion de favoris -> AJAX 
     #[Route('/supprimer/{id}', name: 'supprimer_favoris', methods: ['DELETE'])]
     #[IsGranted('ROLE_USER')]
     public function supprimer(Produit $produit, EntityManagerInterface $em, FavorisRepository $favorisRepository): JsonResponse
@@ -79,6 +80,7 @@ class FavorisController extends AbstractController
         return new JsonResponse(['message' => 'Produit retiré des favoris']);
     }
 
+    //Fonction de récupération des favoris d'un utilisateur pour l'AJAX
     #[Route('/liste', name: 'liste', methods: ['GET'])]
     public function liste(FavorisRepository $favorisRepository, Request $request): JsonResponse
     {

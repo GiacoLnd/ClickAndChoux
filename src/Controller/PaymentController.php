@@ -31,6 +31,8 @@ class PaymentController extends AbstractController{
         $this->em = $em;
         $this->generator = $generator;
     }
+
+    //Fonction du tunnel de paiement
     #[Route('/create-session-stripe', name: 'payment_stripe')]
     public function StripeCheckout(SessionInterface $session, UrlGeneratorInterface $generator, Request $request): RedirectResponse
     {
@@ -79,7 +81,7 @@ class PaymentController extends AbstractController{
             'payment_method_types' => ['card'],
             'line_items' => $productStripe,
             'mode' => 'payment',
-            'success_url' => $generator->generate('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'success_url' => $generator->generate('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL), // absolute url : url avec son protocole 
             'cancel_url' => $generator->generate('payment_error', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
     
@@ -91,7 +93,7 @@ class PaymentController extends AbstractController{
     }
     
 
-
+    //Fonction de paiement validé *** INSTANCIATION D'OBJET COMMANDE ***
     #[Route('/success', name: 'payment_success')]
     public function StripeSuccess(SessionInterface $session, EntityManagerInterface $em, MailerInterface $mailer, InvoiceGenerator $invoiceGenerator): Response
     {
@@ -248,9 +250,7 @@ class PaymentController extends AbstractController{
         return $response;
     }
     
-    
-    
-
+    //Fonction de paiement refusé
     #[Route('/commande/error', name: 'payment_error')]
     public function StripeError(SessionInterface $session): Response
     {

@@ -41,6 +41,7 @@ final class AdminController extends AbstractController
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']); 
     }
 
+    //Fonction d'affichage du dashboard admin
     #[Route('/dashboard', name: 'profile')]
     public function dashboardAdmin(): Response
     {
@@ -61,6 +62,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    //Fonction de listing utilisateur
     #[Route('/utilisateurs', name: 'list_user')]
     public function listUser(UserRepository $userRepository): Response
     {
@@ -74,6 +76,7 @@ final class AdminController extends AbstractController
         ]);
     }   
     
+    //Fonction listant les commandes 
     #[Route('/utilisateur/commandes', name: 'list_commandes')]
     public function listeCommandes(EntityManagerInterface $em ): Response
     {
@@ -88,6 +91,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    //Fonction listant les commandes d'un utilisateur
     #[Route('/utilisateur/{id}/commandes', name: 'user_commandes')]
     public function listeCommandesUser(User $user, CommandeRepository $commandeRepository, ): Response
     {
@@ -100,6 +104,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    //Fonction d'édition du profil d'un utilisateur
     #[Route('/utilisateurs/{id}/updateProfile', name: 'user_edit_profile')]
     public function adminUpdateProfile(User $user, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -118,6 +123,7 @@ final class AdminController extends AbstractController
             'formProfile' => $formProfile->createView(),
         ]);
     }
+
     // Function to add a product
     #[Route('/admin/produit/ajouter', name: 'add_product')]
     public function ajouterProduit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
@@ -186,7 +192,7 @@ final class AdminController extends AbstractController
     }
     
 
-    // Function to remove one or multiple products 
+    // Function to remove one product
     #[Route('/admin/produit/supprimer', name: 'delete_produit')]
     public function deleteProduit(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -214,6 +220,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    //Fonction d'édition d'un produit
     #[Route('/produit/{slug}/modifier', name: 'update_product')]
     public function edit(Produit $produit, Request $request, EntityManagerInterface $em)
     {
@@ -307,6 +314,7 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    //Fonction de suppression d'un produit depuis la gestion des produits
     #[Route('/admin/produit/delete/{slug}', name: 'delete_product')]
     public function deleteProduct(Produit $produit, EntityManagerInterface $em): Response
     {
@@ -318,6 +326,7 @@ final class AdminController extends AbstractController
         return $this->redirectToRoute('admin_produits');
     }
 
+    //Fonction de mise ou de retrait du stock
     #[Route('/admin/produit/stock/{slug}', name: 'update_stock')]
     public function updateStock(Produit $produit, EntityManagerInterface $em): Response
     {
@@ -335,6 +344,7 @@ final class AdminController extends AbstractController
         return $this->redirectToRoute('admin_produits');
     }
 
+    //Fonction de suppression d'un utilisateur par l'admin
     #[Route('/admin/supprimer-utilisateur/{id}', name: 'supprimer_utilisateur')]
     #[IsGranted('ROLE_ADMIN')]
     public function supprimerUtilisateur(

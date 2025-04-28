@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FaqController extends AbstractController
 {
+    //Fonction d'affichage du FAQ
     #[Route('/faq', name: 'app_faq')]
     public function index(ProduitRepository $produitRepository, AllergeneRepository $allergeneRepository, CategorieRepository $categorieRepository): Response
     {

@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class CommandeController extends AbstractController
 {
+    //Fonction bridge validant la connexion de l'utilisateur pour le rediriger vers le recap de commande
     #[Route('/panier/valider', name: 'commande_valider', methods: ['POST'])]
     public function validerPanier(SessionInterface $session): Response
     {
@@ -40,7 +41,7 @@ final class CommandeController extends AbstractController
     }
     
 
-
+    //Fonction principale de récapitulatif de commande
     #[Route('/commande/confirmer', name: 'commande_confirmer')]
     public function confirmerCommande(
         Request $request,
@@ -117,9 +118,7 @@ final class CommandeController extends AbstractController
         ]);
     }
     
-    
-    
-    
+    //Fonction informant l'utilisateur de la validation de la commande    
     #[Route('/commande/confirmation/{slug}', name: 'commande_confirmation')]
     public function confirmationCommande(Commande $commande, Security $security): Response
     {

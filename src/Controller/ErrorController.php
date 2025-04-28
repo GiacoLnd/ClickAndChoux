@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ErrorController extends AbstractController
 {
+    //Fonction gérant la page d'erreur
     public function show(\Throwable $exception): Response
     {
         $statusCode = 500; // Code d'erreur par défaut

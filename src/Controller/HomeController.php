@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
+    //Fonction de la page d'accueil
     #[Route('/', name: 'app_home')]
     public function index(ProduitRepository $produitRepository, PanierRepository $panierRepository): Response
     {

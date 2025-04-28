@@ -62,9 +62,6 @@ class PanierController extends AbstractController
         ]);
     }
     
-    
-
-    
     // Fonction de suppression d'un produit du panier
     #[Route('/panier/remove/{id}', name: 'panier_remove', methods: ['POST'])]
     public function supprimerProduit(
@@ -84,8 +81,6 @@ class PanierController extends AbstractController
 
         return $this->redirectToRoute('panier_afficher');
     }
-
-    
 
     // Fonction de suppression de tous les produits du panier
     #[Route('/panier/clear', name: 'panier_clear', methods: ['POST'])]

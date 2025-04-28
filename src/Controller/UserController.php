@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 final class UserController extends AbstractController
 {
+    //Fonction du profil utilisateur
     #[Route('/profil', name: 'app_user_profil')]
     #[IsGranted('ROLE_USER')]
     public function profile(): Response
@@ -30,6 +31,7 @@ final class UserController extends AbstractController
         ]);
     }
 
+    //Fonction de modification des données personnelles
     #[Route('/update/profil', name: 'app_update_profile')]
     public function updateProfile(Request $request, EntityManagerInterface $entityManager): Response {
         $user = $this->getUser();
@@ -50,6 +52,7 @@ final class UserController extends AbstractController
         ]);
     }
 
+    //Fonction de modification du mot de passe
     #[Route('/update/password', name: 'app_update_password')]
     public function updatePassword(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher,  TokenStorageInterface $tokenStorage): Response
     {
@@ -88,7 +91,9 @@ final class UserController extends AbstractController
         ]);
     }
 
+    //Fonction de listing des commandes utilisateur
     #[Route('/profil/commandes', name: 'app_user_commandes')]
+    #[IsGranted('ROLE_USER')]
     public function listeCommandes(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -101,6 +106,7 @@ final class UserController extends AbstractController
         ]);
     }
 
+    //Fonction de suppression de compte
     #[Route('/profil/supprimer', name: 'app_profile_delete', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function deleteAccount(
@@ -149,8 +155,4 @@ final class UserController extends AbstractController
             'formDelete' => $formDelete->createView(),
         ]);
     }
-    
-    
-    
-    
 }

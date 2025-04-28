@@ -87,7 +87,7 @@ class ProduitController extends AbstractController
         ]);
     }
 
-
+    //Fonction de recherche de la barre de recherche AJAX 
     #[Route('/produit/salty/ajax', name: 'ajax_salty_produit', methods: ['GET'])]
     public function ajaxSaltySearch(
         ProduitRepository $produitRepository,
@@ -163,6 +163,7 @@ class ProduitController extends AbstractController
         ]);
     }
 
+    //Fonction de recherche de la barre de recherche AJAX
     #[Route('/produit/sweety/ajax', name: 'ajax_sweety_produit', methods: ['GET'])]
     public function ajaxSweetySearch(
         ProduitRepository $produitRepository,
@@ -315,6 +316,8 @@ class ProduitController extends AbstractController
             'totalCommentaires' => $totalCommentaires,
         ]);
     }
+
+    //Fonction de modification de commentaire
     #[Route('/produit/{slug}/modifier-commentaire/{commentId}', name: 'produit_modifier_commentaire', methods: ['GET', 'POST'])]
     public function modifierCommentaire(
         Produit $produit,
@@ -366,6 +369,7 @@ class ProduitController extends AbstractController
         ]);
     }
 
+    //Fonction de suppression de commentaire
     #[Route('/commentaire/{id}/supprimer', name: 'commentaire_supprimer', methods: ['POST'])]
     public function deleteComment(
         Commentaire $commentaire, 
