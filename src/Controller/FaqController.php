@@ -14,15 +14,15 @@ final class FaqController extends AbstractController
     #[Route('/faq', name: 'app_faq')]
     public function index(ProduitRepository $produitRepository, AllergeneRepository $allergeneRepository, CategorieRepository $categorieRepository): Response
     {
-        $salé = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
-        $sucré = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
+        $sale = $categorieRepository->findOneBy(['nomCategorie' => 'Salé']);
+        $sucre = $categorieRepository->findOneBy(['nomCategorie' => 'Sucré']);
         $produit = $produitRepository->findAll();
-        $allergeneSalés = $allergeneRepository->findAllergensByCategory($salé);
-        $allergeneSucrés = $allergeneRepository->findAllergensByCategory($sucré);
+        $allergeneSales = $allergeneRepository->findAllergensByCategory($sale);
+        $allergeneSucres = $allergeneRepository->findAllergensByCategory($sucre);
         return $this->render('faq/index.html.twig', [
             'produit' => $produit,
-            'allergeneSalés' => $allergeneSalés,
-            'allergeneSucrés' => $allergeneSucrés,
+            'allergeneSales' => $allergeneSales,
+            'allergeneSucres' => $allergeneSucres,
         ]);
     }
 }

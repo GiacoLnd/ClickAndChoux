@@ -75,20 +75,22 @@
         </div>
         
         <div class="flex-column-center">
-            {% if 'start_delivery' in availableTransition %}
-                <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
-                    <button type="submit" class="bubblegum-link" style="background: #007BFF  ; color: white;">
-                        Passer en livraison
-                    </button>
-                </form>
-            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                {% if 'start_delivery' in availableTransition %}
+                    <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
+                        <button type="submit" class="bubblegum-link" style="background: #007BFF  ; color: white;">
+                            Passer en livraison
+                        </button>
+                    </form>
+                {% endif %}
 
-            {% if 'complete' in availableTransition %}
-                <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
-                    <button type="submit" class="bubblegum-link" style="background: #568203;color: white;">
-                        Terminer la commande
-                    </button>
-                </form>
+                {% if 'complete' in availableTransition %}
+                    <form action="{{ path('update_status_commande', {'id': commande.id}) }}">
+                        <button type="submit" class="bubblegum-link" style="background: #568203;color: white;">
+                            Terminer la commande
+                        </button>
+                    </form>
+                {% endif %}
             {% endif %}
         </div>
     </section>

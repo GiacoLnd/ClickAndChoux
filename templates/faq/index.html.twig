@@ -18,11 +18,11 @@
                         <strong>Allergènes - choux salés <i class="fa-solid fa-angle-down"></i></strong>
                     </p>
                     <div class="faq-content">
-                        {% for allergene in allergeneSalés %}
-                            <ul>
+                        <ul>
+                        {% for allergene in allergeneSales %}
                                 <li>{{ allergene.nomAllergene }}</li>
-                            </ul>
                         {% endfor %}
+                        </ul>
                     </div>
                 </div>
                 <div class="sweety-allergen">
@@ -30,11 +30,11 @@
                         <strong>Allergènes - choux sucrés <i class="fa-solid fa-angle-down"></i></strong>
                     </p>
                     <div class="faq-content">
-                        {% for allergene in allergeneSucrés %}
-                            <ul>
+                        <ul>
+                        {% for allergene in allergeneSucres %}
                                 <li>{{ allergene.nomAllergene }}</li>
-                            </ul>
                         {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
